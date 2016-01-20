@@ -7,13 +7,13 @@ class RawData(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40), nullable=False)
-    file_path = db.Column(db.String(200), nullable=True)
+    files_path = db.Column(db.String(200), nullable=True)
     submissions = db.relationship('Submission', backref='raw_data',
                                   lazy='dynamic')
 
-    def __init__(self, name, file_path):
+    def __init__(self, name, files_path):
         self.name = name
-        self.file_path = file_path
+        self.files_path = files_path
 
     def __repr__(self):
         return 'RawData( id {}, file_path {} )'.format(self.id,
