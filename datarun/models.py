@@ -11,7 +11,8 @@ class RawData(db.Model):
     submissions = db.relationship('Submission', backref='raw_data',
                                   lazy='dynamic')
 
-    def __init__(self, file_path):
+    def __init__(self, name, file_path):
+        self.name = name
         self.file_path = file_path
 
     def __repr__(self):
