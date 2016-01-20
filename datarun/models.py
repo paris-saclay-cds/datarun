@@ -1,26 +1,12 @@
-import zlib
-import numpy as np
 from datarun import db
 # from sqlalchemy.dialects.postgresql import JSON
-
-
-class NumpyType(db.TypeDecorator):
-    """ Storing zipped numpy arrays."""
-    impl = db.LargeBinary
-    # impl = db.Text
-
-    def process_bind_param(self, value, dialect):
-        # we convert the initial value into np.array to handle None and lists
-        return zlib.compress(np.array(value).dumps())
-
-    def process_result_value(self, value, dialect):
-        return np.loads(zlib.decompress(value))
 
 
 class RawData(db.Model):
     __tablename__ = 'raw_data'
 
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(40), nullable=False)
     file_path = db.Column(db.String(200), nullable=True)
     submissions = db.relationship('Submission', backref='raw_data',
                                   lazy='dynamic')
@@ -42,7 +28,8 @@ class Submission(db.Model):
                                        lazy='dynamic')
     raw_data_id = db.Column(db.Integer, db.ForeignKey('raw_data.id'))
 
-    def __init__(self, files_path, raw_data_id):
+    def __init__(self, submission_id, files_path, raw_data_id):
+        self.id = submission_id
         self.files_path = files_path
         self.raw_data_id = raw_data_id
 
@@ -63,10 +50,10 @@ class SubmissionFold(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     # submission_fold_id = db.Column(db.Integer, primary_key=True)
     submission_id = db.Column(db.Integer, db.ForeignKey('submission.id'))
-    train_is = db.Column(NumpyType, nullable=False)
-    test_is = db.Column(NumpyType, nullable=False)
+    train_is = db.Column(db.LargeBinary, nullable=False)
+    test_is = db.Column(db.LargeBinary, nullable=False)
     # TODO? Do we need to output full_train_predictions and test_predictions
-    predictions = db.Column(NumpyType)
+    predictions = db.Column(db.LargeBinary)
     state = db.Column(db.Enum('todo', 'done', 'error', name='state'),
                       default='todo')
     log_messages = db.Column(db.Text)
