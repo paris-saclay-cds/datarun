@@ -1,18 +1,48 @@
 #!flask/bin/python
 import os
-from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask import jsonify  # , abort, make_response
+from flask import jsonify, abort, make_response, request
 from flask.ext.httpauth import HTTPBasicAuth
 # from flask.ext.restful import Api, Resource, reqparse, fields, marshal
-from datarun import app
+from datarun import app, db
+from datarun.models import RawData, Submission, SubmissionFold
 
-# app = Flask(__name__)
-# app.config.from_object(os.getenv('APP_SETTINGS'))
-# db = SQLAlchemy(app)
 auth = HTTPBasicAuth()
 
-from datarun.models import SubmissionFold
+# Submission files are temporarilly saved in submission_directory
+# they are likely to be saved in the database as a next step?
+# idem for data
+submission_directory = 'submission_directory/'
+data_directory = 'raw_data/'
+# TODO method to save raw data and get id of existing raw data
+
+
+def save_files(dir_data, data):
+    "save files from data['files'] in directory dir_data"
+    os.mkdir(dir_data)
+    for n_ff, ff in data['files'].items():
+        with open(dir_data + '/' + n_ff) as o_ff:
+            o_ff.write(ff)
+
+
+@app.route('/raw_data/', methods=['GET'])
+@auth.login_required
+def list_data():
+    return jsonify({'raw_data': RawData.query.all()})
+
+
+@app.route('/raw_data/', methods=['POST'])
+@auth.login_required
+def create_data():
+    if not request.json or 'files' not in request.json \
+                        or 'name' not in request.json:
+        abort(400)
+    data = request.json
+    this_data_directory = data_directory + data['name']
+    save_files(this_data_directory, data)
+    raw_data = RawData(name=data['name'], files_path=this_data_directory)
+    db.session.add(raw_data)
+    db.session.commit()
+    return jsonify({'raw_data': raw_data}), 201
 
 
 @app.route('/submissions_fold/', methods=['GET'])
@@ -30,12 +60,43 @@ def get_submission_state(id):
 @app.route('/submissions_fold/', methods=['POST'])
 @auth.login_required
 def create_submission():
-    if not request.json or 'submission_fold_id' not in request.json:
+    if not request.json or 'submission_fold_id' not in request.json \
+                        or 'submission_id' not in request.json:
         abort(400)
-    submission_fold = SubmissionFold(request.json.submission_fold_id,
-                                     )
-    return jsonify({'submission_fold': SubmissionFold.query.get(id)})
+    data = request.json
+    try:
+        # if the submission does not exist in the db, create it
+        if not Submission.query.get(data['submission_id']):
+            # save submission files TODO: better to save them in the db?
+            this_submission_directory = submission_directory + \
+                                        'sub_{}'.format(data['submission_id'])
+            save_files(this_submission_directory, data)
+            submission = Submission(submission_id=data['submission_id'],
+                                    files_path=this_submission_directory,
+                                    raw_data_id=data['raw_data_id'])
+            db.session.add(submission)
+            db.session.commit()
+    except:
+        abort(400)
+    # we assume below that train_is and test_is are sent compressed with
+    # zlib.compress(np.array(train_is).dumps)
+    # indices can be retrieved with np.loads(zlib.decompress(train_is))
+    try:
+        submission_fold = SubmissionFold(submission_fold_id=data[
+                                                        'submission_fold_id'],
+                                         submission_id=data['submission_id'],
+                                         train_is=data['train_is'],
+                                         test_is=data['test_is'], state='todo')
+        db.session.add(submission_fold)
+        db.session.commit()
+    except:
+        abort(400)
+    return jsonify({'submission_fold': submission_fold}), 201
 
+
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Oups'}), 404)
 
 if __name__ == '__main__':
     app.run(debug=True)
