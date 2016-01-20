@@ -1,6 +1,6 @@
 import zlib
 import numpy as np
-from runapp import db
+from datarun import db
 # from sqlalchemy.dialects.postgresql import JSON
 
 
@@ -34,7 +34,7 @@ class RawData(db.Model):
 
 
 class Submission(db.Model):
-    __tablename__ = 'submissions'
+    __tablename__ = 'submission'
 
     id = db.Column(db.Integer, primary_key=True)
     files_path = db.Column(db.String(200), nullable=True)
@@ -61,17 +61,20 @@ class SubmissionFold(db.Model):
     __tablename__ = 'submission_folds'
 
     id = db.Column(db.Integer, primary_key=True)
+    # submission_fold_id = db.Column(db.Integer, primary_key=True)
     submission_id = db.Column(db.Integer, db.ForeignKey('submission.id'))
-    # TODO? Or put in a json train_is, test_is, and predictions??
-    train_is = db.Column(db.NumpyType, nullable=False)
-    test_is = db.Column(db.NumpyType, nullable=False)
+    train_is = db.Column(NumpyType, nullable=False)
+    test_is = db.Column(NumpyType, nullable=False)
     # TODO? Do we need to output full_train_predictions and test_predictions
-    predictions = db.Column(db.NumpyType)
+    predictions = db.Column(NumpyType)
     state = db.Column(db.Enum('todo', 'done', 'error', name='state'),
                       default='todo')
     log_messages = db.Column(db.Text)
 
-    def __init__(self, submission_id, train_is, test_is, state='todo'):
+    def __init__(self, submission_fold_id, submission_id, train_is, test_is,
+                 state='todo'):
+        # self.submission_fold_id = submission_fold_id
+        self.id = submission_fold_id
         self.submission_id = submission_id
         self.train_is = train_is
         self.test_is = test_is
