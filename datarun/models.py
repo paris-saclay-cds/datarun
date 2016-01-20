@@ -7,6 +7,7 @@ from runapp import db
 class NumpyType(db.TypeDecorator):
     """ Storing zipped numpy arrays."""
     impl = db.LargeBinary
+    # impl = db.Text
 
     def process_bind_param(self, value, dialect):
         # we convert the initial value into np.array to handle None and lists
