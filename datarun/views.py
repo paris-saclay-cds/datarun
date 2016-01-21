@@ -25,13 +25,13 @@ def save_files(dir_data, data):
 
 
 @app.route('/raw_data/', methods=['GET'])
-@auth.login_required
+# @auth.login_required
 def list_data():
     return jsonify({'raw_data': RawData.query.all()})
 
 
 @app.route('/raw_data/', methods=['POST'])
-@auth.login_required
+# @auth.login_required
 def create_data():
     if not request.json or 'files' not in request.json \
                         or 'name' not in request.json:
@@ -46,19 +46,19 @@ def create_data():
 
 
 @app.route('/submissions_fold/', methods=['GET'])
-@auth.login_required
+# @auth.login_required
 def index():
     return jsonify({'submissions_fold': SubmissionFold.query.all()})
 
 
 @app.route('/submissions_fold/<int:id>')
-@auth.login_required
+# @auth.login_required
 def get_submission_state(id):
     return jsonify({'submission_fold': SubmissionFold.query.get(id)})
 
 
 @app.route('/submissions_fold/', methods=['POST'])
-@auth.login_required
+# @auth.login_required
 def create_submission():
     if not request.json or 'submission_fold_id' not in request.json \
                         or 'submission_id' not in request.json:

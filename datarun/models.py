@@ -16,8 +16,9 @@ class RawData(db.Model):
         self.files_path = files_path
 
     def __repr__(self):
-        return 'RawData( id {}, file_path {} )'.format(self.id,
-                                                       self.file_path)
+        return 'RawData( id {}, name {}, file_path {} )'.format(self.id,
+                                                                self.name,
+                                                                self.files_path)
 
 
 class Submission(db.Model):
