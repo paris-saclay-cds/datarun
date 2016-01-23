@@ -11,30 +11,29 @@ auth = HTTPBasicAuth()
 # Submission files are temporarilly saved in submission_directory
 # they are likely to be saved in the database as a next step?
 # idem for data
-submission_directory = 'submission_directory/'
-data_directory = 'raw_data/'
-# TODO method to save raw data and get id of existing raw data
+data_directory = os.getenv('DIR_DATA')
+submission_directory = os.getenv('DIR_SUBMISSION')
 
 
 def save_files(dir_data, data):
     "save files from data['files'] in directory dir_data"
     os.mkdir(dir_data)
     for n_ff, ff in data['files'].items():
-        with open(dir_data + '/' + n_ff) as o_ff:
+        with open(dir_data + '/' + n_ff, 'w') as o_ff:
             o_ff.write(ff)
 
 
 @app.route('/raw_data/', methods=['GET'])
 # @auth.login_required
 def list_data():
-    return jsonify({'raw_data': RawData.query.all()})
+    return jsonify({'raw_data': [rd.as_dict() for rd in RawData.query.all()]})
 
 
-@app.route('/raw_data/', methods=['POST'])
 # @auth.login_required
+@app.route('/raw_data/', methods=['POST'])
 def create_data():
-    if not request.json or 'files' not in request.json \
-                        or 'name' not in request.json:
+    print(request.json)
+    if not request.json or 'name' not in request.json:
         abort(400)
     data = request.json
     this_data_directory = data_directory + data['name']
@@ -42,19 +41,20 @@ def create_data():
     raw_data = RawData(name=data['name'], files_path=this_data_directory)
     db.session.add(raw_data)
     db.session.commit()
-    return jsonify({'raw_data': raw_data}), 201
+    return jsonify({'raw_data': raw_data.as_dict()}), 201
 
 
 @app.route('/submissions_fold/', methods=['GET'])
 # @auth.login_required
 def index():
-    return jsonify({'submissions_fold': SubmissionFold.query.all()})
+    return jsonify({'submissions_fold':
+                    [sf.as_dict() for sf in SubmissionFold.query.all()]})
 
 
 @app.route('/submissions_fold/<int:id>')
 # @auth.login_required
 def get_submission_state(id):
-    return jsonify({'submission_fold': SubmissionFold.query.get(id)})
+    return jsonify({'submission_fold': SubmissionFold.query.get(id).as_dict()})
 
 
 @app.route('/submissions_fold/', methods=['POST'])
@@ -91,7 +91,7 @@ def create_submission():
         db.session.commit()
     except:
         abort(400)
-    return jsonify({'submission_fold': submission_fold}), 201
+    return jsonify({'submission_fold': submission_fold.as_dict()}), 201
 
 
 @app.errorhandler(404)

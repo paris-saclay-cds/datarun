@@ -20,6 +20,9 @@ class RawData(db.Model):
                                                                 self.name,
                                                                 self.files_path)
 
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 
 class Submission(db.Model):
     __tablename__ = 'submission'
@@ -39,6 +42,8 @@ class Submission(db.Model):
         return 'Submission( id {}, files_path {}, raw_data_id {} )'. \
                 format(self.id, self.files_path, self.raw_data_id)
 
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 # TODO? put files in the database
 # class SubmissionFile(db.Model):
 #     __tablename__ = 'submission_file'
@@ -72,3 +77,6 @@ class SubmissionFold(db.Model):
     def __repr__(self):
         return 'SubmissionFold( id {}, submission_id {}, state {} )'. \
                 format(self.id, self.submission_id, self.state)
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}

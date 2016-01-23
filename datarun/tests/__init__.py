@@ -3,15 +3,6 @@ from datarun import app, db
 
 test_app = app.test_client()
 app.config.from_object('datarun.config.TestingConfig')
-# to initiate the database, is it ok to just use createdb or shall we use what
-# is here https://github.com/kelsmj/flask-test-example
-
-database_test_name = os.getenv('DATABASE_URL_TEST').split('/')[-1]
-dir_data_test = 'test_data'
-dir_submission_test = 'test_submission'
-os.environ['DATABASE_TEST_NAME'] = database_test_name
-os.environ['DIR_DATA_TEST'] = dir_data_test
-os.environ['DIR_SUBMISSION_TEST'] = dir_submission_test
 
 
 def init_db():
@@ -28,7 +19,7 @@ def init_db():
     db.create_all()
 
 
-#def teardown():
+# def teardown():
 #    try:
 #        os.system('dropdb ' + database_test_name)
 #    except:
@@ -37,10 +28,13 @@ def init_db():
 
 init_db()
 try:
-    os.mkdir(dir_data_test)
+    os.mkdir(os.getenv('DIR_DATA'))
 except:
+    print('rm -rf ' + os.getenv('DIR_DATA') + '/*')
+    os.system('rm -rf ' + os.getenv('DIR_DATA') + '/*')
     print('Data test directory already exists')
 try:
-    os.mkdir(dir_submission_test)
+    os.system('rm -rf ' + os.getenv('DIR_SUBMISSION') + '/*')
+    os.mkdir(os.getenv('DIR_SUBMISSION'))
 except:
     print('Submission test directory already exists')
