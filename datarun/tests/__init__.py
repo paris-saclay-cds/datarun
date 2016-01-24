@@ -19,19 +19,15 @@ def init_db():
     db.create_all()
 
 
-# def teardown():
-#    try:
-#        os.system('dropdb ' + database_test_name)
-#    except:
-#        print('test database does not exist')
-#
+#def teardown():
+#    db.session.remove()
+#    db.drop_all()
 
 init_db()
 try:
     os.mkdir(os.getenv('DIR_DATA'))
 except:
-    print('rm -rf ' + os.getenv('DIR_DATA') + '/*')
-    os.system('rm -rf ' + os.getenv('DIR_DATA') + '/*')
+    os.system('rm -rf ' + os.getenv('DIR_DATA') + '/boson')
     print('Data test directory already exists')
 try:
     os.system('rm -rf ' + os.getenv('DIR_SUBMISSION') + '/*')

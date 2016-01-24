@@ -26,13 +26,13 @@ def save_files(dir_data, data):
 @app.route('/raw_data/', methods=['GET'])
 # @auth.login_required
 def list_data():
-    return jsonify({'raw_data': [rd.as_dict() for rd in RawData.query.all()]})
+    return jsonify({'raw_data': [rd.as_dict() for rd in RawData.query.all()
+                                 if rd is not None]})
 
 
 # @auth.login_required
 @app.route('/raw_data/', methods=['POST'])
 def create_data():
-    print(request.json)
     if not request.json or 'name' not in request.json:
         abort(400)
     data = request.json
@@ -48,13 +48,18 @@ def create_data():
 # @auth.login_required
 def index():
     return jsonify({'submissions_fold':
-                    [sf.as_dict() for sf in SubmissionFold.query.all()]})
+                    [sf.as_dict() for sf in SubmissionFold.query.all()
+                     if sf is not None]})
 
 
 @app.route('/submissions_fold/<int:id>')
 # @auth.login_required
 def get_submission_state(id):
-    return jsonify({'submission_fold': SubmissionFold.query.get(id).as_dict()})
+    if SubmissionFold.query.get(id) is not None:
+        return jsonify({'submission_fold':
+                        SubmissionFold.query.get(id).as_dict()})
+    else:
+        return jsonify({'submission_fold': 'empty!'})
 
 
 @app.route('/submissions_fold/', methods=['POST'])
@@ -83,7 +88,7 @@ def create_submission():
     # indices can be retrieved with np.loads(zlib.decompress(train_is))
     try:
         submission_fold = SubmissionFold(submission_fold_id=data[
-                                                        'submission_fold_id'],
+                                                         'submission_fold_id'],
                                          submission_id=data['submission_id'],
                                          train_is=data['train_is'],
                                          test_is=data['test_is'], state='todo')
