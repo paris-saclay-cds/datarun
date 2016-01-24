@@ -57,10 +57,10 @@ class SubmissionFold(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     # submission_fold_id = db.Column(db.Integer, primary_key=True)
     submission_id = db.Column(db.Integer, db.ForeignKey('submission.id'))
-    train_is = db.Column(db.LargeBinary, nullable=False)
-    test_is = db.Column(db.LargeBinary, nullable=False)
+    train_is = db.Column(db.Text, nullable=False)
+    test_is = db.Column(db.Text, nullable=False)
     # TODO? Do we need to output full_train_predictions and test_predictions
-    predictions = db.Column(db.LargeBinary)
+    predictions = db.Column(db.Text)
     state = db.Column(db.Enum('todo', 'done', 'error', name='state'),
                       default='todo')
     log_messages = db.Column(db.Text)
