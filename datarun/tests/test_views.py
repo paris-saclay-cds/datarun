@@ -1,8 +1,8 @@
 import os
 import json
+import base64
 import zlib
 import nose
-import numpy as np
 from sklearn import cross_validation
 from datarun.tests import test_app
 import logging
@@ -76,10 +76,10 @@ def test_create_submission():
          'raw_data_id': raw_data_id}
     skf = cross_validation.ShuffleSplit(100)
     train_is, test_is = list(skf)[0]
-    train_is = zlib.compress(np.array(train_is).dumps())
-    test_is = zlib.compress(np.array(test_is).dumps())
-    d['train_is'] = '' #train_is
-    d['test_is'] = '' #test_is
+    train_is = base64.b64encode(zlib.compress(train_is.tostring()))
+    test_is = base64.b64encode(zlib.compress(test_is.tostring()))
+    d['train_is'] = train_is
+    d['test_is'] = test_is
     with open(file1, 'r') as ff:
         df1 = ff.read()
     with open(file2, 'r') as ff:

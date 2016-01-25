@@ -19,9 +19,9 @@ def init_db():
     db.create_all()
 
 
-#def teardown():
-#    db.session.remove()
-#    db.drop_all()
+def teardown():
+    db.session.remove()
+    db.drop_all()
 
 init_db()
 try:

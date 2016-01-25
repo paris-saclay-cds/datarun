@@ -84,8 +84,9 @@ def create_submission():
     except:
         abort(400)
     # we assume below that train_is and test_is are sent compressed with
-    # zlib.compress(np.array(train_is).dumps)
-    # indices can be retrieved with np.loads(zlib.decompress(train_is))
+    # base64.b64encode(zlib.compress(train_is.tostring()))
+    # indices can be retrieved with:
+    # np.fromstring(zlib.decompress(base64.b64decode(train_is)), dtype=int)
     try:
         submission_fold = SubmissionFold(submission_fold_id=data[
                                                          'submission_fold_id'],

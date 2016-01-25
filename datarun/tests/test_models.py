@@ -1,4 +1,5 @@
 import os
+import base64
 import zlib
 import numpy as np
 from datarun import db
@@ -22,9 +23,9 @@ def test_submission():
 
 def test_submission_fold():
     train_is = np.arange(20)
-    train_is = zlib.compress(np.array(train_is).dumps())
+    train_is = base64.b64encode(zlib.compress(train_is.tostring()))
     test_is = np.arange(20, 40)
-    test_is = zlib.compress(np.array(test_is).dumps())
+    test_is = base64.b64encode(zlib.compress(test_is.tostring()))
     submission_fold = SubmissionFold(submission_fold_id=1,
                                      submission_id=1,
                                      train_is=train_is,
