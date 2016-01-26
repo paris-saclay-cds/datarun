@@ -70,6 +70,8 @@ class SubmissionFold(db.Model):
                               'error', name='state'), default='todo')
     log_messages = db.Column(db.Text)
     train_time = db.Column(db.Float, nullable=True)
+    validation_time = db.Column(db.Float, nullable=True)
+    test_time = db.Column(db.Float, nullable=True)
     train_cpu_time = db.Column(db.Float, nullable=True)
     train_memory = db.Column(db.Float, nullable=True)
 
