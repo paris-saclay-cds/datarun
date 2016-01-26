@@ -28,7 +28,10 @@ def test_list_data():
 def test_create_data():
     # create a new raw data element
     raw_data_name = "boson"
-    d = {'name': raw_data_name}
+    target_column = 'mdev'
+    workflow_elements = 'regressor'
+    d = {'name': raw_data_name, 'target_column': target_column,
+         'workflow_elements': workflow_elements}
     # TODO use a real data file
     with open('requirements.txt', 'r') as ff:
         df = ff.read()

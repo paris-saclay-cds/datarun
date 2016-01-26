@@ -33,12 +33,16 @@ def list_data():
 # @auth.login_required
 @app.route('/raw_data/', methods=['POST'])
 def create_data():
-    if not request.json or 'name' not in request.json:
+    if not request.json or 'name' not in request.json \
+            or 'target_column' not in request.json \
+            or 'workflow_elements' not in request.json:
         abort(400)
     data = request.json
     this_data_directory = data_directory + data['name']
     save_files(this_data_directory, data)
-    raw_data = RawData(name=data['name'], files_path=this_data_directory)
+    raw_data = RawData(name=data['name'], files_path=this_data_directory,
+                       workflow_elements=data['workflow_elements'],
+                       target_column=data['target_column'])
     db.session.add(raw_data)
     db.session.commit()
     return jsonify({'raw_data': raw_data.as_dict()}), 201
@@ -98,6 +102,16 @@ def create_submission():
     except:
         abort(400)
     return jsonify({'submission_fold': submission_fold.as_dict()}), 201
+
+
+@app.route('/split_train_test/', methods=['POST'])
+# @auth.login_required
+def split_train_test():
+    if not request.json or 'held_out_test_size' not in request.json \
+            or 'raw_data_id' not in request.json:
+        abort(400)
+    # TODO: command to split data
+    return jsonify({'Done!': 'Data ready'}), 201
 
 
 @app.errorhandler(404)

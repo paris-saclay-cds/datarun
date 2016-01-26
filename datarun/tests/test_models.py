@@ -7,7 +7,8 @@ from datarun.models import RawData, Submission, SubmissionFold
 
 
 def test_raw_data():
-    raw_data = RawData(name='iris', files_path=os.getenv('DIR_DATA_TEST'))
+    raw_data = RawData(name='iris', files_path=os.getenv('DIR_DATA_TEST'),
+                       workflow_elements='classifier', target_column='species')
     db.session.add(raw_data)
     db.session.commit()
 
