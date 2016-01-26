@@ -64,9 +64,10 @@ class SubmissionFold(db.Model):
     train_is = db.Column(db.Text, nullable=False)
     test_is = db.Column(db.Text, nullable=False)
     # TODO? Do we need to output full_train_predictions and test_predictions
-    predictions = db.Column(db.Text)
-    state = db.Column(db.Enum('todo', 'done', 'error', name='state'),
-                      default='todo')
+    full_train_predictions = db.Column(db.Text)
+    test_predictions = db.Column(db.Text)
+    state = db.Column(db.Enum('todo', 'trained', 'validated', 'tested',
+                              'error', name='state'), default='todo')
     log_messages = db.Column(db.Text)
     train_time = db.Column(db.Float, nullable=True)
     train_cpu_time = db.Column(db.Float, nullable=True)
