@@ -1,14 +1,14 @@
 """empty message
 
-Revision ID: 2ac796bbb84f
-Revises: e1dc9db4bdca
-Create Date: 2016-01-23 23:37:31.670509
+Revision ID: adc5189810fb
+Revises: None
+Create Date: 2016-01-26 10:33:17.909300
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '2ac796bbb84f'
-down_revision = 'e1dc9db4bdca'
+revision = 'adc5189810fb'
+down_revision = None
 
 from alembic import op
 import sqlalchemy as sa
@@ -20,6 +20,8 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=40), nullable=False),
     sa.Column('files_path', sa.String(length=200), nullable=True),
+    sa.Column('workflow_elements', sa.String(length=200), nullable=False),
+    sa.Column('target_column', sa.String(length=40), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('submission',
@@ -32,9 +34,9 @@ def upgrade():
     op.create_table('submission_folds',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('submission_id', sa.Integer(), nullable=True),
-    sa.Column('train_is', sa.LargeBinary(), nullable=False),
-    sa.Column('test_is', sa.LargeBinary(), nullable=False),
-    sa.Column('predictions', sa.LargeBinary(), nullable=True),
+    sa.Column('train_is', sa.Text(), nullable=False),
+    sa.Column('test_is', sa.Text(), nullable=False),
+    sa.Column('predictions', sa.Text(), nullable=True),
     sa.Column('state', sa.Enum('todo', 'done', 'error', name='state'), nullable=True),
     sa.Column('log_messages', sa.Text(), nullable=True),
     sa.ForeignKeyConstraint(['submission_id'], ['submission.id'], ),

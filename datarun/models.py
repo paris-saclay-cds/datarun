@@ -10,10 +10,14 @@ class RawData(db.Model):
     files_path = db.Column(db.String(200), nullable=True)
     submissions = db.relationship('Submission', backref='raw_data',
                                   lazy='dynamic')
+    workflow_elements = db.Column(db.String(200), nullable=False)
+    target_column = db.Column(db.String(40), nullable=False)
 
-    def __init__(self, name, files_path):
+    def __init__(self, name, files_path, workflow_elements, target_column):
         self.name = name
         self.files_path = files_path
+        self.workflow_elements = workflow_elements
+        self.target_column = target_column
 
     def __repr__(self):
         return 'RawData( id {}, name {}, file_path {} )'.format(self.id,
