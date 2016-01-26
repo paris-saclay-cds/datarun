@@ -68,6 +68,9 @@ class SubmissionFold(db.Model):
     state = db.Column(db.Enum('todo', 'done', 'error', name='state'),
                       default='todo')
     log_messages = db.Column(db.Text)
+    train_time = db.Column(db.Float, nullable=True)
+    train_cpu_time = db.Column(db.Float, nullable=True)
+    train_memory = db.Column(db.Float, nullable=True)
 
     def __init__(self, submission_fold_id, submission_id, train_is, test_is,
                  state='todo'):
