@@ -1,0 +1,14 @@
+db:
+  image: postgres
+web:
+  build: .
+  command: python manage.py runserver -p 8000
+  volumes:
+    - .:/code
+  ports:
+    - "8000:8000"
+  links:
+    - db
+  environment:
+    - APP_SETTINGS=datarun.config.DevelopmentConfig
+    - DATABASE_URL_TEST=postgresql://localhost/datarun_test 
