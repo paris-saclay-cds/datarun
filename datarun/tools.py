@@ -4,7 +4,8 @@ import base64
 import numpy as np
 import pandas as pd
 from importlib import import_module
-from sklearn.cross_validation import StratifiedShuffleSplit
+from sklearn.cross_validation import train_test_split, StratifiedShuffleSplit
+import celery
 
 
 def read_data(filename, target_column):
@@ -21,6 +22,22 @@ def _make_error_message(e):
         return repr(e)
 
 
+@celery.task
+def add(x, y):
+    return x + y
+
+
+@celery.task
+def prepare_data(raw_filename, held_out_test_size, train_filename,
+                 test_filename, random_state=42):
+    df = pd.read_csv(raw_filename)
+    df_train, df_test = train_test_split(
+        df, test_size=held_out_test_size, random_state=random_state)
+    df_train.to_csv(train_filename)
+    df_test.to_csv(test_filename)
+
+
+@celery.task
 def train_test_submission_fold(submission_fold):
     log_message = ''
     # get raw data

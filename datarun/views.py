@@ -5,6 +5,7 @@ from flask.ext.httpauth import HTTPBasicAuth
 # from flask.ext.restful import Api, Resource, reqparse, fields, marshal
 from datarun import app, db
 from datarun.models import RawData, Submission, SubmissionFold
+import tools
 
 auth = HTTPBasicAuth()
 
@@ -23,6 +24,12 @@ def save_files(dir_data, data):
             o_ff.write(ff)
 
 
+# @app.route('/test_task/', methods=['GET'])
+# def test_celery():
+#     task = tools.add.delay(10, 20)
+#     return jsonify({'task': task.id})
+
+
 @app.route('/raw_data/', methods=['GET'])
 # @auth.login_required
 def list_data():
@@ -38,8 +45,18 @@ def create_data():
             or 'workflow_elements' not in request.json:
         abort(400)
     data = request.json
+    # change raw data file name
+    if len(data['files'].keys()) > 1:
+        # more than one raw_data file was sent
+        abort(400)
+    else:
+        kk = data['files'].keys()[0]
+        data['files'][data['name'] + 'csv'] = data['files'][kk]
+        data['files'].pop(kk)
+    # save raw data file
     this_data_directory = data_directory + data['name']
     save_files(this_data_directory, data)
+    # insert raw data file in the databas
     raw_data = RawData(name=data['name'], files_path=this_data_directory,
                        workflow_elements=data['workflow_elements'],
                        target_column=data['target_column'])
@@ -110,8 +127,18 @@ def split_train_test():
     if not request.json or 'held_out_test_size' not in request.json \
             or 'raw_data_id' not in request.json:
         abort(400)
-    # TODO: command to split data
-    return jsonify({'Done!': 'Data ready'}), 201
+    if 'random_state' in request.json:
+        random_state = request.json['random_state']
+    else:
+        random_state = 42
+    held_out_test_size = request.json['held_out_test_size']
+    raw_data = RawData.query.get(request.json['raw_data_id'])
+    raw_filename = raw_data.files_path + '/' + raw_data.name
+    train_filename = raw_data.files_path + '/train.csv'
+    test_filename = raw_data.files_path + '/test.csv'
+    task = tools.prepare_data(raw_filename, held_out_test_size, train_filename,
+                              test_filename, random_state=random_state)
+    return jsonify({'Soon done! task id': task.id}), 201
 
 
 @app.errorhandler(404)

@@ -17,7 +17,7 @@ def init_db():
     db.session.close()
     db.drop_all()
     db.create_all()
-
+    print(db)
 
 def teardown():
     db.session.remove()
