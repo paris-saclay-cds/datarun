@@ -1,13 +1,9 @@
-#!flask/bin/python
 import os
-from flask import jsonify, abort, make_response, request
-from flask.ext.httpauth import HTTPBasicAuth
-# from flask.ext.restful import Api, Resource, reqparse, fields, marshal
-from datarun import app, db
-from datarun.models import RawData, Submission, SubmissionFold
+from django.shortcuts import render, render_to_response
+from django.core import serializers
+data = serializers.serialize("xml", SomeModel.objects.all())
+from .models import RawData, Submission, SubmissionFold
 import tools
-
-auth = HTTPBasicAuth()
 
 # Submission files are temporarilly saved in submission_directory
 # they are likely to be saved in the database as a next step?
@@ -30,45 +26,46 @@ def save_files(dir_data, data):
 #     return jsonify({'task': task.id})
 
 
-@app.route('/raw_data/', methods=['GET'])
+#@app.route('/raw_data/', methods=['GET'])
 # @auth.login_required
-def list_data():
-    return jsonify({'raw_data': [rd.as_dict() for rd in RawData.query.all()
-                                 if rd is not None]})
-
-
-# @auth.login_required
-@app.route('/raw_data/', methods=['POST'])
-def create_data():
-    if not request.json or 'name' not in request.json \
-            or 'target_column' not in request.json \
-            or 'workflow_elements' not in request.json:
-        abort(400)
-    data = request.json
-    # change raw data file name
-    if len(data['files'].keys()) > 1:
-        # more than one raw_data file was sent
-        abort(400)
+def raw_data(request):
+    if request.method == 'GET':
+        context = {'raw_data':
+                   serializers.serialize("json", RawData.objects.all())}
+        return render(request, 'runapp/list_data.html', context)
     else:
-        kk = data['files'].keys()[0]
-        data['files'][data['name'] + 'csv'] = data['files'][kk]
-        data['files'].pop(kk)
-    # save raw data file
-    this_data_directory = data_directory + data['name']
-    save_files(this_data_directory, data)
-    # insert raw data file in the databas
-    raw_data = RawData(name=data['name'], files_path=this_data_directory,
-                       workflow_elements=data['workflow_elements'],
-                       target_column=data['target_column'])
-    db.session.add(raw_data)
-    db.session.commit()
-    return jsonify({'raw_data': raw_data.as_dict()}), 201
+        context = {}
+        if not request.json or 'name' not in request.json \
+                or 'target_column' not in request.json \
+                or 'workflow_elements' not in request.json:
+            context['error'] = 'Raw data name or target column or workflow \
+                                elements is/are missing or format is not json'
+        data = request.json
+        # change raw data file name
+        if len(data['files'].keys()) > 1:
+            # more than one raw_data file was sent
+            context['error'] = 'More than one raw data file was sent...'
+        else:
+            kk = data['files'].keys()[0]
+            data['files'][data['name'] + 'csv'] = data['files'][kk]
+            data['files'].pop(kk)
+        # save raw data file
+        this_data_directory = data_directory + data['name']
+        save_files(this_data_directory, data)
+        # insert raw data file in the databas
+        raw_data = RawData(name=data['name'], files_path=this_data_directory,
+                           workflow_elements=data['workflow_elements'],
+                           target_column=data['target_column'])
+        raw_data.save()
+        context['succes'] = 'You have successfully uploaded a raw dataset!'
+        return render_to_response('runapp/upload_data.html', context)
 
 
-@app.route('/submissions_fold/', methods=['GET'])
+#@app.route('/submissions_fold/', methods=['GET'])
 # @auth.login_required
-def index():
-    return jsonify({'submissions_fold':
+def index(request):
+    return render(request, 'runapp/list_submission_fold.html')
+jsonify({'submissions_fold':
                     [sf.as_dict() for sf in SubmissionFold.query.all()
                      if sf is not None]})
 
