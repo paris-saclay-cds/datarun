@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from datarun.models import RawData, Submission, SubmissionFold
+from .models import RawData, Submission, SubmissionFold
 
 
 class RawDataSerializer(serializers.ModelSerializer):
