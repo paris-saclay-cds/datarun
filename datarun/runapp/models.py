@@ -16,7 +16,7 @@ class RawData(models.Model):
     :type target_column: string
     """
 
-    name = models.CharField(max_length=40, null=False)
+    name = models.CharField(max_length=40, unique=True, null=False)
     files_path = models.CharField(max_length=200, null=True)
     workflow_elements = models.CharField(max_length=200, null=False)
     target_column = models.CharField(max_length=200, null=False)
