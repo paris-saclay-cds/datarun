@@ -85,8 +85,8 @@ class SubmissionFold(models.Model):
     train_is = models.TextField(null=False)
     test_is = models.TextField(null=False)
     # TODO? Do we need to output full_train_predictions and test_predictions
-    full_train_predictions = models.TextField()
-    test_predictions = models.TextField()
+    full_train_predictions = models.TextField(null=True)
+    test_predictions = models.TextField(null=True)
     STATE_CHOICES = (
         ('TODO', 'to be trained'),
         ('TRAINED', 'trained'),
@@ -95,8 +95,8 @@ class SubmissionFold(models.Model):
         ('ERROR', 'error during the train or test'),
     )
     state = models.CharField(max_length=10, choices=STATE_CHOICES,
-                             default='TODO')
-    log_messages = models.TextField()
+                             default='TODO', null=True)
+    log_messages = models.TextField(null=True)
     train_time = models.FloatField(default=0., null=True)
     validation_time = models.FloatField(default=0., null=True)
     test_time = models.FloatField(default=0., null=True)
