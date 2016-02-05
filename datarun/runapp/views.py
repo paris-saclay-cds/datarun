@@ -7,13 +7,24 @@ from rest_framework import permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-# import tools
+from rest_framework.decorators import api_view
+from rest_framework.reverse import reverse
+# import task
 
 # Submission files are temporarilly saved in submission_directory
 # they are likely to be saved in the database as a next step?
 # idem for data
-data_directory = os.getenv('DIR_DATA')
-submission_directory = os.getenv('DIR_SUBMISSION')
+data_directory = os.environ.get('DIR_DATA', 'data')
+submission_directory = os.environ.get('DIR_SUBMISSION', 'submission')
+
+
+@api_view(('GET',))
+def api_root(request, format=None):
+    return Response({
+       'rawdata': reverse('rawdata-list', request=request, format=format),
+       'submissionfold': reverse('submissionfold-list', request=request,
+                                 format=format)
+    })
 
 
 def save_files(dir_data, data):
@@ -41,10 +52,10 @@ class RawDataList(APIView):
         if serializer.is_valid():
             # save raw data file
             kk = request.data['files'].keys()[0]
-            request.data['files'][request.data['name'] + 'csv'] = \
+            request.data['files'][request.data['name'] + '.csv'] = \
                 request.data['files'][kk]
             request.data['files'].pop(kk)
-            this_data_directory = data_directory + request.data['name']
+            this_data_directory = data_directory + '/' + request.data['name']
             save_files(this_data_directory, request.data)
             # save raw data in the database
             serializer.save()
@@ -78,7 +89,7 @@ class SubmissionFoldList(APIView):
                     # save submission files
                     # TODO: better to save them in the db?
                     this_submission_directory = submission_directory + \
-                                'sub_{}'.format(request.data['submission_id'])
+                                '/sub_{}'.format(request.data['submission_id'])
                     save_files(this_submission_directory, request.data)
                     # save submission in the database
                     serializer_submission.save()
@@ -123,7 +134,7 @@ class SubmissionFoldDetail(APIView):
 #     raw_filename = raw_data.files_path + '/' + raw_data.name
 #     train_filename = raw_data.files_path + '/train.csv'
 #     test_filename = raw_data.files_path + '/test.csv'
-#     task = tools.prepare_data(raw_filename, held_out_test_size, train_filename,
-#                               test_filename, random_state=random_state)
+#     task = tools.prepare_data(raw_filename, held_out_test_size,
+#                               train_filename, test_filename,
+#                               random_state=random_state)
 #     return jsonify({'Soon done! task id': task.id}), 201
-
