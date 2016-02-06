@@ -2,10 +2,10 @@ import os
 import base64
 import zlib
 import numpy as np
+from sklearn import cross_validation
 from test.test_support import EnvironmentVarGuard
 from django.contrib.auth.models import User
-# from django.test import TestCase
-from django.utils.unittest import TestCase
+from django.test import TestCase
 from django.core.urlresolvers import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -30,23 +30,23 @@ class ModelTests(TestCase):
                                workflow_elements='classifier',
                                target_column='species')
         raw_data_iris = RawData.objects.get(name='iris')
-        Submission.objects.create(databoard_id=1,
+        Submission.objects.create(databoard_s_id=1,
                                   files_path=self.env['DIR_SUBMISSION'],
                                   raw_data=raw_data_iris)
         train_is = np.arange(20)
         train_is = base64.b64encode(zlib.compress(train_is.tostring()))
         test_is = np.arange(20, 40)
         test_is = base64.b64encode(zlib.compress(test_is.tostring()))
-        submission = Submission.objects.get(databoard_id=1)
-        SubmissionFold.objects.create(databoard_id=1,
+        submission = Submission.objects.get(databoard_s_id=1)
+        SubmissionFold.objects.create(databoard_sf_id=1,
                                       submission=submission,
                                       train_is=train_is,
                                       test_is=test_is, state='todo')
 
     def test_get_models(self):
         raw_data = RawData.objects.get(name='iris')
-        submission = Submission.objects.get(databoard_id=1)
-        submission_fold = SubmissionFold.objects.get(databoard_id=1)
+        submission = Submission.objects.get(databoard_s_id=1)
+        submission_fold = SubmissionFold.objects.get(databoard_sf_id=1)
         self.assertEqual(raw_data, submission.raw_data)
         self.assertEqual(submission, submission_fold.submission)
 
@@ -86,23 +86,36 @@ class WorkflowTests(APITestCase):
         Make sure we can submit a submission on cv fold
         """
         with self.env:
+            url = reverse('submissionfold-list')
             subf_id, sub_id, raw_data_id = 2, 2, 1
             file1 = 'test_files/feature_extractor.py'
             file2 = 'test_files/classifier.py'
             file3 = 'test_files/calibrator.py'
-            d = {'submission_fold_id': subf_id, 'submission_id': sub_id,
-                 'raw_data_id': raw_data_id}
+            data = {'databoard_sf_id': subf_id, 'databoard_s_id': sub_id,
+                    'raw_data_id': raw_data_id}
             skf = cross_validation.ShuffleSplit(100)
             train_is, test_is = list(skf)[0]
             train_is = base64.b64encode(zlib.compress(train_is.tostring()))
             test_is = base64.b64encode(zlib.compress(test_is.tostring()))
-            d['train_is'] = train_is
-            d['test_is'] = test_is
+            data['train_is'] = train_is
+            data['test_is'] = test_is
             with open(file1, 'r') as ff:
                 df1 = ff.read()
             with open(file2, 'r') as ff:
                 df2 = ff.read()
             with open(file3, 'r') as ff:
                 df3 = ff.read()
-            d['files'] = {file1.split('/')[-1]: df1, file2.split('/')[-1]: df2,
-                          file3.split('/')[-1]: df3}
+            data['files'] = {file1.split('/')[-1]: df1,
+                             file2.split('/')[-1]: df2,
+                             file3.split('/')[-1]: df3}
+            response = self.client.post(url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            self.assertEqual(Submission.objects.count(), 1)
+            self.assertEqual(SubmissionFold.objects.count(), 1)
+
+    def test_training(self):
+        """
+        Check submission on cv fold training
+        """
+        with self.env:
+            pass

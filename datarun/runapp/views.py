@@ -83,13 +83,17 @@ class SubmissionFoldList(APIView):
         # np.fromstring(zlib.decompress(base64.b64decode(train_is)), dtype=int)
         if serializer.is_valid():
             # if the submission does not exist in the db, create it
-            if not Submission.objects.get(request.data['submission_id']):
+            try:
+                Submission.objects.get(
+                                databoard_s_id=request.data['databoard_s_id'])
+            except:
                 serializer_submission = SubmissionSerializer(data=request.data)
+                print(serializer_submission)
                 if serializer_submission.is_valid():
                     # save submission files
                     # TODO: better to save them in the db?
                     this_submission_directory = submission_directory + \
-                                '/sub_{}'.format(request.data['submission_id'])
+                                '/sub_{}'.format(request.data['databoard_s_id'])
                     save_files(this_submission_directory, request.data)
                     # save submission in the database
                     serializer_submission.save()
