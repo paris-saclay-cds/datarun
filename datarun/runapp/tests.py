@@ -60,11 +60,14 @@ class WorkflowTests(APITestCase):
                                              password='test')
         self.client.login(username='test', password='test')
 
-    def test_create_data(self):
+    def test_workflow(self):
         """
-        Make sure we can create raw data
+        Make sure we can create raw data, submission, and submission on cv
+        fold, and that we can train test submissions on cv fold
         """
         with self.env:
+            # --------------------------------
+            # Make sure we can create raw data
             url = reverse('rawdata')
             raw_data_name = "boson"
             target_column = 'mdev'
@@ -81,11 +84,8 @@ class WorkflowTests(APITestCase):
             self.assertEqual(RawData.objects.count(), 1)  # or 2??
             self.assertEqual(RawData.objects.all()[0].name, raw_data_name)
 
-    def test_create_submission(self):
-        """
-        Make sure we can submit a submission on cv fold
-        """
-        with self.env:
+            # Make sure we can submit a submission on cv fold
+            # -----------------------------------------------
             url = reverse('submissionfold-list')
             subf_id, sub_id, raw_data_id = 2, 2, 1
             file1 = 'test_files/feature_extractor.py'
@@ -112,6 +112,7 @@ class WorkflowTests(APITestCase):
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
             self.assertEqual(Submission.objects.count(), 1)
             self.assertEqual(SubmissionFold.objects.count(), 1)
+            print('rr', RawData.objects.count())
 
     def test_training(self):
         """

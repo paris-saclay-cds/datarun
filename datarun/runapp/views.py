@@ -88,7 +88,6 @@ class SubmissionFoldList(APIView):
                                 databoard_s_id=request.data['databoard_s_id'])
             except:
                 serializer_submission = SubmissionSerializer(data=request.data)
-                print(serializer_submission)
                 if serializer_submission.is_valid():
                     # save submission files
                     # TODO: better to save them in the db?
