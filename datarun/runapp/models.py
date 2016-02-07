@@ -81,7 +81,7 @@ class SubmissionFold(models.Model):
     """
 
     databoard_sf_id = models.IntegerField(primary_key=True)
-    submission = models.ForeignKey(Submission, null=False, blank=True)
+    databoard_s = models.ForeignKey(Submission, null=False, blank=True)
     train_is = models.TextField(null=False)
     test_is = models.TextField(null=False)
     # TODO? Do we need to output full_train_predictions and test_predictions
