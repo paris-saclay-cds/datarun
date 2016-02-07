@@ -34,7 +34,7 @@ class Submission(models.Model):
     :param raw_data: associated raw data
 
     :type databoard_s_id: IntegerField(primary_key=True)
-    :type files_path: FileField(max_length=200, null=True)
+    :type files_path: CharField(max_length=200, null=True)
     :type raw_data: ForeignKey(RawData, null=True, blank=True)
     """
     databoard_s_id = models.IntegerField(primary_key=True)
@@ -81,7 +81,7 @@ class SubmissionFold(models.Model):
     """
 
     databoard_sf_id = models.IntegerField(primary_key=True)
-    submission = models.ForeignKey(Submission, null=True, blank=True)
+    submission = models.ForeignKey(Submission, null=False, blank=True)
     train_is = models.TextField(null=False)
     test_is = models.TextField(null=False)
     # TODO? Do we need to output full_train_predictions and test_predictions
@@ -105,4 +105,4 @@ class SubmissionFold(models.Model):
 
     def __unicode__(self):
         return 'SubmissionFold(databoard id {}, submission_id {}, state {})'. \
-                format(self.databoard_sf_id, self.submission_id, self.state)
+                format(self.databoard_sf_id, self.submission.id, self.state)
