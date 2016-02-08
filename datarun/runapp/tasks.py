@@ -14,9 +14,9 @@ from django.conf import settings
 
 def read_data(filename, target_column):
     data = pd.read_csv(filename)
-    y_array = data[target_column].values
-    X_array = data.drop([target_column], axis=1).values
-    return X_array, y_array
+    y_df = data[target_column]
+    X_df = data.drop([target_column], axis=1)
+    return X_df, y_df
 
 
 def _make_error_message(e):
@@ -45,14 +45,15 @@ def prepare_data(raw_filename, held_out_test_size, train_filename,
 def train_test_submission_fold(submission_fold):
     log_message = ''
     # get raw data
-    print(submission_fold)
-    print(submission_fold.databoard_s)
     raw_data = submission_fold.databoard_s.raw_data
     try:
-        X_train, y_train = read_data(raw_data.files_path + '/train.csv')
-        X_test, y_test = read_data(raw_data.files_path + '/test.csv')
+        X_train, y_train = read_data(raw_data.files_path + '/train.csv',
+                                     raw_data.target_column)
+        X_test, y_test = read_data(raw_data.files_path + '/test.csv',
+                                   raw_data.target_column)
     except:
         log_message = log_message + 'ERROR: split data \n'
+        return log_message
     # get workflow elements
     list_workflow_elements = raw_data.workflow_elements.split(',')
     # train submission on fold
@@ -62,12 +63,13 @@ def train_test_submission_fold(submission_fold):
     if 'error' not in submission_fold.state:
         log_test = test_submission_fold(submission_fold, trained_model, X_test,
                                         y_test, list_workflow_elements)
-    return (log_message + '\n' + log_train + '\n' + log_test)
+        return (log_message + '\n' + log_train + '\n' + log_test)
+    return (log_message + '\n' + log_train)
 
 
 def train_submission_fold(submission_fold, X_train, y_train,
                           list_workflow_elements):
-    module_path = submission_fold.databoard_s.files_path
+    module_path = submission_fold.databoard_s.files_path.replace('/', '.')
     train_is = submission_fold.train_is
     train_is = np.fromstring(zlib.decompress(base64.b64decode(train_is)),
                              dtype=int)
@@ -81,6 +83,7 @@ def train_submission_fold(submission_fold, X_train, y_train,
     except Exception, e:
         submission_fold.state = 'error'
         log_message = log_message + _make_error_message(e) + '\n'
+        return None, log_message
     end = timeit.default_timer()
     submission_fold.train_time = end - start
     submission_fold.save()
@@ -103,6 +106,7 @@ def train_submission_fold(submission_fold, X_train, y_train,
     except Exception, e:
         submission_fold.state = 'error'
         log_message = log_message + _make_error_message(e) + '\n'
+        return None, log_message
     end = timeit.default_timer()
     submission_fold.validation_time = end - start
     submission_fold.save()
@@ -139,7 +143,13 @@ def train_model(module_path, list_workflow_elements, X, y, train_is):
     X_train = X.iloc[train_is]
     y_train = y.iloc[train_is]
     nb_applied_elements = 0
+    # it is assimed here that feature extractor takes as input pd.dataframe
+    # and output np.array
+    if 'feature_extractor' not in list_workflow_elements:
+        X_train = np.array(X_train)
+        y_train = np.array(y_train)
     # it is here assumed that workflow elements are in the right order
+    trained_models = []
     for workflow_element in list_workflow_elements:
         if workflow_element == 'feature_extractor':
             nb_applied_elements += 1
@@ -147,6 +157,7 @@ def train_model(module_path, list_workflow_elements, X, y, train_is):
             fe = feature_extractor.FeatureExtractor()
             fe.fit(X_train, y_train)
             X_train = fe.transform(X_train)
+            trained_models.append(fe)
         elif workflow_element == 'classifier':
             nb_applied_elements += 1
             classifier = import_module('.classifier', module_path)
@@ -163,31 +174,38 @@ def train_model(module_path, list_workflow_elements, X, y, train_is):
                 y_calib_train = y_train[calib_test_is]
                 # Classification
                 clf.fit(X_train_train, y_train_train)
+                trained_models.append(clf)
                 # Calibration
                 calibrator = import_module('.calibrator', module_path)
                 calib = calibrator.Calibrator()
                 y_probas = clf.predict_proba(X_calib_train)
                 calib.fit(y_probas, y_calib_train)
-                if nb_applied_elements == len(list_workflow_elements):
-                    return fe, clf, calib
+                trained_models.append(calib)
+                # if nb_applied_elements == len(list_workflow_elements):
+                #     return fe, clf, calib
             else:
                 clf.fit(X_train, y_train)
-                if nb_applied_elements == len(list_workflow_elements):
-                    return fe, clf
+                trained_models.append(clf)
+                # if nb_applied_elements == len(list_workflow_elements):
+                #     return fe, clf
         elif workflow_element == 'regressor':
             nb_applied_elements += 1
             regressor = import_module('.regressor', module_path)
             reg = regressor.Regressor()
             reg.fit(X_train, y_train)
-            if nb_applied_elements == len(list_workflow_elements):
-                return fe, reg
+            trained_models.append(reg)
+            # if nb_applied_elements == len(list_workflow_elements):
+            #     return fe, reg
+    return trained_models
 
 
 def test_model(trained_model, list_workflow_elements,  X, test_is):
-    X_test = X[test_is]
+    X_test = X.iloc[test_is]
     if 'feature_extraction' in list_workflow_elements:
         fe = trained_model[0]
         X_test = fe.transform(X_test)
+    else:
+        X_test = np.array(X_test)
     if 'regressor' in list_workflow_elements \
        and len(list_workflow_elements) < 3:
         reg = trained_model[-1]

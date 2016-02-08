@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
-# import task
+import tasks
 
 # Submission files are temporarilly saved in submission_directory
 # they are likely to be saved in the database as a next step?
@@ -30,6 +30,7 @@ def api_root(request, format=None):
 def save_files(dir_data, data):
     "save files from data['files'] in directory dir_data"
     os.mkdir(dir_data)
+    os.system('touch ' + dir_data + '/__init__.py')
     for n_ff, ff in data['files'].items():
         with open(dir_data + '/' + n_ff, 'w') as o_ff:
             o_ff.write(ff)
@@ -134,23 +135,20 @@ class SubmissionFoldDetail(APIView):
         return Response(serializer.data)
 
 
-# TODO view to train and split dataset
 # @app.route('/split_train_test/', methods=['POST'])
-# # @auth.login_required
-# def split_train_test():
-#     if not request.json or 'held_out_test_size' not in request.json \
-#             or 'raw_data_id' not in request.json:
-#         abort(400)
-#     if 'random_state' in request.json:
-#         random_state = request.json['random_state']
-#     else:
-#         random_state = 42
-#     held_out_test_size = request.json['held_out_test_size']
-#     raw_data = RawData.query.get(request.json['raw_data_id'])
-#     raw_filename = raw_data.files_path + '/' + raw_data.name
-#     train_filename = raw_data.files_path + '/train.csv'
-#     test_filename = raw_data.files_path + '/test.csv'
-#     task = tools.prepare_data(raw_filename, held_out_test_size,
-#                               train_filename, test_filename,
-#                               random_state=random_state)
-#     return jsonify({'Soon done! task id': task.id}), 201
+# @auth.login_required
+def split_train_test(request):
+    data = request.data
+    if 'random_state' in data:
+        random_state = data['random_state']
+    else:
+        random_state = 42
+    held_out_test_size = data['held_out_test_size']
+    raw_data = RawData.objects.get(id=data['raw_data_id'])
+    raw_filename = raw_data.files_path + '/' + raw_data.name
+    train_filename = raw_data.files_path + '/train.csv'
+    test_filename = raw_data.files_path + '/test.csv'
+    task = tasks.prepare_data(raw_filename, held_out_test_size,
+                              train_filename, test_filename,
+                              random_state=random_state)
+    # return jsonify({'Soon done! task id': task.id}), 201

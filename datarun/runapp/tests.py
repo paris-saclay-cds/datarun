@@ -26,6 +26,7 @@ class ModelTests(TestCase):
             os.mkdir(self.env['DIR_SUBMISSION'])
         except:
             os.system('rm -rf ' + self.env['DIR_SUBMISSION'] + '/*')
+        os.system('touch ' + self.env['DIR_SUBMISSION'] + '/__init__.py')
         RawData.objects.create(name='iris',
                                files_path=self.env['DIR_DATA'],
                                workflow_elements='classifier',
@@ -67,16 +68,18 @@ class WorkflowTests(APITestCase):
         fold, and that we can train test submissions on cv fold
         """
         with self.env:
-            # --------------------------------
             # Make sure we can create raw data
+            # --------------------------------
             url = reverse('rawdata')
             raw_data_name = "iris"
+            raw_data_file = 'test_files/iris.csv'
+            n_samples = 150
+            held_out_test = 0.5
             target_column = 'species'
             workflow_elements = 'classifier'
             data = {'name': raw_data_name, 'target_column': target_column,
                     'workflow_elements': workflow_elements}
-            # TODO use a real data file
-            with open('test_files/iris.csv', 'r') as ff:
+            with open(raw_data_file, 'r') as ff:
                 df = ff.read()
             data['files'] = {'raw_data_test.txt': df}
 
@@ -96,7 +99,7 @@ class WorkflowTests(APITestCase):
             data = {'databoard_sf_id': subf_id, 'databoard_s_id': sub_id,
                     # 'raw_data': {'id': raw_data_id}}
                     'raw_data': raw_data_id}
-            skf = cross_validation.ShuffleSplit(100)
+            skf = cross_validation.ShuffleSplit(int(n_samples * held_out_test))
             train_is, test_is = list(skf)[0]
             train_is = base64.b64encode(zlib.compress(train_is.tostring()))
             test_is = base64.b64encode(zlib.compress(test_is.tostring()))
@@ -116,9 +119,26 @@ class WorkflowTests(APITestCase):
             self.assertEqual(Submission.objects.count(), 1)
             self.assertEqual(SubmissionFold.objects.count(), 1)
 
+            # Make sure we can split data into train and test sets
+            # ----------------------------------------------------
+            raw_data = RawData.objects.get(id=raw_data_id)
+            raw_filename = raw_data.files_path + '/' + raw_data.name + '.csv'
+            train_filename = raw_data.files_path + '/train.csv'
+            test_filename = raw_data.files_path + '/test.csv'
+            task.prepare_data(raw_filename, held_out_test,
+                              train_filename, test_filename,
+                              random_state=42)
+            # TODO with the view
+
             # Make sure we can train and test a submission on cv fold
             # -------------------------------------------------------
             submission_fold = SubmissionFold.objects.get(
                                         databoard_sf_id=subf_id)
             logs = task.train_test_submission_fold(submission_fold)
-            print(logs)
+            print('** logs **', logs)
+            print('submission fold state:', submission_fold.state)
+            pred = np.fromstring(zlib.decompress(
+               base64.b64decode(submission_fold.test_predictions)), dtype=float)
+            pred = pred.reshape(int(n_samples * held_out_test), 3)
+            sum_prob = np.ones(int(n_samples * held_out_test))
+            self.assertTrue((pred.sum(axis=1) == sum_prob).all())
