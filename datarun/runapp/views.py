@@ -48,14 +48,19 @@ class RawDataList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = RawDataSerializer(data=request.data)
+        data = request.data
+        if 'name' in data.keys() and 'files_path' not in data.keys():
+            this_data_directory = data_directory + '/' + request.data['name']
+            data['files_path'] = this_data_directory
+        serializer = RawDataSerializer(data=data)
         if serializer.is_valid():
             # save raw data file
             kk = request.data['files'].keys()[0]
             request.data['files'][request.data['name'] + '.csv'] = \
                 request.data['files'][kk]
             request.data['files'].pop(kk)
-            this_data_directory = data_directory + '/' + request.data['name']
+            if 'files_path' in data.keys():
+                this_data_directory = data['files_path']
             save_files(this_data_directory, request.data)
             # save raw data in the database
             serializer.save()
@@ -76,26 +81,34 @@ class SubmissionFoldList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = SubmissionFoldSerializer(data=request.data)
+        data = request.data
+        if 'databoard_s_id' in data.keys():
+            data['databoard_s'] = data['databoard_s_id']
+            if 'files_path' not in data.keys():
+                this_submission_directory = submission_directory + \
+                                '/sub_{}'.format(request.data['databoard_s_id'])
+                data['files_path'] = this_submission_directory
+        # create associated submission if it does not exist in the db
+        try:
+            Submission.objects.get(
+                            databoard_s_id=request.data['databoard_s_id'])
+        except:
+            serializer_submission = SubmissionSerializer(data=data)
+            if serializer_submission.is_valid():
+                # save submission files
+                # TODO: better to save them in the db?
+                if 'files_path' in data.keys():
+                    this_submission_directory = data['files_path']
+                save_files(this_submission_directory, data)
+                # save submission in the database
+                serializer_submission.save()
+        # create submission on cv fold
+        serializer = SubmissionFoldSerializer(data=data)
         # we assume below that train_is and test_is are sent compressed with
         # base64.b64encode(zlib.compress(train_is.tostring()))
         # indices can be retrieved with:
         # np.fromstring(zlib.decompress(base64.b64decode(train_is)), dtype=int)
         if serializer.is_valid():
-            # if the submission does not exist in the db, create it
-            try:
-                Submission.objects.get(
-                                databoard_s_id=request.data['databoard_s_id'])
-            except:
-                serializer_submission = SubmissionSerializer(data=request.data)
-                if serializer_submission.is_valid():
-                    # save submission files
-                    # TODO: better to save them in the db?
-                    this_submission_directory = submission_directory + \
-                                '/sub_{}'.format(request.data['databoard_s_id'])
-                    save_files(this_submission_directory, request.data)
-                    # save submission in the database
-                    serializer_submission.save()
             # save submission fold in the database
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

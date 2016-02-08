@@ -18,4 +18,3 @@ class SubmissionFoldSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubmissionFold
         fields = '__all__'
-

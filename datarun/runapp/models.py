@@ -105,4 +105,4 @@ class SubmissionFold(models.Model):
 
     def __unicode__(self):
         return 'SubmissionFold(databoard id {}, submission_id {}, state {})'. \
-                format(self.databoard_sf_id, self.databoard_s_id, self.state)
+                format(self.databoard_sf_id, self.databoard_s, self.state)

@@ -45,7 +45,9 @@ def prepare_data(raw_filename, held_out_test_size, train_filename,
 def train_test_submission_fold(submission_fold):
     log_message = ''
     # get raw data
-    raw_data = submission_fold.submission.raw_data
+    print(submission_fold)
+    print(submission_fold.databoard_s)
+    raw_data = submission_fold.databoard_s.raw_data
     try:
         X_train, y_train = read_data(raw_data.files_path + '/train.csv')
         X_test, y_test = read_data(raw_data.files_path + '/test.csv')
@@ -65,7 +67,7 @@ def train_test_submission_fold(submission_fold):
 
 def train_submission_fold(submission_fold, X_train, y_train,
                           list_workflow_elements):
-    module_path = submission_fold.submission.files_path
+    module_path = submission_fold.databoard_s.files_path
     train_is = submission_fold.train_is
     train_is = np.fromstring(zlib.decompress(base64.b64decode(train_is)),
                              dtype=int)
