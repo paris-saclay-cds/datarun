@@ -121,14 +121,18 @@ class WorkflowTests(APITestCase):
 
             # Make sure we can split data into train and test sets
             # ----------------------------------------------------
-            raw_data = RawData.objects.get(id=raw_data_id)
-            raw_filename = raw_data.files_path + '/' + raw_data.name + '.csv'
-            train_filename = raw_data.files_path + '/train.csv'
-            test_filename = raw_data.files_path + '/test.csv'
-            task.prepare_data(raw_filename, held_out_test,
-                              train_filename, test_filename,
-                              random_state=42)
-            # TODO with the view
+            # raw_data = RawData.objects.get(id=raw_data_id)
+            # raw_filename = raw_data.files_path + '/' + raw_data.name + '.csv'
+            # train_filename = raw_data.files_path + '/train.csv'
+            # test_filename = raw_data.files_path + '/test.csv'
+            # task.prepare_data(raw_filename, held_out_test,
+            #                   train_filename, test_filename,
+            #                   random_state=42)
+            url = reverse('rawdata-split')
+            data = {'random_state': 42, 'held_out_test': held_out_test,
+                    'raw_data_id': raw_data_id}
+            response = self.client.post(url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
 
             # Make sure we can train and test a submission on cv fold
             # -------------------------------------------------------

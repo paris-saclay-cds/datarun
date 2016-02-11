@@ -8,6 +8,8 @@ urlpatterns = [
         name='submissionfold-list'),
     url(r'^runapp/submissionfold/(?P<pk>[0-9]+)/$',
         views.SubmissionFoldDetail.as_view(), name='submissionfold-detail'),
+    url(r'^runapp/rawdata/split/$',
+        views.SplitTrainTest.as_view(), name='rawdata-split'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
