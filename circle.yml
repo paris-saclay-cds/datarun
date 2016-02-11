@@ -1,0 +1,7 @@
+## Customize the test machine
+machine:
+
+  # Add some environment variables
+  environment:
+    DIR_DATA: data
+    DIR_SUBMISSION: submission
