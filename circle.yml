@@ -6,3 +6,10 @@ machine:
     DIR_DATA: data
     DIR_SUBMISSION: submission
     DR_DATABASE_NAME: datarun
+
+
+test:
+  override:
+    - coverage run manage.py test
+  post:
+    - coverage html -d $CIRCLE_ARTIFACTS
