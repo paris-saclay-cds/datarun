@@ -65,7 +65,7 @@ class RawDataList(APIView):
             TODO
             requests.post('http://127.0.0.1:8000/runapp/rawdata/',
                           auth=('username', 'password'),
-                          data={'name': 'iris', 'target_column': 'species',
+                          json={'name': 'iris', 'target_column': 'species',
                                  'workflow_elements': 'classifier',
                                  'files': {'iris.csv': 'blablabla'}})
         ---
