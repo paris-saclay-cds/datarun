@@ -97,7 +97,6 @@ class WorkflowTests(APITestCase):
             file2 = 'test_files/classifier.py'
             file3 = 'test_files/calibrator.py'
             data = {'databoard_sf_id': subf_id, 'databoard_s_id': sub_id,
-                    # 'raw_data': {'id': raw_data_id}}
                     'raw_data': raw_data_id}
             skf = cross_validation.ShuffleSplit(int(n_samples * held_out_test))
             train_is, test_is = list(skf)[0]
@@ -146,3 +145,19 @@ class WorkflowTests(APITestCase):
             pred = pred.reshape(int(n_samples * held_out_test), 3)
             sum_prob = np.ones(int(n_samples * held_out_test))
             self.assertTrue((pred.sum(axis=1) == sum_prob).all())
+
+            # Make sure we can retrieve predictions
+            # -------------------------------------
+            # Specified by a list of submission fold ids
+            url = reverse('testpredictions-list')
+            data = {'list_submission_fold': [subf_id]}
+            response = self.client.post(url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = {'list_submission': [subf_id]}
+            response = self.client.post(url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+            # That have been newly trained and not requested
+            url = reverse('testpredictions-new')
+            data = {'raw_data': raw_data_id}
+            response = self.client.post(url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)

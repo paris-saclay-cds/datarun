@@ -149,16 +149,16 @@ class GetTestPredictionList(APIView):
         try:
             ind = data['list_submission_fold']
             tested_sub = SubmissionFold.objects.filter(databoard_sf_id__in=ind,
-                                                       state='TESTED')
+                                                       state='tested')
             serializer = TestPredSubmissionFoldSerializer(tested_sub, many=True)
-            if serializer.is_valid():
-                for sub in tested_sub:
-                    sub.new = False
-                    sub.save()
+            for sub in tested_sub:
+                sub.new = False
+                sub.save()
             return Response(serializer.data)
         except:
             return Response({'error': 'You need to post list_submission_fold: a\
-                              list of submission on cv fold id'})
+                              list of submission on cv fold id'},
+                            status=status.HTTP_204_NO_CONTENT)
 
 
 class GetTestPredictionNew(APIView):
@@ -175,19 +175,19 @@ class GetTestPredictionNew(APIView):
         try:
             if 'raw_data' in data.keys():
                 tested_sub = SubmissionFold.\
-                    objects.filter(state='TESTED', new=True,
+                    objects.filter(state='tested', new=True,
                                    databoard_s__raw_data__id=data['raw_data'])
             else:
-                tested_sub = SubmissionFold.objects.filter(state='TESTED',
+                tested_sub = SubmissionFold.objects.filter(state='tested',
                                                            new=True)
             serializer = TestPredSubmissionFoldSerializer(tested_sub, many=True)
-            if serializer.is_valid():
-                for sub in tested_sub:
-                    sub.new = False
-                    sub.save()
+            for sub in tested_sub:
+                sub.new = False
+                sub.save()
             return Response(serializer.data)
         except:
-            return Response({'error': 'Oups, something went wrong!'})
+            return Response({'error': 'Oups, something went wrong!'},
+                            status=status.HTTP_204_NO_CONTENT)
 
 
 class SplitTrainTest(APIView):
@@ -210,4 +210,3 @@ class SplitTrainTest(APIView):
                            train_filename, test_filename,
                            random_state=random_state)
         return Response({'Soon done! Data splitted:': raw_data.name})
-

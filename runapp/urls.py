@@ -10,6 +10,10 @@ urlpatterns = [
         views.SubmissionFoldDetail.as_view(), name='submissionfold-detail'),
     url(r'^runapp/rawdata/split/$',
         views.SplitTrainTest.as_view(), name='rawdata-split'),
+    url(r'^runapp/testpredictions/list/$',
+        views.GetTestPredictionList.as_view(), name='testpredictions-list'),
+    url(r'^runapp/testpredictions/new/$',
+        views.GetTestPredictionNew.as_view(), name='testpredictions-new'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
