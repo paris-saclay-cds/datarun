@@ -22,9 +22,9 @@ class RawData(models.Model):
     target_column = models.CharField(max_length=200, null=False)
 
     def __unicode__(self):
-        return 'RawData(id {}, name {}, file_path {})'.format(self.id,
-                                                              self.name,
-                                                              self.files_path)
+        return 'RawData(id {}, name {}, files_path {})'.format(self.id,
+                                                               self.name,
+                                                               self.files_path)
 
 
 class Submission(models.Model):
@@ -64,6 +64,7 @@ class SubmissionFold(models.Model):
     :param test_time: real clock testing time
     :param train_cpu_time:  training cpu time
     :param train_memory: training memory usage
+    :param new: True when it has not already been sent by the API
 
     :type databoard_sf_id: IntegerField(primary_key=True)
     :type submission: ForeignKey(Submission, null=True, blank=True)
@@ -78,6 +79,7 @@ class SubmissionFold(models.Model):
     :type test_time: FloatField, default=0.
     :type train_cpu_time: FloatField, default=0.
     :type train_memory: FloatField, default=0.
+    :type new: BooleanField, default=True.
     """
 
     databoard_sf_id = models.IntegerField(primary_key=True)
@@ -102,6 +104,7 @@ class SubmissionFold(models.Model):
     test_time = models.FloatField(default=0., null=True)
     train_cpu_time = models.FloatField(default=0., null=True)
     train_memory = models.FloatField(default=0., null=True)
+    new = models.BooleanField(default=True)
 
     def __unicode__(self):
         return 'SubmissionFold(databoard id {}, submission_id {}, state {})'. \
