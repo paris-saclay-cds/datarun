@@ -2,6 +2,7 @@ import os
 from .models import RawData, Submission, SubmissionFold
 from .serializers import RawDataSerializer, SubmissionSerializer
 from .serializers import SubmissionFoldSerializer
+from .serializers import TestPredSubmissionFoldSerializer
 from django.http import Http404
 from rest_framework import permissions
 from rest_framework.views import APIView
@@ -135,8 +136,60 @@ class SubmissionFoldDetail(APIView):
         return Response(serializer.data)
 
 
-# @app.route('/split_train_test/', methods=['POST'])
-# @auth.login_required
+class GetTestPredictionList(APIView):
+    """
+    Retrieve predictions (on the test data set) of  SubmissionFold instances
+    among a list of id that have been trained and tested
+    """
+
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    def post(self, request, format=None):
+        data = request.data
+        try:
+            ind = data['list_submission_fold']
+            tested_sub = SubmissionFold.objects.filter(databoard_sf_id__in=ind,
+                                                       state='TESTED')
+            serializer = TestPredSubmissionFoldSerializer(tested_sub, many=True)
+            if serializer.is_valid():
+                for sub in tested_sub:
+                    sub.new = False
+                    sub.save()
+            return Response(serializer.data)
+        except:
+            return Response({'error': 'You need to post list_submission_fold: a\
+                              list of submission on cv fold id'})
+
+
+class GetTestPredictionNew(APIView):
+    """
+    Retrieve predictions (on the test data set) of  SubmissionFold instances
+    that have been trained and tested and not yet requested. You can specify a
+    given data challenge by posting the raw_data id.
+    """
+
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    def post(self, request, format=None):
+        data = request.data
+        try:
+            if 'raw_data' in data.keys():
+                tested_sub = SubmissionFold.\
+                    objects.filter(state='TESTED', new=True,
+                                   databoard_s__raw_data__id=data['raw_data'])
+            else:
+                tested_sub = SubmissionFold.objects.filter(state='TESTED',
+                                                           new=True)
+            serializer = TestPredSubmissionFoldSerializer(tested_sub, many=True)
+            if serializer.is_valid():
+                for sub in tested_sub:
+                    sub.new = False
+                    sub.save()
+            return Response(serializer.data)
+        except:
+            return Response({'error': 'Oups, something went wrong!'})
+
+
 class SplitTrainTest(APIView):
 
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
@@ -157,3 +210,4 @@ class SplitTrainTest(APIView):
                            train_filename, test_filename,
                            random_state=random_state)
         return Response({'Soon done! Data splitted:': raw_data.name})
+
