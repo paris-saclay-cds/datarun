@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'runapp',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'rest_framework_swagger'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -135,3 +136,34 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# API documentation django-rest-swagger
+# http://django-rest-swagger.readthedocs.org/en/latest/index.html
+SWAGGER_SETTINGS = {
+    'exclude_namespaces': [],
+    'api_version': '0.1',
+    'api_path': '/',
+    'enabled_methods': [
+        'get',
+        'post',
+        'put',
+        'patch',
+        'delete'
+    ],
+    'api_key': '',
+    'is_authenticated': True,
+    'is_superuser': False,
+    'unauthenticated_user': 'django.contrib.auth.models.AnonymousUser',
+    'permission_denied_handler': None,
+    'resource_access_handler': None,
+    # 'base_path':'helloreverb.com/docs',
+    'info': {
+        'contact': 'camille.marini@telecom-paristech.fr',
+        'description': 'Datarun is a rest api that train and test models \
+                        on CV fold',
+        # 'license': '????',
+        # 'licenseUrl': 'http://www.apache.org/licenses/LICENSE-2.0.html',
+        'title': 'Datarun',
+    },
+    'doc_expansion': 'none',
+}

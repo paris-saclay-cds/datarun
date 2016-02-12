@@ -38,18 +38,40 @@ def save_files(dir_data, data):
 
 
 class RawDataList(APIView):
-    """
-    List all raw dataset, or create a new dataset
-    """
 
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def get(self, request, format=None):
+        """
+        List all raw dataset
+        . Example with curl:
+            curl -u username:password GET http://127.0.0.1:8000/runapp/rawdata/
+        . Example with the python package requests:
+            requests.get('http://127.0.0.1:8000/runapp/rawdata/',
+            auth=('username', 'password'))
+        ---
+        response_serializer: RawDataSerializer
+        """
         raw_datas = RawData.objects.all()
         serializer = RawDataSerializer(raw_datas, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        """
+        Create a new dataset
+        . Ex with curl:
+            curl -u username:password POST http://127.0.0.1:8000/runapp/rawdata/
+        . Ex with the python package requests:
+            TODO
+            requests.post('http://127.0.0.1:8000/runapp/rawdata/',
+                          auth=('username', 'password'),
+                          data={'name': 'iris', 'target_column': 'species',
+                                 'workflow_elements': 'classifier',
+                                 'files': {'iris.csv': 'blablabla'}})
+        ---
+        request_serializer: RawDataSerializer
+        response_serializer: RawDataSerializer
+        """
         data = request.data
         if 'name' in data.keys() and 'files_path' not in data.keys():
             this_data_directory = data_directory + '/' + request.data['name']
@@ -71,18 +93,26 @@ class RawDataList(APIView):
 
 
 class SubmissionFoldList(APIView):
-    """
-    List all submission on CV fold, or create a new one
-    """
 
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def get(self, request, format=None):
+        """
+        List all submission on CV fold
+        ---
+        response_serializer: SubmissionFoldSerializer
+        """
         submission_folds = SubmissionFold.objects.all()
         serializer = SubmissionFoldSerializer(submission_folds, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        """
+        List all submission on CV fold
+        ---
+        request_serializer: SubmissionFoldSerializer
+        response_serializer: SubmissionFoldSerializer
+        """
         data = request.data
         if 'databoard_s_id' in data.keys():
             data['databoard_s'] = data['databoard_s_id']
@@ -118,9 +148,6 @@ class SubmissionFoldList(APIView):
 
 
 class SubmissionFoldDetail(APIView):
-    """
-    Retrieve a SubmissionFold instance to check its state
-    """
 
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
@@ -131,20 +158,39 @@ class SubmissionFoldDetail(APIView):
             raise Http404
 
     def get(self, request, pk, format=None):
+        """
+        Retrieve a SubmissionFold instance to check its state
+        ---
+        parameters:
+            - name : pk
+              description: id of the submission on cv fold in the databoard db
+              required: true
+              type: interger
+              paramType: path
+        response_serializer: SubmissionFoldSerializer
+        """
         submission_fold = self.get_object(pk)
         serializer = SubmissionFoldSerializer(submission_fold)
         return Response(serializer.data)
 
 
 class GetTestPredictionList(APIView):
-    """
-    Retrieve predictions (on the test data set) of  SubmissionFold instances
-    among a list of id that have been trained and tested
-    """
 
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def post(self, request, format=None):
+        """
+        Retrieve predictions (on the test data set) of  SubmissionFold instances
+        among a list of id that have been trained and tested
+        ---
+        parameters:
+            - name: list_submission_fold
+              description: list of submission on cv fold ids
+              required: true
+              type: list
+              paramType: form
+        response_serializer: TestPredSubmissionFoldSerializer
+        """
         data = request.data
         try:
             ind = data['list_submission_fold']
@@ -162,21 +208,29 @@ class GetTestPredictionList(APIView):
 
 
 class GetTestPredictionNew(APIView):
-    """
-    Retrieve predictions (on the test data set) of  SubmissionFold instances
-    that have been trained and tested and not yet requested. You can specify a
-    given data challenge by posting the raw_data id.
-    """
 
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def post(self, request, format=None):
+        """
+        Retrieve predictions (on the test data set) of  SubmissionFold
+        instances that have been trained and tested and not yet requested.
+        You can specify a given data challenge by posting the raw_data id.
+        ---
+        parameters:
+            - name: raw_data_id
+              description: id of the raw dataset from which to get predictions
+              required: false
+              type: integer
+              paramType: form
+        response_serializer: TestPredSubmissionFoldSerializer
+        """
         data = request.data
         try:
-            if 'raw_data' in data.keys():
+            if 'raw_data_id' in data.keys():
                 tested_sub = SubmissionFold.\
-                    objects.filter(state='tested', new=True,
-                                   databoard_s__raw_data__id=data['raw_data'])
+                   objects.filter(state='tested', new=True,
+                                  databoard_s__raw_data__id=data['raw_data_id'])
             else:
                 tested_sub = SubmissionFold.objects.filter(state='tested',
                                                            new=True)
@@ -195,6 +249,26 @@ class SplitTrainTest(APIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def post(self, request, format=None):
+        """
+        Split raw data into train and test datasets
+        ---
+        parameters:
+            - name: random_state
+              description: random state used to split data
+              required: false
+              type: integer
+              paramType: form
+            - name: held_out_test
+              description: percentage of the dataset kept as test dataset
+              required: true
+              type: float
+              paramType: form
+            - name: raw_data_id
+              description: id of the raw dataset
+              required: true
+              type: integer
+              paramType: form
+        """
         data = request.data
         if 'random_state' in data:
             random_state = data['random_state']

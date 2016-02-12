@@ -70,7 +70,7 @@ class WorkflowTests(APITestCase):
         with self.env:
             # Make sure we can create raw data
             # --------------------------------
-            url = reverse('rawdata')
+            url = reverse('runapp:rawdata')
             raw_data_name = "iris"
             raw_data_file = 'test_files/iris.csv'
             n_samples = 150
@@ -90,7 +90,7 @@ class WorkflowTests(APITestCase):
 
             # Make sure we can submit a submission on cv fold
             # -----------------------------------------------
-            url = reverse('submissionfold-list')
+            url = reverse('runapp:submissionfold-list')
             subf_id, sub_id = 2, 2
             raw_data_id = RawData.objects.all()[0].pk
             file1 = 'test_files/feature_extractor.py'
@@ -127,7 +127,7 @@ class WorkflowTests(APITestCase):
             # task.prepare_data(raw_filename, held_out_test,
             #                   train_filename, test_filename,
             #                   random_state=42)
-            url = reverse('rawdata-split')
+            url = reverse('runapp:rawdata-split')
             data = {'random_state': 42, 'held_out_test': held_out_test,
                     'raw_data_id': raw_data_id}
             response = self.client.post(url, data, format='json')
@@ -149,7 +149,7 @@ class WorkflowTests(APITestCase):
             # Make sure we can retrieve predictions
             # -------------------------------------
             # Specified by a list of submission fold ids
-            url = reverse('testpredictions-list')
+            url = reverse('runapp:testpredictions-list')
             data = {'list_submission_fold': [subf_id]}
             response = self.client.post(url, data, format='json')
             self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -157,7 +157,7 @@ class WorkflowTests(APITestCase):
             response = self.client.post(url, data, format='json')
             self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
             # That have been newly trained and not requested
-            url = reverse('testpredictions-new')
-            data = {'raw_data': raw_data_id}
+            url = reverse('runapp:testpredictions-new')
+            data = {'raw_data_id': raw_data_id}
             response = self.client.post(url, data, format='json')
             self.assertEqual(response.status_code, status.HTTP_200_OK)
