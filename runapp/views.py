@@ -43,11 +43,11 @@ class RawDataList(APIView):
 
     def get(self, request, format=None):
         """
-        List all raw dataset
-        . Example with curl:
-            curl -u username:password GET http://127.0.0.1:8000/runapp/rawdata/
-        . Example with the python package requests:
-            requests.get('http://127.0.0.1:8000/runapp/rawdata/',
+        List all raw dataset \n
+        - Example with curl (on localhost): \n
+        curl -u username:password GET http://127.0.0.1:8000/runapp/rawdata/ \n
+        - Example with the python package requests (on localhost): \n
+        requests.get('http://127.0.0.1:8000/runapp/rawdata/',
             auth=('username', 'password'))
         ---
         response_serializer: RawDataSerializer
@@ -58,11 +58,10 @@ class RawDataList(APIView):
 
     def post(self, request, format=None):
         """
-        Create a new dataset
-        . Ex with curl:
-            curl -u username:password POST http://127.0.0.1:8000/runapp/rawdata/
-        . Ex with the python package requests:
-            TODO
+        Create a new dataset \n
+        - Example with curl (on localhost): \n TODO
+        curl -u username:password POST http://127.0.0.1:8000/runapp/rawdata/ \n
+        - Example with the python package requests (on localhost): \n
             requests.post('http://127.0.0.1:8000/runapp/rawdata/',
                           auth=('username', 'password'),
                           json={'name': 'iris', 'target_column': 'species',
@@ -99,6 +98,12 @@ class SubmissionFoldList(APIView):
     def get(self, request, format=None):
         """
         List all submission on CV fold
+        - Example with curl (on localhost): \n
+            curl -u username:password GET
+            http://127.0.0.1:8000/runapp/submissionfold/ \n
+        - Example with the python package requests (on localhost): \n
+            requests.get('http://127.0.0.1:8000/runapp/submissionfold/',
+            auth=('username', 'password'))
         ---
         response_serializer: SubmissionFoldSerializer
         """
@@ -108,7 +113,18 @@ class SubmissionFoldList(APIView):
 
     def post(self, request, format=None):
         """
-        List all submission on CV fold
+        Create a submission on CV fold (and if necessary the associated
+        submission \n
+        - Example with curl (on localhost): \n TODO
+        curl -u username:password POST
+        http://127.0.0.1:8000/runapp/submissionfold/ \n
+        - Example with the python package requests (on localhost): \n
+            requests.post('http://127.0.0.1:8000/runapp/submissionfold/',
+                          auth=('username', 'password'),
+                          json={'databoard_sf_id': 10, 'databoard_s_id': 24,
+                                'raw_data': 8, 'train_is': 'GDHRFdfgfd',
+                                'test_is': 'kdjhLGf2',
+                                'files': {'classifier.py': 'import sklearn..'}})
         ---
         request_serializer: SubmissionFoldSerializer
         response_serializer: SubmissionFoldSerializer
@@ -160,6 +176,12 @@ class SubmissionFoldDetail(APIView):
     def get(self, request, pk, format=None):
         """
         Retrieve a SubmissionFold instance to check its state
+        - Example with curl (on localhost): \n TODO
+            curl -u username:password POST
+            http://127.0.0.1:8000/runapp/submissionfold/10/ \n
+        - Example with the python package requests (on localhost): \n
+            requests.get('http://127.0.0.1:8000/runapp/submissionfold/10/',
+            auth=('username', 'password'))
         ---
         parameters:
             - name : pk
@@ -182,6 +204,13 @@ class GetTestPredictionList(APIView):
         """
         Retrieve predictions (on the test data set) of  SubmissionFold instances
         among a list of id that have been trained and tested
+        - Example with curl (on localhost): \n TODO
+            curl -u username:password POST
+            http://127.0.0.1:8000/runapp/testpredictions/list/ \n
+        - Example with the python package requests (on localhost): \n
+            requests.post('http://127.0.0.1:8000/runapp/testpredictions/list/',
+                          auth=('username', 'password'),
+                          json={'list_submission_fold': [1, 2, 10]})
         ---
         parameters:
             - name: list_submission_fold
@@ -216,6 +245,13 @@ class GetTestPredictionNew(APIView):
         Retrieve predictions (on the test data set) of  SubmissionFold
         instances that have been trained and tested and not yet requested.
         You can specify a given data challenge by posting the raw_data id.
+        - Example with curl (on localhost): \n TODO
+            curl -u username:password POST
+            http://127.0.0.1:8000/runapp/testpredictions/new/ \n
+        - Example with the python package requests (on localhost): \n
+            requests.post('http://127.0.0.1:8000/runapp/testpredictions/new/',
+                          auth=('username', 'password'),
+                          json={'raw_data_id': 1})
         ---
         parameters:
             - name: raw_data_id
@@ -251,6 +287,14 @@ class SplitTrainTest(APIView):
     def post(self, request, format=None):
         """
         Split raw data into train and test datasets
+        - Example with curl (on localhost): \n TODO
+            curl -u username:password POST
+            http://127.0.0.1:8000/runapp/rawdata/split/ \n
+        - Example with the python package requests (on localhost): \n
+            requests.post('http://127.0.0.1:8000/runapp/raw_data/split/',
+                          auth=('username', 'password'),
+                          json={'random_state': 42, 'held_out_test': 0.7,
+                                'raw_data_id': 1})
         ---
         parameters:
             - name: random_state
