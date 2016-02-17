@@ -32,10 +32,14 @@ Run: `python manage.py migrate`
 #### 5. Create a superuser
 
 Run: `python manage.py createsuperuser`  
- 
+
 #### 6. Run the server (localhost)
 
 Run: `python manage.py runserver`
+
+#### 7. Start celery worker 
+
+Run: `celery -A datarun worker -l info`
 
 ### How to test it?
 
