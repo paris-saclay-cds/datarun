@@ -338,8 +338,7 @@ class SplitTrainTest(APIView):
         raw_filename = raw_data.files_path + '/' + raw_data.name + '.csv'
         train_filename = raw_data.files_path + '/train.csv'
         test_filename = raw_data.files_path + '/test.csv'
-        # task = tasks.prepare_data(raw_filename, held_out_test_size,
-        tasks.prepare_data(raw_filename, held_out_test_size,
-                           train_filename, test_filename,
-                           random_state=random_state)
-        return Response({'Soon done! Data splitted:': raw_data.name})
+        task = tasks.prepare_data.delay(raw_filename, held_out_test_size,
+                                        train_filename, test_filename,
+                                        random_state=random_state)
+        return Response({'task_id': task.id})

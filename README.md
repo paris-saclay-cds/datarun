@@ -7,7 +7,10 @@ The API documentation can be found at [http://host/docs/](http://127.0.0.1:8000/
 #### 1. Install the application
 
 Clone the project: `git clone https://github.com/camillemarini/datarun.git`  
-Install dependencies (might be useful to create a virtual environment before, eg using [virtualenv and virtualenvwrapper](https://virtualenvwrapper.readthedocs.org/en/latest/)): `pip install -r requirements.txt`.   
+Install dependencies (might be useful to create a virtual environment before, eg using [virtualenv and virtualenvwrapper](https://virtualenvwrapper.readthedocs.org/en/latest/)):  
+`pip install -r requirements.txt`.   
+For numpy and scipy(for Unbuntu & Debian users):  
+`sudo apt-get install python-numpy python-scipy`  
 
 #### 2. Set up the database
   

@@ -120,25 +120,18 @@ class WorkflowTests(APITestCase):
 
             # Make sure we can split data into train and test sets
             # ----------------------------------------------------
-            # raw_data = RawData.objects.get(id=raw_data_id)
-            # raw_filename = raw_data.files_path + '/' + raw_data.name + '.csv'
-            # train_filename = raw_data.files_path + '/train.csv'
-            # test_filename = raw_data.files_path + '/test.csv'
-            # task.prepare_data(raw_filename, held_out_test,
-            #                   train_filename, test_filename,
-            #                   random_state=42)
             url = reverse('runapp:rawdata-split')
             data = {'random_state': 42, 'held_out_test': held_out_test,
                     'raw_data_id': raw_data_id}
             response = self.client.post(url, data, format='json')
             self.assertEqual(response.status_code, status.HTTP_200_OK)
-
             # Make sure we can train and test a submission on cv fold
             # -------------------------------------------------------
+            t = task.train_test_submission_fold.delay(subf_id)
+            logs = t.result
+            print('** logs **', logs)
             submission_fold = SubmissionFold.objects.get(
                                         databoard_sf_id=subf_id)
-            logs = task.train_test_submission_fold(submission_fold)
-            print('** logs **', logs)
             print('submission fold state:', submission_fold.state)
             pred = np.fromstring(zlib.decompress(
                base64.b64decode(submission_fold.test_predictions)), dtype=float)

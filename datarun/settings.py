@@ -14,14 +14,6 @@ from __future__ import absolute_import
 import os
 
 
-# Celery settings
-
-BROKER_URL = 'amqp://'  # 'amqp://guest:guest@localhost//'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -46,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djcelery',
     'runapp',
     'rest_framework',
     'rest_framework.authtoken',
@@ -167,3 +160,11 @@ SWAGGER_SETTINGS = {
     },
     'doc_expansion': 'none',
 }
+
+# Celery settings
+BROKER_URL = 'amqp://'  # 'amqp://guest:guest@localhost//'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'

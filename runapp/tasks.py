@@ -7,9 +7,9 @@ import pandas as pd
 from importlib import import_module
 from sklearn.cross_validation import train_test_split, StratifiedShuffleSplit
 from celery import shared_task
-
+from runapp.models import SubmissionFold
 os.environ['DJANGO_SETTINGS_MODULE'] = 'datarun.settings'
-from django.conf import settings
+# from django.conf import settings
 
 
 def read_data(filename, target_column):
@@ -27,11 +27,6 @@ def _make_error_message(e):
 
 
 @shared_task
-def add(x, y):
-    return x + y
-
-
-@shared_task
 def prepare_data(raw_filename, held_out_test_size, train_filename,
                  test_filename, random_state=42):
     df = pd.read_csv(raw_filename)
@@ -42,7 +37,9 @@ def prepare_data(raw_filename, held_out_test_size, train_filename,
 
 
 @shared_task
-def train_test_submission_fold(submission_fold):
+def train_test_submission_fold(submission_fold_id):
+    submission_fold = SubmissionFold.objects.\
+        get(databoard_sf_id=submission_fold_id)
     log_message = ''
     # get raw data
     raw_data = submission_fold.databoard_s.raw_data
