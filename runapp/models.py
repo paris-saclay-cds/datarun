@@ -54,7 +54,9 @@ class SubmissionFold(models.Model):
     :param databoard_sf_id: id of the submission on cv fold in databoard db
     :param submission: associated submission
     :param train_is: train indices
-    :param test_is!: test indices
+    :param test_is: test indices
+    :param priority: priority to train-test the fold
+    ('L' for low priority, 'H' for high priority)
     :param full_train_predictions: predictions of the entire train dataset
     :param test_predictions: predictions of the test dataset
     :param state: TODO, TRAINED, VALIDATED, TESTED, ERROR
@@ -64,12 +66,15 @@ class SubmissionFold(models.Model):
     :param test_time: real clock testing time
     :param train_cpu_time:  training cpu time
     :param train_memory: training memory usage
+    :param test_cpu_time:  test cpu time
+    :param test_memory: test memory usage
     :param new: True when it has not already been sent by the API
 
     :type databoard_sf_id: IntegerField(primary_key=True)
     :type submission: ForeignKey(Submission, null=True, blank=True)
     :type train_is: TextField
     :type test_is: TextField
+    :type priority: CharField, choices.
     :type full_train_predictions: TextField
     :type test_predictions: TextField
     :type state: CharField, choices.
@@ -78,12 +83,20 @@ class SubmissionFold(models.Model):
     :type validation_time: FloatField, default=0.
     :type test_time: FloatField, default=0.
     :type train_cpu_time: FloatField, default=0.
-    :type train_memory: FloatField, default=0.
+    :type train_cpu_time: FloatField, default=0.
+    :type test_memory: FloatField, default=0.
+    :type test_memory: FloatField, default=0.
     :type new: BooleanField, default=True.
     """
 
     databoard_sf_id = models.IntegerField(primary_key=True)
     databoard_s = models.ForeignKey(Submission, null=True, blank=True)
+    PRIORITY_CHOICES = (
+        ('low', 'low priority'),
+        ('high', 'high priority'),
+    )
+    priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES,
+                                default='low', null=True)
     train_is = models.TextField(null=False)
     test_is = models.TextField(null=False)
     # TODO? Do we need to output full_train_predictions and test_predictions
@@ -104,6 +117,8 @@ class SubmissionFold(models.Model):
     test_time = models.FloatField(default=0., null=True)
     train_cpu_time = models.FloatField(default=0., null=True)
     train_memory = models.FloatField(default=0., null=True)
+    test_cpu_time = models.FloatField(default=0., null=True)
+    test_memory = models.FloatField(default=0., null=True)
     new = models.BooleanField(default=True)
 
     def __unicode__(self):
