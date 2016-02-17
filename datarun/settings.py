@@ -166,5 +166,5 @@ BROKER_URL = 'amqp://'  # 'amqp://guest:guest@localhost//'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-# CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
 TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'

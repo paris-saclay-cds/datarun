@@ -124,7 +124,8 @@ class SubmissionFoldList(APIView):
             curl -u username:password   -H "Content-Type: applson" -X POST
             -d '{"databoard_s_id": 1, "files": {"classifier.py":
                 "import sklearn.."}, "train_is": "hgjhg", "raw_data":1,
-                "databoard_sf_id": 11, "test_is": "kdjhLGf2"}'
+                "databoard_sf_id": 11, "test_is": "kdjhLGf2",
+                "priority": "L"}'
                 http://127.0.0.1:8000/runapp/submissionfold/ \n
             Don't forget double quotes for the json, simple quotes do not work\n
         - Example with the python package requests (on localhost): \n
@@ -132,7 +133,7 @@ class SubmissionFoldList(APIView):
                           auth=('username', 'password'),
                           json={'databoard_sf_id': 10, 'databoard_s_id': 24,
                                 'raw_data': 8, 'train_is': 'GDHRFdfgfd',
-                                'test_is': 'kdjhLGf2',
+                                'test_is': 'kdjhLGf2', 'priority': 'L'
                                 'files': {'classifier.py': 'import sklearn..'}})
         ---
         request_serializer: SubmissionFoldSerializer
@@ -168,7 +169,25 @@ class SubmissionFoldList(APIView):
         if serializer.is_valid():
             # save submission fold in the database
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            # Add train-test task to the queue (low priority by default)
+            if 'priority' in data.keys():
+                priority = data['priority']
+            else:
+                priority = "low"
+            try:
+                # task = tasks.train_test_submission_fold.apply_async(
+                #     args=[data['databoard_sf_id']],
+                #     kwargs={'queue': priority})
+                task = tasks.train_test_submission_fold.delay(
+                    data['databoard_sf_id'])
+                task_id = task.id
+            except:
+                print('Train test not started for submission fold %s'
+                      % data['databoard_sf_id'])
+                task_id = None
+            dd = serializer.data
+            dd['task_id'] = task_id
+            return Response(dd, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

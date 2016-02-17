@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from runapp.models import RawData, Submission, SubmissionFold
-import runapp.tasks as task
+# import runapp.tasks as task
 
 
 class ModelTests(TestCase):
@@ -88,11 +88,19 @@ class WorkflowTests(APITestCase):
             self.assertEqual(RawData.objects.count(), 1)  # or 2??
             self.assertEqual(RawData.objects.all()[0].name, raw_data_name)
 
+            # Make sure we can split data into train and test sets
+            # ----------------------------------------------------
+            raw_data_id = RawData.objects.all()[0].pk
+            url = reverse('runapp:rawdata-split')
+            data = {'random_state': 42, 'held_out_test': held_out_test,
+                    'raw_data_id': raw_data_id}
+            response = self.client.post(url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+
             # Make sure we can submit a submission on cv fold
             # -----------------------------------------------
             url = reverse('runapp:submissionfold-list')
             subf_id, sub_id = 2, 2
-            raw_data_id = RawData.objects.all()[0].pk
             file1 = 'test_files/feature_extractor.py'
             file2 = 'test_files/classifier.py'
             file3 = 'test_files/calibrator.py'
@@ -118,18 +126,11 @@ class WorkflowTests(APITestCase):
             self.assertEqual(Submission.objects.count(), 1)
             self.assertEqual(SubmissionFold.objects.count(), 1)
 
-            # Make sure we can split data into train and test sets
-            # ----------------------------------------------------
-            url = reverse('runapp:rawdata-split')
-            data = {'random_state': 42, 'held_out_test': held_out_test,
-                    'raw_data_id': raw_data_id}
-            response = self.client.post(url, data, format='json')
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
             # Make sure we can train and test a submission on cv fold
             # -------------------------------------------------------
-            t = task.train_test_submission_fold.delay(subf_id)
-            logs = t.result
-            print('** logs **', logs)
+            # t = task.train_test_submission_fold.delay(subf_id)
+            # logs = t.result
+            # print('** logs **', logs)
             submission_fold = SubmissionFold.objects.get(
                                         databoard_sf_id=subf_id)
             print('submission fold state:', submission_fold.state)
