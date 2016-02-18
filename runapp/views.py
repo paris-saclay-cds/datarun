@@ -175,12 +175,26 @@ class SubmissionFoldList(APIView):
             else:
                 priority = "low"
             try:
+                submission_fold = SubmissionFold.objects.\
+                    get(databoard_sf_id=data['databoard_sf_id'])
+                raw_data_files_path = submission_fold.databoard_s.\
+                    raw_data.files_path
+                workflow_elements = submission_fold.databoard_s.\
+                    raw_data.workflow_elements
+                raw_data_target_column = submission_fold.databoard_s.\
+                    raw_data_target_column
+                submission_files_path = submission_fold.databoard_s.\
+                    files_path
+                train_is = submission_fold.train_is
                 # task = tasks.train_test_submission_fold.apply_async(
                 #     (data['databoard_sf_id']),
                 #     queue=priority)
                 task = tasks.train_test_submission_fold.delay(
-                    data['databoard_sf_id'])
+                    raw_data_files_path, workflow_elements,
+                    raw_data_target_column, submission_files_path, train_is)
                 task_id = task.id
+                submission_fold.task_id = task_id
+                submission_fold.save()
             except:
                 print('Train test not started for submission fold %s'
                       % data['databoard_sf_id'])

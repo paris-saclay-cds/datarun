@@ -7,7 +7,6 @@ import pandas as pd
 from importlib import import_module
 from sklearn.cross_validation import train_test_split, StratifiedShuffleSplit
 from celery import shared_task
-from runapp.models import SubmissionFold
 os.environ['DJANGO_SETTINGS_MODULE'] = 'datarun.settings'
 # from django.conf import settings
 
@@ -27,6 +26,11 @@ def _make_error_message(e):
 
 
 @shared_task
+def add(x, y):
+    return x + y
+
+
+@shared_task
 def prepare_data(raw_filename, held_out_test_size, train_filename,
                  test_filename, random_state=42):
     df = pd.read_csv(raw_filename)
@@ -37,53 +41,69 @@ def prepare_data(raw_filename, held_out_test_size, train_filename,
 
 
 @shared_task
-def train_test_submission_fold(submission_fold_id):
-    submission_fold = SubmissionFold.objects.\
-        get(databoard_sf_id=submission_fold_id)
+def train_test_submission_fold(raw_data_files_path, workflow_elements,
+                               raw_data_target_column, submission_files_path,
+                               train_is):
+    '''
+    Train and test a submission on a fold
+
+    :param raw_data_files_path: path of raw data file
+    :param workflow_elements: workflow elements separated by a comma
+    :param raw_data_target_column: name of the targetted column
+    :param submission_files_path: path of the submission files
+    :param train_is: indices of train dataset for this fold (compressed and
+    base64 encoded)
+    '''
+    # submission_fold = SubmissionFold.objects.\
+    #     get(databoard_sf_id=submission_fold_id)
     log_message = ''
     # get raw data
-    raw_data = submission_fold.databoard_s.raw_data
+    # raw_data = submission_fold.databoard_s.raw_data
     try:
-        X_train, y_train = read_data(raw_data.files_path + '/train.csv',
-                                     raw_data.target_column)
-        X_test, y_test = read_data(raw_data.files_path + '/test.csv',
-                                   raw_data.target_column)
+        X_train, y_train = read_data(raw_data_files_path + '/train.csv',
+                                     raw_data_target_column)
+        X_test, y_test = read_data(raw_data_files_path + '/test.csv',
+                                   raw_data_target_column)
     except:
         log_message = log_message + 'ERROR: split data \n'
         return log_message
     # get workflow elements
-    list_workflow_elements = raw_data.workflow_elements.split(',')
+    list_workflow_elements = workflow_elements.split(',')
     # train submission on fold
-    trained_model, log_train = train_submission_fold(submission_fold,
-                                                     X_train, y_train,
-                                                     list_workflow_elements)
-    if 'error' not in submission_fold.state:
-        log_test = test_submission_fold(submission_fold, trained_model, X_test,
-                                        y_test, list_workflow_elements)
+    trained_model, log_train, submission_fold_state, metrics_train,\
+        full_train_predictions = \
+        train_submission_fold(submission_files_path, train_is,
+                              X_train, y_train, list_workflow_elements)
+    if 'error' not in submission_fold_state:
+        log_test, submission_fold_state, metrics_test, test_predictions = \
+            test_submission_fold(trained_model, X_test, y_test,
+                                 list_workflow_elements)
         return (log_message + '\n' + log_train + '\n' + log_test)
-    return (log_message + '\n' + log_train)
+    metrics = metrics_train.update(metrics_test)
+    # TODO return: full_train_predictions, submission_state, metrics, test_pred
+    return (log_message + '\n' + log_train), submission_fold_state, metrics,\
+        full_train_predictions, test_predictions
 
 
-def train_submission_fold(submission_fold, X_train, y_train,
-                          list_workflow_elements):
-    module_path = submission_fold.databoard_s.files_path.replace('/', '.')
-    train_is = submission_fold.train_is
+def train_submission_fold(submission_files_path, train_is, X_train,
+                          y_train, list_workflow_elements):
+    module_path = submission_files_path.replace('/', '.')
     train_is = np.fromstring(zlib.decompress(base64.b64decode(train_is)),
                              dtype=int)
     log_message = ''
+    metrics = {}
     # Train
     start = timeit.default_timer()
     try:
         trained_submission = train_model(module_path, list_workflow_elements,
                                          X_train, y_train, train_is)
-        submission_fold.state = 'trained'
+        submission_fold_state = 'trained'
     except Exception, e:
-        submission_fold.state = 'error'
+        submission_fold_state = 'error'
         log_message = log_message + _make_error_message(e) + '\n'
-        return None, log_message
+        return None, log_message, submission_fold_state, None, None
     end = timeit.default_timer()
-    submission_fold.train_time = end - start
-    submission_fold.save()
+    metrics['train_time'] = end - start
     # TODO add resources...
     # Validation
     start = timeit.default_timer()
@@ -93,47 +113,47 @@ def train_submission_fold(submission_fold, X_train, y_train,
         if len(predictions) == len(y_train):
             predictions = base64.b64encode(zlib.compress(
                 predictions.tostring()))
-            submission_fold.full_train_predictions = predictions
-            submission_fold.state = 'validated'
+            full_train_predictions = predictions
+            submission_fold_state = 'validated'
         else:
             log_message = log_message + 'Wrong full train prediction size: \n'\
                           + '{} instead of {} \n'.format(len(predictions),
                                                          len(y_train))
-            submission_fold.state = 'error'
+            submission_fold_state = 'error'
+            full_train_predictions = None
     except Exception, e:
-        submission_fold.state = 'error'
+        submission_fold_state = 'error'
         log_message = log_message + _make_error_message(e) + '\n'
-        return None, log_message
+        return None, log_message, submission_fold_state, None, None
     end = timeit.default_timer()
-    submission_fold.validation_time = end - start
-    submission_fold.save()
-    return trained_submission, log_message
+    metrics['validation_time'] = end - start
+    return trained_submission, log_message, submission_fold_state,\
+        metrics, full_train_predictions
 
 
-def test_submission_fold(submission_fold, trained_submission, X_test, y_test,
+def test_submission_fold(trained_submission, X_test, y_test,
                          list_workflow_elements):
     log_message = ''
+    metrics = {}
     start = timeit.default_timer()
     try:
         predictions = test_model(trained_submission, list_workflow_elements,
                                  X_test, range(len(y_test)))
         if len(predictions) == len(y_test):
-            predictions = base64.b64encode(zlib.compress(
+            test_predictions = base64.b64encode(zlib.compress(
                 predictions.tostring()))
-            submission_fold.test_predictions = predictions
-            submission_fold.state = 'tested'
+            submission_fold_state = 'tested'
         else:
             log_message = log_message + 'Wrong test prediction size: \n'\
                           + '{} instead of {} \n'.format(len(predictions),
                                                          len(y_test))
-            submission_fold.state = 'error'
-
+            submission_fold_state = 'error'
+            test_predictions = None
     except:
         pass
     end = timeit.default_timer()
-    submission_fold.test_time = end - start
-    submission_fold.save()
-    return log_message
+    metrics['test_time'] = end - start
+    return log_message, submission_fold_state, metrics, test_predictions
 
 
 def train_model(module_path, list_workflow_elements, X, y, train_is):

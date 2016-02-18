@@ -128,9 +128,6 @@ class WorkflowTests(APITestCase):
 
             # Make sure we can train and test a submission on cv fold
             # -------------------------------------------------------
-            # t = task.train_test_submission_fold.delay(subf_id)
-            # logs = t.result
-            # print('** logs **', logs)
             submission_fold = SubmissionFold.objects.get(
                                         databoard_sf_id=subf_id)
             print('submission fold state:', submission_fold.state)
