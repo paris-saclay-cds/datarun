@@ -176,8 +176,8 @@ class SubmissionFoldList(APIView):
                 priority = "low"
             try:
                 # task = tasks.train_test_submission_fold.apply_async(
-                #     args=[data['databoard_sf_id']],
-                #     kwargs={'queue': priority})
+                #     (data['databoard_sf_id']),
+                #     queue=priority)
                 task = tasks.train_test_submission_fold.delay(
                     data['databoard_sf_id'])
                 task_id = task.id
