@@ -1,4 +1,4 @@
-import os
+# import os
 import timeit
 import zlib
 import base64
@@ -7,7 +7,7 @@ import pandas as pd
 from importlib import import_module
 from sklearn.cross_validation import train_test_split, StratifiedShuffleSplit
 from celery import shared_task
-os.environ['DJANGO_SETTINGS_MODULE'] = 'datarun.settings'
+# os.environ['DJANGO_SETTINGS_MODULE'] = 'datarun.settings'
 # from django.conf import settings
 
 
@@ -30,11 +30,23 @@ def add(x, y):
     return x + y
 
 
+def save_submission_fold_db(submission_fold, submission_fold_state, metrics,
+                            full_train_predictions, test_predictions):
+    submission_fold.state = submission_fold_state
+    submission_fold.test_predictions = test_predictions
+    submission_fold.full_train_predictions = full_train_predictions
+    # TODO: add resources
+    submission_fold.train_time = metrics['train_time']
+    submission_fold.validation_time = metrics['validation_time']
+    submission_fold.test_time = metrics['test_time']
+    submission_fold.save()
+
+
 @shared_task
-def save_submission_fold_db():
+def task_save_submission_fold_db():
     '''
     Get all new trained tested submission on cv fold and save them in the
-    database
+    database. This task requires an access to the db
     '''
     from runapp.models import SubmissionFold
     # Get all new trained tested submission on cv fold
@@ -42,8 +54,14 @@ def save_submission_fold_db():
         filter(test_predictions__isnull=True).\
         filter(task_id__isnull=False)
     for submission_fold in submission_folds:
-        print('status', train_test_submission_fold.AsyncResult(submission_fold.
-                                                               task_id).state)
+        task = train_test_submission_fold.AsyncResult(submission_fold.task_id)
+        if task.state == 'SUCCESS':
+            log_message, submission_fold_state, metrics,\
+                full_train_predictions, test_predictions = task.result
+            if 'error' not in log_message:
+                save_submission_fold_db(submission_fold, submission_fold_state,
+                                        metrics, full_train_predictions,
+                                        test_predictions)
 
 
 @shared_task

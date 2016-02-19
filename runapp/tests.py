@@ -125,7 +125,6 @@ class WorkflowTests(APITestCase):
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
             self.assertEqual(Submission.objects.count(), 1)
             self.assertEqual(SubmissionFold.objects.count(), 1)
-            print(response)
 
             # Make sure we can train and test a submission on cv fold
             # -------------------------------------------------------
@@ -145,12 +144,13 @@ class WorkflowTests(APITestCase):
             submission_fold = SubmissionFold.objects.get(
                                         databoard_sf_id=subf_id)
             self.assertNotIn('error', log_message)
-            submission_fold.state = submission_fold_state
-            submission_fold.test_predictions = test_predictions
-            submission_fold.full_train_predictions = full_train_predictions
-            submission_fold.save()
+            tasks.save_submission_fold_db(submission_fold,
+                                          submission_fold_state, metrics,
+                                          full_train_predictions,
+                                          test_predictions)
             # Check if train test went ok
             print('submission fold state:', submission_fold.state)
+            self.assertEqual(submission_fold.state, 'tested')
             pred = np.fromstring(zlib.decompress(
                base64.b64decode(submission_fold.test_predictions)), dtype=float)
             pred = pred.reshape(int(n_samples * held_out_test), 3)
