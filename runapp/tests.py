@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from runapp.models import RawData, Submission, SubmissionFold
-# import runapp.tasks as task
+import runapp.tasks as tasks
 
 
 class ModelTests(TestCase):
@@ -125,11 +125,31 @@ class WorkflowTests(APITestCase):
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
             self.assertEqual(Submission.objects.count(), 1)
             self.assertEqual(SubmissionFold.objects.count(), 1)
+            print(response)
 
             # Make sure we can train and test a submission on cv fold
             # -------------------------------------------------------
+            # Train test is called in the view runapp:submissionfold-list
+            # But not possible to get the task in the result db, so we retrain
+            raw_data_files_path = RawData.objects.get(id=raw_data_id).files_path
+            submission_files_path = Submission.objects.\
+                get(databoard_s_id=sub_id).files_path
+            log_message, submission_fold_state, metrics,\
+                full_train_predictions, test_predictions =\
+                tasks.train_test_submission_fold(raw_data_files_path,
+                                                 workflow_elements,
+                                                 target_column,
+                                                 submission_files_path,
+                                                 train_is)
+            # Save output of the task in the database
             submission_fold = SubmissionFold.objects.get(
                                         databoard_sf_id=subf_id)
+            self.assertNotIn('error', log_message)
+            submission_fold.state = submission_fold_state
+            submission_fold.test_predictions = test_predictions
+            submission_fold.full_train_predictions = full_train_predictions
+            submission_fold.save()
+            # Check if train test went ok
             print('submission fold state:', submission_fold.state)
             pred = np.fromstring(zlib.decompress(
                base64.b64decode(submission_fold.test_predictions)), dtype=float)

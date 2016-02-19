@@ -154,7 +154,6 @@ class SubmissionFoldList(APIView):
             serializer_submission = SubmissionSerializer(data=data)
             if serializer_submission.is_valid():
                 # save submission files
-                # TODO: better to save them in the db?
                 if 'files_path' in data.keys():
                     this_submission_directory = data['files_path']
                 save_files(this_submission_directory, data)
@@ -182,7 +181,7 @@ class SubmissionFoldList(APIView):
                 workflow_elements = submission_fold.databoard_s.\
                     raw_data.workflow_elements
                 raw_data_target_column = submission_fold.databoard_s.\
-                    raw_data_target_column
+                    raw_data.target_column
                 submission_files_path = submission_fold.databoard_s.\
                     files_path
                 train_is = submission_fold.train_is
@@ -193,6 +192,9 @@ class SubmissionFoldList(APIView):
                     raw_data_files_path, workflow_elements,
                     raw_data_target_column, submission_files_path, train_is)
                 task_id = task.id
+                # print('status', tasks.train_test_submission_fold.
+                #       AsyncResult(task_id).state)
+                # print task.state
                 submission_fold.task_id = task_id
                 submission_fold.save()
             except:

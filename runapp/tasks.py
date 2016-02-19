@@ -31,8 +31,39 @@ def add(x, y):
 
 
 @shared_task
+def save_submission_fold_db():
+    '''
+    Get all new trained tested submission on cv fold and save them in the
+    database
+    '''
+    from runapp.models import SubmissionFold
+    # Get all new trained tested submission on cv fold
+    submission_folds = SubmissionFold.objects.\
+        filter(test_predictions__isnull=True).\
+        filter(task_id__isnull=False)
+    for submission_fold in submission_folds:
+        print('status', train_test_submission_fold.AsyncResult(submission_fold.
+                                                               task_id).state)
+
+
+@shared_task
 def prepare_data(raw_filename, held_out_test_size, train_filename,
                  test_filename, random_state=42):
+    '''
+    Split dataset in train and test datasets
+
+    :param raw_filename: name of raw data with path
+    :param held_out_test_size: percentage of data for the test dataset
+    :param train_filename: name of the file in which we are going to save the
+    train dataset
+    :param test_filename: name of the file in which we are going to save the
+    test dataset
+
+    :type raw_filename: string
+    :type held_out_test_size: float (between 0 and 1)
+    :type train_filename: string
+    :type test_filename: string
+    '''
     df = pd.read_csv(raw_filename)
     df_train, df_test = train_test_split(
         df, test_size=held_out_test_size, random_state=random_state)
@@ -53,12 +84,14 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
     :param submission_files_path: path of the submission files
     :param train_is: indices of train dataset for this fold (compressed and
     base64 encoded)
+
+    :type raw_data_files_path: string
+    :type workflow_elements: string
+    :type raw_data_target_column: string
+    :type submission_files_path: string
+    :type train_is: string
     '''
-    # submission_fold = SubmissionFold.objects.\
-    #     get(databoard_sf_id=submission_fold_id)
     log_message = ''
-    # get raw data
-    # raw_data = submission_fold.databoard_s.raw_data
     try:
         X_train, y_train = read_data(raw_data_files_path + '/train.csv',
                                      raw_data_target_column)
@@ -66,22 +99,25 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
                                    raw_data_target_column)
     except:
         log_message = log_message + 'ERROR: split data \n'
-        return log_message
+        return log_message, 'TODO', {}, None, None
     # get workflow elements
     list_workflow_elements = workflow_elements.split(',')
     # train submission on fold
-    trained_model, log_train, submission_fold_state, metrics_train,\
+    trained_model, log_train, submission_fold_state, metrics,\
         full_train_predictions = \
         train_submission_fold(submission_files_path, train_is,
                               X_train, y_train, list_workflow_elements)
+    log_message = log_message + '\n' + log_train
     if 'error' not in submission_fold_state:
         log_test, submission_fold_state, metrics_test, test_predictions = \
             test_submission_fold(trained_model, X_test, y_test,
                                  list_workflow_elements)
-        return (log_message + '\n' + log_train + '\n' + log_test)
-    metrics = metrics_train.update(metrics_test)
-    # TODO return: full_train_predictions, submission_state, metrics, test_pred
-    return (log_message + '\n' + log_train), submission_fold_state, metrics,\
+        metrics.update(metrics_test)
+        log_message = log_message + '\n' + log_test
+    else:
+        full_train_predictions = None
+        test_predictions = None
+    return log_message, submission_fold_state, metrics,\
         full_train_predictions, test_predictions
 
 
