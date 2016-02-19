@@ -192,9 +192,6 @@ class SubmissionFoldList(APIView):
                     raw_data_files_path, workflow_elements,
                     raw_data_target_column, submission_files_path, train_is)
                 task_id = task.id
-                # print('status', tasks.train_test_submission_fold.
-                #       AsyncResult(task_id).state)
-                # print task.state
                 submission_fold.task_id = task_id
                 submission_fold.save()
             except:
