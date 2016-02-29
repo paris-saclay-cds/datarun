@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from importlib import import_module
 from sklearn.cross_validation import train_test_split, StratifiedShuffleSplit
-from celery import shared_task
+from celery import task, shared_task
 from celery.utils.log import get_task_logger
 # os.environ['DJANGO_SETTINGS_MODULE'] = 'datarun.settings'
 # from django.conf import settings
