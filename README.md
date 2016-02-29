@@ -23,12 +23,7 @@ Before starting, [install postgres](http://www.postgresql.org/download/) if need
 * `DR_DATABASE_USER`: database user name  
 * `DR_DATABASE_PASSWORD`: database user password  
 * `CELERY_SCHEDULER_PERIOD`: period (in min) at which the scheduler checks new trained models and saves them in the database. Ex: `*/2` for every 2 min.    
-* `D_CELERYD_NODES`: number of nodes (for celery init script celeryd)  
-* `D_CELERY_BIN`: absolute or relative path to the celery command (for celery init scripts celeryd and celerybeat)  
-* `D_CELERY_APP`: app instance to use (for celery init scripts celeryd and celerybeat)   
-* `D_CELERY_CHDIR`: where to chdir at start (for celery init scripts celeryd and celerybeat)   
-* `D_CELERYD_OPTS`: extra command-line arguments to the celery workers. e.g. "--time-limit=300 --concurrency=8"
-* `D_CELERYBEAT_OPTS`: extra arguments to celeybeat. e.g. "--schedule=/var/run/celery/celerybeat-schedule"
+* `CELERY_NODES`: number of nodes   
  
 
 If your are using virtualenvwrapper, you can store these variables in `$VIRTUAL_ENV/bin/postactivate`
