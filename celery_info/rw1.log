@@ -1,0 +1,11 @@
+[2016-03-01 09:00:39,729: INFO/MainProcess] Connected to amqp://guest:**@localhost:5672//
+[2016-03-01 09:00:39,880: INFO/MainProcess] mingle: searching for neighbors
+[2016-03-01 09:00:40,896: INFO/MainProcess] mingle: all alone
+[2016-03-01 09:00:40,912: WARNING/MainProcess] /home/camille/.virtualenvs/djatarun/local/lib/python2.7/site-packages/celery/fixups/django.py:265: UserWarning: Using settings.DEBUG leads to a memory leak, never use this setting in production environments!
+  warnings.warn('Using settings.DEBUG leads to a memory leak, never '
+
+[2016-03-01 09:00:40,912: WARNING/MainProcess] rw1@did ready.
+[2016-03-01 09:00:40,926: INFO/MainProcess] sync with lw1@did
+[2016-03-01 09:02:00,077: INFO/MainProcess] Received task: runapp.tasks.task_save_submission_fold_db[16ea1acb-7a55-4794-a0a8-85bbf8e4f720]
+[2016-03-01 09:02:00,078: INFO/Worker-3] runapp.tasks.task_save_submission_fold_db[16ea1acb-7a55-4794-a0a8-85bbf8e4f720]: oh yeah
+[2016-03-01 09:02:00,110: INFO/MainProcess] Task runapp.tasks.task_save_submission_fold_db[16ea1acb-7a55-4794-a0a8-85bbf8e4f720] succeeded in 0.0324603479967s: None

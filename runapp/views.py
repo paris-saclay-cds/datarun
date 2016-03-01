@@ -18,8 +18,6 @@ import tasks
 # idem for data
 data_directory = os.environ.get('DIR_DATA', 'data')
 submission_directory = os.environ.get('DIR_SUBMISSION', 'submission')
-print('data directory', data_directory)
-print('submission directory', submission_directory)
 
 
 @api_view(('GET',))

@@ -144,6 +144,7 @@ class WorkflowTests(APITestCase):
             submission_fold = SubmissionFold.objects.get(
                                         databoard_sf_id=subf_id)
             self.assertNotIn('error', log_message)
+            self.assertNotIn('Error', log_message)
             tasks.save_submission_fold_db(submission_fold,
                                           submission_fold_state, metrics,
                                           full_train_predictions,
