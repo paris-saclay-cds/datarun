@@ -1,4 +1,6 @@
 import os
+import zlib
+import base64
 from .models import RawData, Submission, SubmissionFold
 from .serializers import RawDataSerializer, SubmissionSerializer
 from .serializers import SubmissionFoldSerializer
@@ -35,6 +37,7 @@ def save_files(dir_data, data):
     os.system('touch ' + dir_data + '/__init__.py')
     for n_ff, ff in data['files'].items():
         with open(dir_data + '/' + n_ff, 'w') as o_ff:
+            ff = zlib.decompress(base64.b64decode(ff))
             o_ff.write(ff)
 
 

@@ -6,7 +6,7 @@ import base64
 def read_compress(file_name):
     with open(file_name, 'r') as ff:
         df = ff.read()
-    return base64.b64encode(zlib.compress(df.tostring()))
+    return base64.b64encode(zlib.compress(df))
 
 
 def post_data(host_url, username, password,
