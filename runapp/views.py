@@ -10,14 +10,16 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
-import runapp
 import tasks
+
 
 # Submission files are temporarilly saved in submission_directory
 # they are likely to be saved in the database as a next step?
 # idem for data
 data_directory = os.environ.get('DIR_DATA', 'data')
 submission_directory = os.environ.get('DIR_SUBMISSION', 'submission')
+print('data directory', data_directory)
+print('submission directory', submission_directory)
 
 
 @api_view(('GET',))
@@ -61,7 +63,8 @@ class RawDataList(APIView):
         """
         Create a new dataset \n
         - Example with curl (on localhost): \n
-            curl -u username:password   -H "Content-Type: applson" -X POST
+            curl -u username:password   -H "Content-Type: application/json"
+            -X POST
             -d '{"name": "iris", "target_column": "species",
                  "workflow_elements": "classifier",
                  "files": {"iris.csv": 'blablabla'}}'
@@ -122,7 +125,8 @@ class SubmissionFoldList(APIView):
         Create a submission on CV fold (and if necessary the associated
         submission \n
         - Example with curl (on localhost): \n
-            curl -u username:password   -H "Content-Type: applson" -X POST
+            curl -u username:password   -H "Content-Type: application/json"
+            -X POST
             -d '{"databoard_s_id": 1, "files": {"classifier.py":
                 "import sklearn.."}, "train_is": "hgjhg", "raw_data":1,
                 "databoard_sf_id": 11, "test_is": "kdjhLGf2",
@@ -247,7 +251,8 @@ class GetTestPredictionList(APIView):
         Retrieve predictions (on the test data set) of  SubmissionFold instances
         among a list of id that have been trained and tested \n
         - Example with curl (on localhost): \n
-            curl -u username:password -H "Content-Type: applson" -X POST
+            curl -u username:password -H "Content-Type: application/json"
+            -X POST
             -d '{"list_submission_fold": [1, 2, 10]}'
                 http://127.0.0.1:8000/runapp/testpredictions/list/ \n
             Don't forget double quotes for the json, simple quotes do not work\n
@@ -290,7 +295,8 @@ class GetTestPredictionNew(APIView):
         instances that have been trained and tested and not yet requested.
         You can specify a given data challenge by posting the raw_data id. \n
         - Example with curl (on localhost): \n
-            curl -u username:password -H "Content-Type: applson" -X POST
+            curl -u username:password -H "Content-Type: application/json"
+            -X POST
             -d '{"raw_data_id": 1}'
                 http://127.0.0.1:8000/runapp/testpredictions/new/ \n
             Don't forget double quotes for the json, simple quotes do not work\n
@@ -334,7 +340,8 @@ class SplitTrainTest(APIView):
         """
         Split raw data into train and test datasets \n
         - Example with curl (on localhost): \n
-            curl -u username:password -H "Content-Type: applson" -X POST
+            curl -u username:password -H "Content-Type: application/json"
+            -X POST
             -d '{"random_state": 42, "held_out_test": 0.7, "raw_data_id": 1}'
                 http://127.0.0.1:8000/runapp/rawdata/split/ \n
             Don't forget double quotes for the json, simple quotes do not work\n
