@@ -18,6 +18,8 @@ cd ..
 while getopts ":d" opt; do
   case $opt in
     d)
+      echo "Stopping the test server"
+      fuser -k 8000/tcp
       echo "Destroying the test database and reseting it to original value";
       dropdb $DR_DATABASE_NAME;
       echo "Killing the workers";
