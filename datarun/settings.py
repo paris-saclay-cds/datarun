@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 from __future__ import absolute_import
 import os
+from celery.schedules import crontab
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -168,3 +169,10 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
 TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
+CELERYBEAT_SCHEDULE = {
+    'save-train-model-in-db': {
+        'task': 'runapp.tasks.task_save_submission_fold_db',
+        'schedule': crontab(minute=os.environ.get('CELERY_SCHEDULER_PERIOD',
+                                                  '*/15')),
+    },
+}

@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from runapp.models import RawData, Submission, SubmissionFold
-# import runapp.tasks as task
+import runapp.tasks as tasks
 
 
 class ModelTests(TestCase):
@@ -81,6 +81,7 @@ class WorkflowTests(APITestCase):
                     'workflow_elements': workflow_elements}
             with open(raw_data_file, 'r') as ff:
                 df = ff.read()
+            df = base64.b64encode(zlib.compress(df))
             data['files'] = {'raw_data_test.txt': df}
 
             response = self.client.post(url, data, format='json')
@@ -118,6 +119,10 @@ class WorkflowTests(APITestCase):
                 df2 = ff.read()
             with open(file3, 'r') as ff:
                 df3 = ff.read()
+            # compress files content
+            df1 = base64.b64encode(zlib.compress(df1))
+            df2 = base64.b64encode(zlib.compress(df2))
+            df3 = base64.b64encode(zlib.compress(df3))
             data['files'] = {file1.split('/')[-1]: df1,
                              file2.split('/')[-1]: df2,
                              file3.split('/')[-1]: df3}
@@ -128,12 +133,30 @@ class WorkflowTests(APITestCase):
 
             # Make sure we can train and test a submission on cv fold
             # -------------------------------------------------------
-            # t = task.train_test_submission_fold.delay(subf_id)
-            # logs = t.result
-            # print('** logs **', logs)
+            # Train test is called in the view runapp:submissionfold-list
+            # But not possible to get the task in the result db, so we retrain
+            raw_data_files_path = RawData.objects.get(id=raw_data_id).files_path
+            submission_files_path = Submission.objects.\
+                get(databoard_s_id=sub_id).files_path
+            log_message, submission_fold_state, metrics,\
+                full_train_predictions, test_predictions =\
+                tasks.train_test_submission_fold(raw_data_files_path,
+                                                 workflow_elements,
+                                                 target_column,
+                                                 submission_files_path,
+                                                 train_is)
+            # Save output of the task in the database
             submission_fold = SubmissionFold.objects.get(
                                         databoard_sf_id=subf_id)
+            self.assertNotIn('error', log_message)
+            self.assertNotIn('Error', log_message)
+            tasks.save_submission_fold_db(submission_fold,
+                                          submission_fold_state, metrics,
+                                          full_train_predictions,
+                                          test_predictions)
+            # Check if train test went ok
             print('submission fold state:', submission_fold.state)
+            self.assertEqual(submission_fold.state, 'tested')
             pred = np.fromstring(zlib.decompress(
                base64.b64decode(submission_fold.test_predictions)), dtype=float)
             pred = pred.reshape(int(n_samples * held_out_test), 3)

@@ -10,7 +10,9 @@ Clone the project: `git clone https://github.com/camillemarini/datarun.git`
 Install dependencies (might be useful to create a virtual environment before, eg using [virtualenv and virtualenvwrapper](https://virtualenvwrapper.readthedocs.org/en/latest/)):  
 `pip install -r requirements.txt`.   
 For numpy and scipy(for Unbuntu & Debian users):  
-`sudo apt-get install python-numpy python-scipy`  
+`sudo apt-get install python-numpy python-scipy` 
+
+Install RabbitMQ (celery [broker](http://docs.celeryproject.org/en/latest/getting-started/first-steps-with-celery.html#rabbitmq)): `sudo apt-get install rabbitmq-server`   
 
 #### 2. Set up the database
   
@@ -21,7 +23,10 @@ Before starting, [install postgres](http://www.postgresql.org/download/) if need
 
 * `DR_DATABASE_NAME`: database name  
 * `DR_DATABASE_USER`: database user name  
-* `DR_DATABASE_PASSWORD`: database user password 
+* `DR_DATABASE_PASSWORD`: database user password  
+* `CELERY_SCHEDULER_PERIOD`: period (in min) at which the scheduler checks new trained models and saves them in the database. Ex: `*/2` for every 2 min.    
+* `CELERY_NODES`: number of nodes   
+ 
 
 If your are using virtualenvwrapper, you can store these variables in `$VIRTUAL_ENV/bin/postactivate`
 
@@ -43,7 +48,13 @@ Run: `celery -A datarun worker -l info`
 
 ### How to test it?
 
+#### for django tests
 Run: `python manage.py test`
+
+#### for local celery tests
+Run in one terminal: `bash local_test1.sh`  
+Run in another terminal: `bash local_test2.sh -d`  
+If two 'Oh yeah' are printed, tests are ok!     
 
 ### Migrations
 

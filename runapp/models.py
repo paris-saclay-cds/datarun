@@ -99,6 +99,7 @@ class SubmissionFold(models.Model):
                                 default='low', null=True)
     train_is = models.TextField(null=False)
     test_is = models.TextField(null=False)
+    task_id = models.CharField(max_length=100, null=True)
     # TODO? Do we need to output full_train_predictions and test_predictions
     full_train_predictions = models.TextField(null=True)
     test_predictions = models.TextField(null=True)
