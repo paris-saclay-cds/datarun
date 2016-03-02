@@ -21,7 +21,7 @@ python manage.py migrate
 python manage.py createuser MrTest test@test.com test 
 
 # Start celery workers
-# bash cmd_workers.sh start 2 1
+bash cmd_workers.sh start 2 1
 
 # Run a test server in the background
 python manage.py runserver 127.0.0.1:8000
