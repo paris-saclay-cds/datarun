@@ -35,12 +35,10 @@ def save_files(dir_data, data):
     "save files from data['files'] in directory dir_data"
     os.mkdir(dir_data)
     os.system('touch ' + dir_data + '/__init__.py')
-    print('data save', data)
     for n_ff, ff in data['files'].items():
         with open(dir_data + '/' + n_ff, 'w') as o_ff:
             ff = zlib.decompress(base64.b64decode(ff))
             o_ff.write(ff)
-        print('data should be saved')
 
 
 class RawDataList(APIView):
@@ -84,7 +82,6 @@ class RawDataList(APIView):
         response_serializer: RawDataSerializer
         """
         data = request.data
-        print('data post view 1', data)
         if 'name' in data.keys() and 'files_path' not in data.keys():
             this_data_directory = data_directory + '/' + request.data['name']
             data['files_path'] = this_data_directory
@@ -98,7 +95,6 @@ class RawDataList(APIView):
                 request.data['files'].pop(kk)
             if 'files_path' in data.keys():
                 this_data_directory = data['files_path']
-            print('data post view 2', data)
             save_files(this_data_directory, request.data)
             # save raw data in the database
             serializer.save()
