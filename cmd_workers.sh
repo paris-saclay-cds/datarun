@@ -35,6 +35,6 @@ else
     celery multi $1 $LOCAL_WORKERS -l INFO -A datarun \
         --logfile="$(pwd)/celery_info/%n.log" \
         --pidfile="$(pwd)/celery_info/%n.pid";
-    celery -A datarun beat -s "$(pwd)/celery_info/celerybeat-schedule"
+    celery -A datarun beat -s "$(pwd)/celery_info/celerybeat-schedule" --detach
 
 fi
