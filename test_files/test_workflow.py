@@ -1,3 +1,4 @@
+import time
 import json
 from sklearn import cross_validation
 import post_api
@@ -41,3 +42,14 @@ post_submission = post_api.post_submission_fold(host_url, username, userpassd,
                                                 data_id, submission_files)
 task_id = json.loads(post_submission.content)["task_id"]
 print(task_id)
+
+# Wait to be sure it was trained and tested and saved in the db (every X min)
+time.sleep(58)
+
+# Get submission prediction
+post_pred = post_api.get_prediction_list(host_url, username, userpassd,
+                                         [submission_fold_id])
+print(json.loads(post_pred.content))
+post_pred_new = post_api.get_prediction_new(host_url, username, userpassd,
+                                            data_id)
+print(json.loads(post_pred_new.content))

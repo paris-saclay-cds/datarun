@@ -9,6 +9,12 @@ def read_compress(file_name):
     return base64.b64encode(zlib.compress(df))
 
 
+def url_post(url1, url2, username, password, data):
+    url = url1 + url2
+    url = url[0:9] + url[9::].replace('//', '/')
+    return requests.post(url, auth=(username, password), json=data)
+
+
 def post_data(host_url, username, password,
               data_name, target_column, workflow_elements, data_file):
     """
@@ -37,20 +43,16 @@ def post_data(host_url, username, password,
             'workflow_elements': workflow_elements}
     df = read_compress(data_file)
     data['files'] = {data_name + '.csv': df}
-    url = host_url + '/runapp/rawdata/'
-    # removing double /
-    url = url[0:9] + url[9::].replace('//', '/')
-    return requests.post(url, auth=(username, password), json=data)
+    return url_post(host_url, '/runapp/rawdata/', username, password,
+                    data)
 
 
 def post_split(host_url, username, password,
                held_out_test, raw_data_id, random_state=42):
-    url = host_url + '/runapp/rawdata/split/'
-    # removing double /
-    url = url[0:9] + url[9::].replace('//', '/')
     data = {'random_state': random_state, 'held_out_test': held_out_test,
             'raw_data_id': raw_data_id}
-    return requests.post(url, auth=(username, password), json=data)
+    return url_post(host_url, '/runapp/rawdata/split/', username, password,
+                    data)
 
 
 def post_submission_fold(host_url, username, password,
@@ -92,7 +94,46 @@ def post_submission_fold(host_url, username, password,
         data['files'] = {}
         for ff in list_submission_files:
             data['files'][ff.split('/')[-1]] = read_compress(ff)
-    url = host_url + '/runapp/submissionfold/'
-    # removing double /
-    url = url[0:9] + url[9::].replace('//', '/')
-    return requests.post(url, auth=(username, password), json=data)
+    return url_post(host_url, '/runapp/submissionfold/', username, password,
+                    data)
+
+
+def get_prediction_list(host_url, username, password,
+                        list_submission_fold_id):
+    """
+    Get predictions given a list of submission on cv fold ids
+
+    :param host_url: api host url, such as http://127.0.0.1:8000/ (localhost)
+    :param username: username to be used for authentication
+    :param password: password to be used for authentication
+    :param list_submission_fold_id: list of submission on cv fold ids from which
+    we want the predictions
+
+    :type host_url: string
+    :type username: string
+    :type password: string
+    :type list_submission_fold_id: list
+    """
+    data = {'list_submission_fold': list_submission_fold_id}
+    return url_post(host_url, '/runapp/testpredictions/list/', username,
+                    password, data)
+
+
+def get_prediction_new(host_url, username, password,
+                       raw_data_id):
+    """
+    Get all new predictions given a raw data id
+
+    :param host_url: api host url, such as http://127.0.0.1:8000/ (localhost)
+    :param username: username to be used for authentication
+    :param password: password to be used for authentication
+    :param raw_data_id: id of a data set from which we want new predictions
+
+    :type host_url: string
+    :type username: string
+    :type password: string
+    :type raw_data_id: integer
+    """
+    data = {'raw_data_id': raw_data_id}
+    return url_post(host_url, '/runapp/testpredictions/new/', username,
+                    password, data)

@@ -7,6 +7,7 @@
 # Set up some environment variables
 export DIR_DATA="test_data"
 export DIR_SUBMISSION="test_submission"
+export CELERY_SCHEDULER_PERIOD='*/1'
 rm -r $DIR_DATA/*
 rm -r $DIR_SUBMISSION/*
 touch $DIR_SUBMISSION/__init__.py
