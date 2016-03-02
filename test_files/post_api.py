@@ -43,8 +43,9 @@ def post_data(host_url, username, password,
     requests.post(url, auth=(username, password), json=data)
 
 
-def post_submission_fold(host_url, username, password, priority,
+def post_submission_fold(host_url, username, password,
                          sub_id, sub_fold_id, train_is, test_is,
+                         priority='low',
                          raw_data_id=None, list_submission_files=None):
     """
     To post submission on cv fold and submission (if not already posted).
@@ -54,10 +55,20 @@ def post_submission_fold(host_url, username, password, priority,
     :param host_url: api host url, such as http://127.0.0.1:8000/ (localhost)
     :param username: username to be used for authentication
     :param password: password to be used for authentication
+    :param sub_id: id of the submission on databoard
+    :param sub_fold_id: id of the submission on cv fold on databoard
+    :param train_is: train indices for the cv fold
+    :param test_is: test indices for the cv fold
+    :param priority: priority level to train test the model: low or high
 
     :type host_url: string
     :type username: string
     :type password: string
+    :type sub_id: integer
+    :type sub_fold_id: integer
+    :type train_is: numpy array
+    :type test_is: numpy array
+    :type priority: string
     """
     # Compress train and test indices
     train_is = base64.b64encode(zlib.compress(train_is.tostring()))
