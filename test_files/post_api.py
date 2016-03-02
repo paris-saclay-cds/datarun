@@ -40,7 +40,17 @@ def post_data(host_url, username, password,
     url = host_url + '/runapp/rawdata/'
     # removing double /
     url = url[0:9] + url[9::].replace('//', '/')
-    requests.post(url, auth=(username, password), json=data)
+    return requests.post(url, auth=(username, password), json=data)
+
+
+def post_split(host_url, username, password,
+               held_out_test, raw_data_id, random_state=42):
+    url = host_url + '/runapp/rawdata/split/'
+    # removing double /
+    url = url[0:9] + url[9::].replace('//', '/')
+    data = {'random_state': random_state, 'held_out_test': held_out_test,
+            'raw_data_id': raw_data_id}
+    return requests.post(url, auth=(username, password), json=data)
 
 
 def post_submission_fold(host_url, username, password,
@@ -84,4 +94,4 @@ def post_submission_fold(host_url, username, password,
     url = host_url + '/runapp/submissionfold/'
     # removing double /
     url = url[0:9] + url[9::].replace('//', '/')
-    requests.post(url, auth=(username, password), json=data)
+    return requests.post(url, auth=(username, password), json=data)
