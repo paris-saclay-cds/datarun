@@ -6,10 +6,10 @@
 
 
 # Send data
-echo "{"name": "iris", "target_column": "species", "workflow_elements": "classifier", "files": {"iris.csv": $(cat test_files/iris.csv)}}"
-
-curl -u "MrTest":"test" -H "Content-Type: application/json" -X POST -d '{"name": "iris", "target_column": "species", "workflow_elements": "classifier", "files": {"iris.csv": "$(cat test_files/iris.csv)"}}' http://127.0.0.1:8000/runapp/rawdata/
-#"files": {"iris.csv": "aa"}}' http://127.0.0.1:8000/runapp/rawdata/
+cd test_files
+python -c'import post_api; post_api.post_data("http://127.0.0.1:8000/", \
+    "MrTest", "test", "iris", "species", "classifier", "iris.csv")'
+cd ..
 
 curl -u "MrTest":"test" -X GET http://127.0.0.1:8000/runapp/rawdata/
 

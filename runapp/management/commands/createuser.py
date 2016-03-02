@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
-from datarun import settings
+
 
 class Command(BaseCommand):
     help = 'Create a user given its name, email, and password'
@@ -14,5 +14,3 @@ class Command(BaseCommand):
         User.objects.create_user(options['user_name'],
                                  options['user_email'],
                                  options['user_password'])
-        print User.objects.all()
-        print settings.DATABASES

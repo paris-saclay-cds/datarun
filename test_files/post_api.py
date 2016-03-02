@@ -37,6 +37,7 @@ def post_data(host_url, username, password,
             'workflow_elements': workflow_elements}
     df = read_compress(data_file)
     data['files'] = {data_name + '.csv': df}
+    print('data before post', data)
     url = host_url + '/runapp/rawdata/'
     # removing double /
     url = url[0:9] + url[9::].replace('//', '/')
