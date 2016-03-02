@@ -5,13 +5,10 @@
 # A test database is created and destroyed if the -d flag is specified
 
 
-# Send data
+# Test workflow: send data, split train test, send submission 
 cd test_files
-python -c'import post_api; post_api.post_data("http://127.0.0.1:8000/", \
-    "MrTest", "test", "iris", "species", "classifier", "iris.csv")'
+python test_workflow.py 
 cd ..
-
-curl -u "MrTest":"test" -X GET http://127.0.0.1:8000/runapp/rawdata/
 
 # Destroy database and reset environment variables to original values
 while getopts ":d" opt; do

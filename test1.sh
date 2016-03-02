@@ -9,6 +9,7 @@ export DIR_DATA="test_data"
 export DIR_SUBMISSION="test_submission"
 rm -r $DIR_DATA/*
 rm -r $DIR_SUBMISSION/*
+touch $DIR_SUBMISSION/__init__.py
 
 # Create a test database
 export DR_DATABASE_NAME="test_datarun"

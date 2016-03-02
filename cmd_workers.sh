@@ -4,6 +4,8 @@
 # with two different queues: low and high
 # and nb_local_workers locally for the scheduler 
 
+rm -r celery_info/*
+
 export REMOTE_WORKERS=""
 for i in `seq 1 $2`;
 do

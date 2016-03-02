@@ -1,8 +1,0 @@
-[2016-03-01 09:00:40,840: INFO/MainProcess] Connected to amqp://guest:**@localhost:5672//
-[2016-03-01 09:00:40,922: INFO/MainProcess] mingle: searching for neighbors
-[2016-03-01 09:00:41,929: INFO/MainProcess] mingle: sync with 1 nodes
-[2016-03-01 09:00:41,929: INFO/MainProcess] mingle: sync complete
-[2016-03-01 09:00:41,938: WARNING/MainProcess] /home/camille/.virtualenvs/djatarun/local/lib/python2.7/site-packages/celery/fixups/django.py:265: UserWarning: Using settings.DEBUG leads to a memory leak, never use this setting in production environments!
-  warnings.warn('Using settings.DEBUG leads to a memory leak, never '
-
-[2016-03-01 09:00:41,938: WARNING/MainProcess] lw1@did ready.
