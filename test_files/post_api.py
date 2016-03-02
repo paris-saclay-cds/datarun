@@ -37,9 +37,10 @@ def post_data(host_url, username, password,
             'workflow_elements': workflow_elements}
     df = read_compress(data_file)
     data['files'] = {data_name + '.csv': df}
-    requests.post(host_url + '/runapp/rawdata/',
-                  auth=('username', 'password'),
-                  json=data)
+    url = host_url + '/runapp/rawdata/'
+    # removing double /
+    url = url[0:9] + url[9::].replace('//', '/')
+    requests.post(url, auth=(username, password), json=data)
 
 
 def post_submission_fold(host_url, username, password, priority,
@@ -69,6 +70,7 @@ def post_submission_fold(host_url, username, password, priority,
         data['files'] = {}
         for ff in list_submission_files:
             data['files'][ff.split('/')[-1]] = read_compress(ff)
-    requests.post(host_url + '/runapp/submissionfold/',
-                  auth=('username', 'password'),
-                  json=data)
+    url = host_url + '/runapp/submissionfold/'
+    # removing double /
+    url = url[0:9] + url[9::].replace('//', '/')
+    requests.post(url, auth=(username, password), json=data)
