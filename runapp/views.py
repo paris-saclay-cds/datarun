@@ -179,7 +179,7 @@ class SubmissionFoldList(APIView):
             if 'priority' in data.keys():
                 priority = data['priority']
             else:
-                priority = "low"
+                priority = "L"
             try:
                 submission_fold = SubmissionFold.objects.\
                     get(databoard_sf_id=data['databoard_sf_id'])

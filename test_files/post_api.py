@@ -55,7 +55,7 @@ def post_split(host_url, username, password,
 
 def post_submission_fold(host_url, username, password,
                          sub_id, sub_fold_id, train_is, test_is,
-                         priority='low',
+                         priority='L',
                          raw_data_id=None, list_submission_files=None):
     """
     To post submission on cv fold and submission (if not already posted).
@@ -69,7 +69,8 @@ def post_submission_fold(host_url, username, password,
     :param sub_fold_id: id of the submission on cv fold on databoard
     :param train_is: train indices for the cv fold
     :param test_is: test indices for the cv fold
-    :param priority: priority level to train test the model: low or high
+    :param priority: priority level to train test the model: L for low
+    and H for high
 
     :type host_url: string
     :type username: string
