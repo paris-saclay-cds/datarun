@@ -8,9 +8,8 @@ The API documentation can be found at [http://host/docs/](http://127.0.0.1:8000/
 
 Clone the project: `git clone https://github.com/camillemarini/datarun.git`  
 Install dependencies (might be useful to create a virtual environment before, eg using [virtualenv and virtualenvwrapper](https://virtualenvwrapper.readthedocs.org/en/latest/)):  
-`pip install -r requirements.txt`.   
-For numpy and scipy(for Unbuntu & Debian users):  
-`sudo apt-get install python-numpy python-scipy` 
+1. For numpy and scipy(for Unbuntu & Debian users): `sudo apt-get install python-numpy python-scipy` 
+2. `pip install -r requirements.txt`.   
 
 Install RabbitMQ (celery [broker](http://docs.celeryproject.org/en/latest/getting-started/first-steps-with-celery.html#rabbitmq)): `sudo apt-get install rabbitmq-server`   
 
@@ -65,4 +64,15 @@ If you modify the app models, you'll need to migrate the database.
 4. add the migrations file to your git and commit both the modified `runapp/models.py` and migrations file (so that other contributors can have the migration history)    
 
 
+### Deployment  
 
+With Apache and [mod_wsgi](https://modwsgi.readthedocs.org/en/develop/index.html).  
+
+#### Install Apache and mod_wsgi  
+
+1. Install Apache:  
+`sudo apt-get install apache`  
+`sudo apt-get install apache2-dev`    
+2. Install mod_wsgi:  
+Quick [installation guide](https://modwsgi.readthedocs.org/en/develop/user-guides/quick-installation-guide.html). 
+ 
