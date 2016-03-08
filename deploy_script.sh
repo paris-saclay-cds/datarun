@@ -19,7 +19,7 @@ sudo su -postgres  # postgres: PostgreSQL administrative user.
 psql -c '\i script_install/setup_database.sql'
 
 # Clone the project
-sudo git clone git@github.com:camillemarini/datarun.git
+sudo git clone https://github.com/camillemarini/datarun.git
 
 # Configure a Python Virtual Environment
 mkvirtualenv datarun
@@ -32,7 +32,15 @@ python manage.py migrate
 python manage.py collectstatic
 # TODO create a superuser??
 
-# Configure Apache
+# Configure Apache: copy apache conf file to /etc/apache2/sites-available/
+mv /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/backup.conf
+cp script_install/000-default.conf /etc/apache2/sites-available/.
 
 # Wrapping up some permissions issues
+# I don t think we need it, since nothing has to be written in the project dir
+sudo chown :www-data ~/datarun
+
+# Restart Apache
+# sudo service apache2 restart
+
 
