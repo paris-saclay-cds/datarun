@@ -41,9 +41,10 @@ Run: `python manage.py createsuperuser`
 
 Run: `python manage.py runserver`
 
-#### 7. Start celery worker 
+#### 7. Start celery worker and scheduler 
 
-Run: `celery -A datarun worker -l info`
+Run: `bash cmd_workers.sh start 2 1` for 3 workers, of which one is for the scheduler  
+Note: to start one worker, run: `celery -A datarun worker -l info`  
 
 ### How to test it?
 
@@ -75,4 +76,12 @@ With Apache and [mod_wsgi](https://modwsgi.readthedocs.org/en/develop/index.html
 `sudo apt-get install apache2-dev`    
 2. Install mod_wsgi:  
 Quick [installation guide](https://modwsgi.readthedocs.org/en/develop/user-guides/quick-installation-guide.html). 
- 
+
+
+### How to run it (remote)?
+
+**TODO wip**  
+- `DR_EMAIL`: email for the platform superuser     
+- `RMQ_VHOST`: RabbitMQ vhost name   
+- `IP_MASTER`: IP addres of the master   
+- `NB_LOCAL_WORKER`: number of local worker for the scheduler     

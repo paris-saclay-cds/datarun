@@ -1,5 +1,5 @@
 #!/bin/bash 
-# :Usage: celery_workers {start|stop|restart} {nb_remote_workers} {nb_local_workers}
+# :Usage: cmd_workers {start|stop|restart} {nb_remote_workers} {nb_local_workers}
 # Starting/stopping/restarting nb_remote_workers workers remotely (TODO) 
 # with two different queues: low and high
 # and nb_local_workers locally for the scheduler 

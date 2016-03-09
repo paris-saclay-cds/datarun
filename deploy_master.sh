@@ -5,6 +5,8 @@
 # - https://www.digitalocean.com/community/tutorials/how-to-serve-django-applications-with-apache-and-mod_wsgi-on-ubuntu-14-04
 # - https://gist.github.com/eezis/4026247 to install virtualenv-burrito
 
+# TODO Add environment variables! When?
+
 # Install Packages from the Ubuntu Repositories 
 sudo apt-get update; sudo apt-get upgrade
 sudo apt-get install python-pip apache2 libapache2-mod-wsgi
@@ -30,7 +32,18 @@ pip install -Ur requirements.txt
 cd datarun
 python manage.py migrate
 python manage.py collectstatic
-# TODO create a superuser??
+python manage.py createuser $DR_DATABASE_USER $DR_DATABASE_PASSWORD $DR_EMAIL --superuser
+
+# Install RabbitMQ 
+sudo apt-get install rabbitmq-server
+# Configure so that remote machines can connect to the master
+sudo rabbitmqctl add_user $DR_DATABASE_USER $DR_DATABASE_PASSWORD
+sudo rabbitmqctl add_vhost $RMQ_VHOST
+sudo rabbitmqctl set_permissions -p $RMQ_VHOST $DR_DATABASE_USER ".*" ".*" ".*"
+sudo rabbitmqctl restart
+
+# Start the worker and scheduler
+bash script_install/master_workers.sh start $NB_LOCAL_WORKER
 
 # Configure Apache: copy apache conf file to /etc/apache2/sites-available/
 mv /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/backup.conf
@@ -41,6 +54,6 @@ cp script_install/000-default.conf /etc/apache2/sites-available/.
 sudo chown :www-data ~/datarun
 
 # Restart Apache
-# sudo service apache2 restart
+sudo service apache2 restart
 
 
