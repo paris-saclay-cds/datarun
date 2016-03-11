@@ -52,7 +52,7 @@ cp script_install/000-default.conf /etc/apache2/sites-available/.
 
 # Wrapping up some permissions issues
 # I don t think we need it, since nothing has to be written in the project dir
-sudo chown :www-data ~/datarun
+sudo chown :www-data ../datarun
 
 # Restart Apache
 sudo service apache2 restart
