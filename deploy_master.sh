@@ -22,6 +22,7 @@ psql -c '\i script_install/setup_database.sql'
 
 # Clone the project
 sudo git clone https://github.com/camillemarini/datarun.git
+cd datarun
 
 # Configure a Python Virtual Environment
 mkvirtualenv datarun
