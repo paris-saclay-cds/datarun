@@ -22,5 +22,7 @@ class Command(BaseCommand):
                                         options['user_password'])
         # TODO superuser
         if options['superuser']:
+            user.is_active = True
             user.is_superuser = True
+            user.is_staff = True
         user.save()
