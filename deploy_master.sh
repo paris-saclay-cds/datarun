@@ -17,7 +17,7 @@ source /home/ubuntu/.venvburrito/startup.sh
 # Install Postgres
 sudo apt-get install python-dev libpq-dev postgresql postgresql-contrib
 # Create a database for the project and a user for the database 
-sudo su -postgres  # postgres: PostgreSQL administrative user.
+#sudo -su postgres  # postgres: PostgreSQL administrative user.
 psql -c '\i script_install/setup_database.sql'
 
 # Clone the project
@@ -30,7 +30,6 @@ sudo apt-get install python-numpy python-scipy  # is it really necessary for the
 pip install -Ur requirements.txt
 
 # Complete initial project setup
-cd datarun
 python manage.py migrate
 python manage.py collectstatic
 python manage.py createuser $DR_DATABASE_USER $DR_DATABASE_PASSWORD $DR_EMAIL --superuser
@@ -53,6 +52,7 @@ cp script_install/000-default.conf /etc/apache2/sites-available/.
 # Wrapping up some permissions issues
 # I don t think we need it, since nothing has to be written in the project dir
 sudo chown :www-data ../datarun
+sudo chown :www-data ../.
 
 # Restart Apache
 sudo service apache2 restart
