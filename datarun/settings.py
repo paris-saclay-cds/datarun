@@ -78,6 +78,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'datarun.wsgi.application'
 
 
+# REST Framework
+# REST_FRAMEWORK = {
+#     'DEFAULT_VERSIONING_CLASS':
+#     'rest_framework.versioning.AcceptHeaderVersioning',
+#     'ALLOWED_VERSIONS': ('0.0'),
+#     'DEFAULT_VERSION': '0.0',
+# }
+
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
