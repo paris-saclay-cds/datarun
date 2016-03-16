@@ -66,6 +66,7 @@ cp script_install/stratuslab-default.conf /etc/apache2/sites-available/000-defau
 # I don t think we need it, since nothing has to be written in the project dir
 sudo chown :www-data ../datarun
 sudo chown :www-data ../.
+# To make it works we have to set it to sudo chown www-data ../. but then we cannot connect in ssh to it. Maybe we can try to put datarun in another forlder such as home?...
 
 # Restart Apache
 sudo service apache2 restart
