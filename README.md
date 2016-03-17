@@ -20,6 +20,7 @@ Before starting, [install postgres](http://www.postgresql.org/download/) if need
 
 #### 3. Define environment variables
 
+* `DR_WORKING_ENV`: `PROD` for production environment or `DEV` for development env
 * `DR_DATABASE_NAME`: database name  
 * `DR_DATABASE_USER`: database user name  
 * `DR_DATABASE_PASSWORD`: database user password  

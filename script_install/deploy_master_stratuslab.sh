@@ -64,6 +64,17 @@ bash script_install/master_workers.sh start $NB_LOCAL_WORKER
 mv /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/backup.conf
 cp script_install/stratuslab-default.conf /etc/apache2/sites-available/000-default.conf
 
+# Deal with environment variables
+sed 's/=/ /g' ~/.bash_aliases > tt.txt
+sed "s/'//g" tt.txt > tt1.txt
+sed "s/export/SetEnv/g" tt1.txt > tt.txt
+while read p; 
+do   
+    sed -i "22a $p" /etc/apache2/sites-available/000-default.conf; 
+done < tt.txt
+sed -i "s/SetEnv/    SetEnv/g" /etc/apache2/sites-available/000-default.conf
+rm tt.txt tt1.txt
+
 # Wrapping up some permissions issues
 # I don t think we need it, since nothing has to be written in the project dir
 sudo chown :www-data ../datarun
