@@ -35,6 +35,7 @@ pg_createcluster 9.3 main --start
 sed -i "85c local   all             postgres                                trust" /etc/postgresql/9.3/main/pg_hba.conf 
 sudo service postgresql restart
 # Create a database for the project and a user for the database 
+# TODO: fix pb for the password, now we have to reset it...
 psql -U postgres -c '\i script_install/setup_database.sql'
 # Change database user permissions
 sed -i "86i local   all             $DR_DATABASE_USER                                 trust" /etc/postgresql/9.3/main/pg_hba.conf
@@ -48,7 +49,7 @@ pip install -Ur requirements.txt
 # Complete initial project setup
 python manage.py migrate
 python manage.py collectstatic
-python manage.py createuser $DR_DATABASE_USER $DR_DATABASE_PASSWORD $DR_EMAIL --superuser
+python manage.py createuser $DR_DATABASE_USER $DR_EMAIL $DR_DATABASE_PASSWORD --superuser
 
 # Install RabbitMQ 
 sudo apt-get install rabbitmq-server
