@@ -35,7 +35,7 @@ pg_createcluster 9.3 main --start
 sed -i "85c local   all             postgres                                trust" /etc/postgresql/9.3/main/pg_hba.conf 
 sudo service postgresql restart
 # Create a database for the project and a user for the database 
-# TODO: fix pb for the password, now we have to reset it...
+# CHECK: Got pb with password once, but could not reproduce the error
 psql -U postgres -c '\i script_install/setup_database.sql'
 # Change database user permissions
 sed -i "86i local   all             $DR_DATABASE_USER                                 trust" /etc/postgresql/9.3/main/pg_hba.conf
@@ -71,8 +71,11 @@ sed 's/=/ /g' ~/.bash_aliases > tt.txt
 sed "s/'//g" tt.txt > tt1.txt
 sed "s/export/SetEnv/g" tt1.txt > tt.txt
 while read p; 
-do   
+do  
+   if ! [[ $p == *"IP_MASTER"* ]];
+   then 
     sed -i "22a $p" /etc/apache2/sites-available/000-default.conf; 
+   fi;
 done < tt.txt
 sed -i "s/SetEnv/    SetEnv/g" /etc/apache2/sites-available/000-default.conf
 rm tt.txt tt1.txt

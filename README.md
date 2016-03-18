@@ -25,8 +25,9 @@ Before starting, [install postgres](http://www.postgresql.org/download/) if need
 * `DR_DATABASE_USER`: database user name  
 * `DR_DATABASE_PASSWORD`: database user password  
 * `CELERY_SCHEDULER_PERIOD`: period (in min) at which the scheduler checks new trained models and saves them in the database. Ex: `*/2` for every 2 min.    
-* `CELERY_NODES`: number of nodes   
- 
+* `NB_LOCAL_WORKER`: number of celery workers  
+* `RMQ_VHOST`: rabbitMQ vhost   
+* `IP_MASTER`: ip address of the master   
 
 If your are using virtualenvwrapper, you can store these variables in `$VIRTUAL_ENV/bin/postactivate`
 
