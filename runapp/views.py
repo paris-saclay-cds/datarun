@@ -43,7 +43,7 @@ def save_files(dir_data, data):
 
 class RawDataList(APIView):
 
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, format=None):
         """
@@ -104,7 +104,7 @@ class RawDataList(APIView):
 
 class SubmissionFoldList(APIView):
 
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, format=None):
         """
@@ -213,7 +213,7 @@ class SubmissionFoldList(APIView):
 
 class SubmissionFoldDetail(APIView):
 
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_object(self, pk):
         try:
@@ -246,7 +246,7 @@ class SubmissionFoldDetail(APIView):
 
 class GetTestPredictionList(APIView):
 
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request, format=None):
         """
@@ -289,7 +289,7 @@ class GetTestPredictionList(APIView):
 
 class GetTestPredictionNew(APIView):
 
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request, format=None):
         """
@@ -336,7 +336,7 @@ class GetTestPredictionNew(APIView):
 
 class SplitTrainTest(APIView):
 
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request, format=None):
         """
