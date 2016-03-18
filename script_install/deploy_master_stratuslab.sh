@@ -30,6 +30,7 @@ cd datarun
 
 # Install Postgres
 sudo apt-get install python-dev libpq-dev postgresql postgresql-contrib
+pg_createcluster 9.3 main --start
 # Change postgres permissions
 sed -i "85c local   all             postgres                                trust" /etc/postgresql/9.3/main/pg_hba.conf 
 sudo service postgresql restart
