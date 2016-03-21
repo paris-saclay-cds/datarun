@@ -16,13 +16,14 @@ export LC_ALL=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 
 # Format attached disk and mount disk
-if ! [[ -z "$1" ]];
-    then
-        mkfs.ext3 $1;
-        mount $1 /mnt;
-    else
-        echo "No external disk was given"
-fi;
+# TODO: change it to use ScienceFS
+# if ! [[ -z "$1" ]];
+#     then
+#         mkfs.ext3 $1;
+#         mount $1 /mnt;
+#     else
+#         echo "No external disk was given"
+# fi;
 
 cd /home/
 
