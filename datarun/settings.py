@@ -173,7 +173,7 @@ SWAGGER_SETTINGS = {
 
 # Celery settings
 # BROKER_URL = 'amqp://'  # 'amqp://guest:guest@localhost//'
-BROKER_URL = 'amqp://%s:%s@%s/%s' % (os.environ.get('DR_DATABASE_NAME'),
+BROKER_URL = 'amqp://%s:%s@%s/%s' % (os.environ.get('DR_DATABASE_USER'),
                                      os.environ.get('DR_DATABASE_PASSWORD'),
                                      os.environ.get('IP_MASTER'),
                                      os.environ.get('RMQ_VHOST'))
