@@ -1,7 +1,8 @@
 #!/bin/bash
-# :Usage: bash deploy_script.sh
+# :Usage: bash deploy_master_stratuslab.sh {device}
 # Prepare Ubuntu (14.04) server instance for the application deployment 
-# We follow steps from 
+# {device} is the attached disk  
+# We follow steps (+ other steps) from 
 # - https://www.digitalocean.com/community/tutorials/how-to-serve-django-applications-with-apache-and-mod_wsgi-on-ubuntu-14-04
 # - https://gist.github.com/eezis/4026247 to install virtualenv-burrito
 
@@ -13,6 +14,15 @@ source .bashrc
 # Set locales variables
 export LC_ALL=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
+
+# Format attached disk and mount disk
+if ! [[ -z "$1" ]];
+    then
+        mkfs.ext3 $1;
+        mount $1 /mnt;
+    else
+        echo "No external disk was given"
+fi;
 
 cd /home/
 
