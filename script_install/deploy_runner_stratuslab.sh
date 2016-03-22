@@ -5,7 +5,7 @@
 
 cd /home/
 
-# Mount read only disk
+# Mount disk
 
 # Instal Packages fro the Ubuntu Repositories
 sudo apt-get update; sudo apt-get upgrade
@@ -14,15 +14,20 @@ sudo apt-get install python-numpy python-scipy
 sudo pip install scikit-learn
 
 # Install Celery
-sudo pip install python-celery
+sudo pip install celery
+# Get rid of librabbitmq to force celery using python-amqp 
+# https://groups.google.com/forum/#!topic/celery-users/tQolVQ7z5LA
+# sudo apt-get remove python-librabbitmq
 
 # Create a user and log in with this user to run celery worker
 adduser celery
 mv /root/env_runner*.sh celery/.bash_aliases
+mv /root/celeryremote.py celery/.
+mv /root/runner_workers.sh celery/.
 mv /root/runapp celery/.
 sudo -su celery 
 cd celery
-source .bashrc
+source .bash_aliases  # strange, bash_aliases not activated when log in...
 
 # Run workers 
 mkdir celery_info  
