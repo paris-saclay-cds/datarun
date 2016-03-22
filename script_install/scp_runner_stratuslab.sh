@@ -1,7 +1,6 @@
 #! /bin/bash
 # :Usage: bash scp_runner_stratuslab.sh {file_runner}
-# To scp to a stratuslab instance (Ubuntu 14.04) files needed to deploy 
-# the master and his runners
+# To scp to a stratuslab instance (Ubuntu 14.04) files needed to deploy runners 
 # {file_runner} is a text file containing in each line 
 # the address of the runner and the number of workers to start on it
 
