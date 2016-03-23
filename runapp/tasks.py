@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from importlib import import_module
 from sklearn.cross_validation import train_test_split, StratifiedShuffleSplit
-from celery import task, shared_task
+from celery import shared_task
 from celery.utils.log import get_task_logger
 # os.environ['DJANGO_SETTINGS_MODULE'] = 'datarun.settings'
 # from django.conf import settings
@@ -52,20 +52,25 @@ def task_save_submission_fold_db():
     database. This task requires an access to the db
     '''
     logger.info('oh yeah')
-    from runapp.models import SubmissionFold
-    # Get all new trained tested submission on cv fold
-    submission_folds = SubmissionFold.objects.\
-        filter(test_predictions__isnull=True).\
-        filter(task_id__isnull=False)
-    for submission_fold in submission_folds:
-        task = train_test_submission_fold.AsyncResult(submission_fold.task_id)
-        if task.state == 'SUCCESS':
-            log_message, submission_fold_state, metrics,\
-                full_train_predictions, test_predictions = task.result
-            if 'error' not in log_message:
-                save_submission_fold_db(submission_fold, submission_fold_state,
-                                        metrics, full_train_predictions,
-                                        test_predictions)
+    try:
+        from runapp.models import SubmissionFold
+        # Get all new trained tested submission on cv fold
+        submission_folds = SubmissionFold.objects.\
+            filter(test_predictions__isnull=True).\
+            filter(task_id__isnull=False)
+        for submission_fold in submission_folds:
+            task = train_test_submission_fold.\
+                AsyncResult(submission_fold.task_id)
+            if task.state == 'SUCCESS':
+                log_message, submission_fold_state, metrics,\
+                    full_train_predictions, test_predictions = task.result
+                if 'error' not in log_message:
+                    save_submission_fold_db(submission_fold,
+                                            submission_fold_state,
+                                            metrics, full_train_predictions,
+                                            test_predictions)
+    except ImportError:
+        logger.info('task_save_submission_fold_db ImportError. OK for runners!')
 
 
 @shared_task

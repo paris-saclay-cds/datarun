@@ -10,4 +10,4 @@ app = Celery('datarun', backend='amqp',
              broker=broker_url)
 
 
-app.autodiscover_tasks(['runapp'])
+app.autodiscover_tasks(['runapp'], force=True)

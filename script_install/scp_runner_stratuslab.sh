@@ -14,9 +14,10 @@ do
     NB_WORKER=$2
     echo "** Runner: $ADD_RUNNER with $NB_WORKER workers **"
     scp deploy_runner_stratuslab.sh root@"$ADD_RUNNER":/root/.
-    scp celeryremote.py root@"$ADD_RUNNER":/root/.
+    scp datarun.py root@"$ADD_RUNNER":/root/.
     scp runner_workers.sh root@"$ADD_RUNNER":/root/.
-    scp -r ../runapp root@"$ADD_RUNNER":/root/.
+    scp ../runapp/tasks.py root@"$ADD_RUNNER":/root/.
+    scp ../runapp/__init__.py root@"$ADD_RUNNER":/root/.
     cp env_runner.sh tmp_runner/env_runner.sh
     sed -i "$ a export NB_WORKER=$NB_WORKER" tmp_runner/env_runner.sh
     scp tmp_runner/env_runner.sh root@"$ADD_RUNNER":/root/.
