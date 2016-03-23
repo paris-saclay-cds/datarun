@@ -187,5 +187,6 @@ CELERYBEAT_SCHEDULE = {
         'task': 'runapp.tasks.task_save_submission_fold_db',
         'schedule': crontab(minute=os.environ.get('CELERY_SCHEDULER_PERIOD',
                                                   '*/15')),
+        'options': {'queue': 'master_periodic'},
     },
 }

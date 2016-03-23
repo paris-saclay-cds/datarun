@@ -5,7 +5,7 @@
 rm -r celery_info/*
 
 export REMOTE_WORKERS=""
-for i in `seq 1 $3`;
+for i in `seq 1 $2`;
 do
     export REMOTE_WORKERS=("$REMOTE_WORKERS lw$i"); 
 done    
