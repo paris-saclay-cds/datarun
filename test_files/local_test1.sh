@@ -4,6 +4,8 @@
 # and running a development server
 # local_test2.sh must be run afterward
 
+cd ..
+
 # Set up some environment variables
 export DIR_DATA="test_data"
 export DIR_SUBMISSION="test_submission"
@@ -22,7 +24,7 @@ python manage.py migrate
 python manage.py createuser MrTest test@test.com test 
 
 # Start celery workers
-bash cmd_workers.sh start 2 1
+bash test_files/cmd_workers_local.sh start 2 1
 
 # Run a test server in the background
 python manage.py runserver 127.0.0.1:8000

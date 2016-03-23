@@ -10,7 +10,6 @@
 export DR_DATABASE_NAME="test_datarun"
 
 # Test workflow: send data, split train test, send submission 
-cd test_files
 python test_workflow.py 
 cd ..
 
