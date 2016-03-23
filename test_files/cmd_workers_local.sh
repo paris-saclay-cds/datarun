@@ -32,7 +32,7 @@ else
         --logfile="$(pwd)/celery_info/%n.log" \
         --pidfile="$(pwd)/celery_info/%n.pid"; 
     # Local workers and starting the scheduler
-    celery multi $1 $LOCAL_WORKERS -l INFO -A datarun \
+    celery multi $1 $LOCAL_WORKERS -l INFO -A datarun -Q:1-$3 master_periodic \
         --logfile="$(pwd)/celery_info/%n.log" \
         --pidfile="$(pwd)/celery_info/%n.pid";
     celery -A datarun beat -s "$(pwd)/celery_info/celerybeat-schedule" \
