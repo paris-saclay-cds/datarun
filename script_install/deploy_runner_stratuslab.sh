@@ -28,7 +28,8 @@ sudo pip install celery
 echo $(pwd)
 mkdir celery
 echo $(ls /root/*sh)
-mv /root/env_runner*.sh celery/.bash_aliases
+#mv /root/env_runner*.sh celery/.bash_aliases
+mv /root/env_runner*.sh /root/.bash_aliases
 mv /root/datarun.py celery/.
 mv /root/runner_workers.sh celery/.
 mkdir celery/runapp
@@ -36,7 +37,8 @@ mv /root/tasks.py celery/runapp
 mv /root/__init__.py celery/runapp
 #sudo -su celery 
 cd celery
-source .bash_aliases  # strange, bash_aliases not activated when log in...
+#source .bash_aliases  # strange, bash_aliases not activated when log in...
+source /root/.bashrc
 
 # Run workers 
 mkdir celery_info  
