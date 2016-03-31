@@ -1,3 +1,10 @@
 *pyc
 *~
 env*.sh
+celery_info/
+data/
+htmlcov/
+script_install/list_runners.txt
+submission/
+test_data/
+test_submission/
