@@ -55,9 +55,12 @@ Note: to start one worker, run: `celery -A datarun worker -l info`
 ### How to run it on stratuslab?
 
 TODO add figure
+
 1. Start one instance for the master and as many instances as you want for the runners.  
-2. Configure the master by:
-  1. On your local computer, create a file called `env.sh` (do not change this name) with the content below. Do not forget to change the values and be careful not to commit this file :-)  
+2. Go to the `script_install` directory and stay there while configuring the master and runners.  
+3. Configure the master by:
+  1. On your local computer, create a file called `env.sh` (do not change this name) with the content below.  
+Do not forget to change the values and be careful not to commit this file :-)  
 And do not add comments to the file.     
 ```
 export DR_DATABASE_NAME='database_name'
@@ -74,9 +77,11 @@ export RMQ_VHOST='rabbitMQ_vhost_name'
 export IP_MASTER=$(/sbin/ifconfig eth0 | grep "inet addr" | awk -F: '{print $2}' | awk '{print $1}')
 ```
   2. scp to the master instance `deploy_master_stratuslab.sh` and `env.sh`  
-  3. ssh to the instance and run `bash deploy_master_stratuslab.sh`  
-3. Configure runners by:
-  1. On your local computer in the folder `script_install`, create a file called `env_runner.sh` (do not change this name) with the content below. Do not forget to change the values and be careful not to commit this file :-)  
+  3. ssh to the instance and run `bash deploy_master_stratuslab.sh`.   
+For now, we have to execute the command from the instance, since it is asking for many parameters. TODO: make changes so that we can run the script with ssh from our local machine.    
+4. Configure runners by:
+  1. On your local computer in the folder `script_install`, create a file called `env_runner.sh` (be careful to use the name `env_runner.sh`) with the content below.  
+Do not forget to change the values and be careful not to commit this file :-)  
 And do not add comments to the file.  
 ```
 export DIR_DATA='data'
@@ -85,15 +90,17 @@ export RMQ_VHOST='rabbitMQ_vhost_name'
 export IP_MASTER='xxx.yyy.zz.aaa'
 # NB_WORKER added by scp_runner_stratuslab.sh
 ```  
-  2. On your local computer, create a file containing the list of runners address address and the number of workers you want on each runner:  
+  2. On your local computer, create a file `list_runners.txt` containing the list of runners address address and the number of workers you want on each runner:  
 ```
 address_runner_1 number_worker_runner_1  
 address_runner_2 number_worker_runner_2  
 ...
 address_runner_3 number_worker_runner_3  
 ```
-  3.  
-TODO
+  3. Run `bash scp_runner_stratuslab.sh list_runners.txt`.  
+This will scp some files to the runners and configure them (by executing the script `deploy_runner_stratuslab.sh`)  
+
+You should now be ready to use datarun on stratuslab!  
 
 ### How to test it?
 

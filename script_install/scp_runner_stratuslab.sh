@@ -4,6 +4,12 @@
 # {file_runner} is a text file containing in each line 
 # the address of the runner and the number of workers to start on it
 
+if [[ $(pwd) == *"script_install" ]]; 
+then
+    echo "you are not in the script_install directory... Go to this directory and rerun the script!";
+    exit 1; 
+fi
+
 FILE_RUNNERS=$1
 
 mkdir tmp_runner
@@ -21,6 +27,7 @@ do
     cp env_runner.sh tmp_runner/env_runner.sh
     sed -i "$ a export NB_WORKER=$NB_WORKER" tmp_runner/env_runner.sh
     scp tmp_runner/env_runner.sh root@"$ADD_RUNNER":/root/.
+    ssh root@"$ADD_RUNNER" 'bash -s' < deploy_runner_stratuslab.sh
 done < $FILE_RUNNERS
 
 rm -r tmp_runner

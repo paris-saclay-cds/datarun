@@ -4,13 +4,15 @@
 # It starts nb_workers on the instance
 
 cd /home/
+export LC_ALL=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
 
 # Mount disk
 
 # Instal Packages fro the Ubuntu Repositories
-sudo apt-get update; sudo apt-get upgrade
-sudo apt-get install python-pip
-sudo apt-get install python-numpy python-scipy python-pandas
+sudo apt-get -y update; sudo apt-get -y upgrade
+sudo apt-get -y install python-pip
+sudo apt-get -y install python-numpy python-scipy python-pandas
 sudo pip install scikit-learn
 
 # Install Celery

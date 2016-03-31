@@ -28,7 +28,7 @@ export LANGUAGE=en_US.UTF-8
 cd /home/
 
 # Install Packages from the Ubuntu Repositories 
-sudo apt-get update; sudo apt-get upgrade
+sudo apt-get update; sudo apt-get upgrade 
 sudo apt-get install python-pip apache2 libapache2-mod-wsgi
 sudo apt-get install git
 wget https://raw.github.com/brainsik/virtualenv-burrito/master/virtualenv-burrito.sh
