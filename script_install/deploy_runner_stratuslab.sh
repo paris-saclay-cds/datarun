@@ -3,9 +3,11 @@
 # Prepare Ubuntu (14.04) server instance for runners. 
 # It starts nb_workers on the instance
 
+echo $(pwd)
 cd /home/
 export LC_ALL=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
+echo $(pwd)
 
 # Mount disk
 
@@ -22,14 +24,17 @@ sudo pip install celery
 # sudo apt-get remove python-librabbitmq
 
 # Create a user and log in with this user to run celery worker
-adduser celery
+#adduser celery
+echo $(pwd)
+mkdir celery
+echo $(ls /root/*sh)
 mv /root/env_runner*.sh celery/.bash_aliases
-mv /root/celeryremote.py celery/.
+mv /root/datarun.py celery/.
 mv /root/runner_workers.sh celery/.
 mkdir celery/runapp
 mv /root/tasks.py celery/runapp
 mv /root/__init__.py celery/runapp
-sudo -su celery 
+#sudo -su celery 
 cd celery
 source .bash_aliases  # strange, bash_aliases not activated when log in...
 

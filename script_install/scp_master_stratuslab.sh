@@ -4,5 +4,4 @@
 # with {add_master} address pf the master
 
 ADD_MASTER=$1
-scp deploy_master_stratuslab.sh root@"$ADD_MASTER":/root/.
-scp env.sh root@"$ADD_MASTER":/root/.
+scp env.sh deploy_master_stratuslab.sh root@"$ADD_MASTER":/root/.

@@ -28,19 +28,19 @@ export LANGUAGE=en_US.UTF-8
 cd /home/
 
 # Install Packages from the Ubuntu Repositories 
-sudo apt-get update; sudo apt-get upgrade 
-sudo apt-get install python-pip apache2 libapache2-mod-wsgi
-sudo apt-get install git
-wget https://raw.github.com/brainsik/virtualenv-burrito/master/virtualenv-burrito.sh
-bash virtualenv-burrito.sh 
-source /home/.venvburrito/startup.sh
+sudo apt-get -y update; sudo apt-get -y upgrade 
+sudo apt-get -y install python-pip apache2 libapache2-mod-wsgi
+sudo apt-get -y install git
+# wget https://raw.github.com/brainsik/virtualenv-burrito/master/virtualenv-burrito.sh
+# bash virtualenv-burrito.sh 
+# source /root/.venvburrito/startup.sh
 
 # Clone the project
 sudo git clone https://github.com/camillemarini/datarun.git
 cd datarun
 
 # Install Postgres
-sudo apt-get install python-dev libpq-dev postgresql postgresql-contrib
+sudo apt-get -y install python-dev libpq-dev postgresql postgresql-contrib
 pg_createcluster 9.3 main --start
 # Change postgres permissions
 sed -i "85c local   all             postgres                                trust" /etc/postgresql/9.3/main/pg_hba.conf 
@@ -48,13 +48,15 @@ sudo service postgresql restart
 # Create a database for the project and a user for the database 
 # CHECK: Got pb with password once, but could not reproduce the error
 psql -U postgres -c '\i script_install/setup_database.sql'
+# To avoid pb...TODO understand why setup_database.sql fails for the password
+psql -U postgres -c "ALTER ROLE $DR_DATABASE_USER WITH PASSWORD '$DR_DATABASE_PASSWORD'"
 # Change database user permissions
 sed -i "86i local   all             $DR_DATABASE_USER                                 trust" /etc/postgresql/9.3/main/pg_hba.conf
 sudo service postgresql restart
 
 # Configure a Python Virtual Environment
-mkvirtualenv datarun
-sudo apt-get install python-numpy python-scipy  # is it really necessary for the master? 
+# mkvirtualenv datarun
+sudo apt-get -y install python-numpy python-scipy  # is it really necessary for the master? 
 pip install -Ur requirements.txt
 
 # Complete initial project setup
@@ -63,7 +65,7 @@ python manage.py collectstatic
 python manage.py createuser $DR_DATABASE_USER $DR_EMAIL $DR_DATABASE_PASSWORD --superuser
 
 # Install RabbitMQ 
-sudo apt-get install rabbitmq-server
+sudo apt-get install -y rabbitmq-server
 # Configure so that remote machines can connect to the master
 sudo rabbitmqctl add_user $DR_DATABASE_USER $DR_DATABASE_PASSWORD
 sudo rabbitmqctl add_vhost $RMQ_VHOST

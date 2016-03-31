@@ -17,7 +17,7 @@ if [ $1 = "stop" ]; then
 else
     echo "$1 the workers";
     # Local workers and starting the scheduler
-    celery multi $1 $REMOTE_WORKERS -l INFO -A celeryremote \
+    celery multi $1 $REMOTE_WORKERS -l INFO -A datarun \
         --logfile="$(pwd)/celery_info/%n.log" \
         --pidfile="$(pwd)/celery_info/%n.pid";
 fi

@@ -1,3 +1,4 @@
+import sys
 import time
 import json
 import zlib
@@ -6,9 +7,14 @@ import numpy as np
 from sklearn import cross_validation
 import post_api
 
-host_url = "http://127.0.0.1:8000/"
-username = "MrTest"
-userpassd = "test"
+if len(sys.argv) > 1:
+    host_url = sys.argv[0]
+    username = sys.argv[1]
+    userpassd = sys.argv[2]
+else:
+    host_url = "http://127.0.0.1:8000/"
+    username = "MrTest"
+    userpassd = "test"
 
 # ----------------------
 # TEST WITH IRIS DATASET
