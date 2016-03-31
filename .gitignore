@@ -8,3 +8,4 @@ script_install/list_runners.txt
 submission/
 test_data/
 test_submission/
+*.swp
