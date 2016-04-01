@@ -3,13 +3,14 @@
 * [How to use it?](#how-to-use-it)
 * [How to run it locally?](#how-to-run-it-locally)
 * [How to run it on stratuslab?](#how-to-run-it-on-stratuslab)
+* [How to test it?](#how-to-test-it)
 
 ### How to use it?
 
 The API documentation can be found at [http://host/docs/](http://127.0.0.1:8000/docs/) 
 (you need to be logged-in to see it, you can log in via the admin page).  
 
-### How to run it (locally)?<a id="how-to-run-it"></a>
+### How to run it (locally)?
 
 #### 1. Install the application
 
