@@ -8,9 +8,10 @@ from sklearn import cross_validation
 import post_api
 
 if len(sys.argv) > 1:
-    host_url = sys.argv[0]
-    username = sys.argv[1]
-    userpassd = sys.argv[2]
+    host_url = sys.argv[1]
+    username = sys.argv[2]
+    userpassd = sys.argv[3]
+    print(host_url, username, userpassd)
 else:
     host_url = "http://127.0.0.1:8000/"
     username = "MrTest"
