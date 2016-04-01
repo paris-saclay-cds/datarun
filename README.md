@@ -1,9 +1,15 @@
+## Datarun
+
+* [How to use it?](#how-to-use-it)
+* [How to run it locally?](#how-to-run-it-locally)
+* [How to run it on stratuslab?](#how-to-run-it-on-stratuslab)
+
 ### How to use it?
 
 The API documentation can be found at [http://host/docs/](http://127.0.0.1:8000/docs/) 
 (you need to be logged-in to see it, you can log in via the admin page).  
 
-### How to run it (locally)?
+### How to run it (locally)?<a id="how-to-run-it"></a>
 
 #### 1. Install the application
 
@@ -56,16 +62,17 @@ Note: to start one worker, run: `celery -A datarun worker -l info`
 
 TODO add figure
 
-1. Start one instance for the master and as many instances as you want for the runners. Use the image `BJILII-tFu00rKKM-enj9l83rsn` which corresponds to Ubuntu v14.04 x86_64.    
+##### 1. Start one instance for the master and as many instances as you want for the runners.  
+Use the image `BJILII-tFu00rKKM-enj9l83rsn` which corresponds to Ubuntu v14.04 x86_64.    
 ```
 stratus-run-instance BJILII-tFu00rKKM-enj9l83rsn --cpu=2 --ram=4000
 ```
 
-2. Go to the `script_install` directory and stay there while configuring the master and runners.  
+##### 2. Go to the `script_install` directory and stay there while configuring the master and runners.
 
-3. Configure the master by:  
+##### 3. Configure the master
 
-    1. On your local computer, create a file called `env.sh` (do not change this name) with the content below.  
+* On your local computer, create a file called `env.sh` (do not change this name) with the content below.  
 Do not forget to change the values and be careful not to commit this file :-)  
 And do not add comments to the file.     
 ```
@@ -83,17 +90,17 @@ export RMQ_VHOST='rabbitMQ_vhost_name'
 export IP_MASTER=$(/sbin/ifconfig eth0 | grep "inet addr" | awk -F: '{print $2}' | awk '{print $1}')
 ```   
 
-    2. Run `bash scp_master_stratuslab.sh master_address` with `master_address` being the master server address (e.g., `onevm-81.lal.in2p3.fr`)  
+* Run `bash scp_master_stratuslab.sh master_address` with `master_address` being the master server address (e.g., `onevm-81.lal.in2p3.fr`)   
 This will scp to the master some files that are needed to configure the master.  
-  
-    3. ssh to the instance and run `bash deploy_master_stratuslab.sh`.   
+
+* Ssh to the instance and run `bash deploy_master_stratuslab.sh`.   
 For now, we have to execute the command from the instance, since it is asking for many parameters. TODO: make changes so that we can run the script with ssh from our local machine.   
  
-4. Configure runners by:
+##### 4. Configure runners
 
-    1. On your local computer in the folder `script_install`, create a file called `env_runner.sh` (be careful to use the name `env_runner.sh`) with the content below.  
+* On your local computer in the folder `script_install`, create a file called `env_runner.sh` (be careful to use the name `env_runner.sh`) with the content below.  
 Do not forget to change the values and be careful not to commit this file :-)  
-And do not add comments to the file.  
+And do not add comments to the file.
 ```
 export DIR_DATA='data'
 export DIR_SUBMISSION='submission'
@@ -101,16 +108,16 @@ export RMQ_VHOST='rabbitMQ_vhost_name'
 export IP_MASTER='xxx.yyy.zz.aaa'
 # NB_WORKER added by scp_runner_stratuslab.sh
 ```
-  
-    2. On your local computer, create a file `list_runners.txt` containing the list of runners address address and the number of workers you want on each runner:  
+
+* On your local computer, create a file `list_runners.txt` containing the list of runners address address and the number of workers you want on each runner:  
 ```
 address_runner_1 number_worker_runner_1  
 address_runner_2 number_worker_runner_2  
 ...
 address_runner_3 number_worker_runner_3  
-```
+```  
 
-    3. Run `bash scp_runner_stratuslab.sh list_runners.txt`.  
+* Run `bash scp_runner_stratuslab.sh list_runners.txt`.  
 This will scp some files to the runners and configure them (by executing the script `deploy_runner_stratuslab.sh`)  
 
 You should now be ready to use datarun on stratuslab!  
