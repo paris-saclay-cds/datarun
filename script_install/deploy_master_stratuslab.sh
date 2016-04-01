@@ -9,7 +9,7 @@
 # Add environment variables
 # env.sh file with environment variables must be in the same folder as this script
 mv env.sh ~/.bash_aliases
-source .bashrc
+source .bash_aliases
 
 # Set locales variables
 export LC_ALL=en_US.UTF-8

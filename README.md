@@ -4,7 +4,7 @@
 * [How to run it locally?](#how-to-run-it-locally)
 * [How to run it on stratuslab?](#how-to-run-it-on-stratuslab)
 * [How to test it?](#how-to-test-it)
-* [How to deal with migrations](#migrations)
+* [How to deal with migrations?](#migrations)
 
 ### How to use it?
 
@@ -125,6 +125,8 @@ address_runner_3 number_worker_runner_3
 
 * Run `bash scp_runner_stratuslab.sh list_runners.txt`.  
 This will scp some files to the runners and configure them (by executing the script `deploy_runner_stratuslab.sh`)  
+TODO fix this step! It does not work!!
+
 
 You should now be ready to use datarun on stratuslab!  
 

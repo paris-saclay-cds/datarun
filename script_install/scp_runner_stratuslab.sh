@@ -14,21 +14,20 @@ fi
 FILE_RUNNERS=$1
 
 mkdir tmp_runner
-while read p;
-do
+while read p; do
     set -- $p
     ADD_RUNNER=$1
     NB_WORKER=$2
     echo "** Runner: $ADD_RUNNER with $NB_WORKER workers **"
-    scp deploy_runner_stratuslab.sh root@"$ADD_RUNNER":/root/.
-    scp datarun.py root@"$ADD_RUNNER":/root/.
-    scp runner_workers.sh root@"$ADD_RUNNER":/root/.
-    scp ../runapp/tasks.py root@"$ADD_RUNNER":/root/.
-    scp ../runapp/__init__.py root@"$ADD_RUNNER":/root/.
+    echo "1"
+    scp deploy_runner_stratuslab.sh datarun.py runner_workers.sh \
+        ../runapp/tasks.py ../runapp/__init__.py root@"$ADD_RUNNER":/root/.
+    echo "2"
     cp env_runner.sh tmp_runner/env_runner.sh
+    echo "3"
     sed -i "$ a export NB_WORKER=$NB_WORKER" tmp_runner/env_runner.sh
     scp tmp_runner/env_runner.sh root@"$ADD_RUNNER":/root/.
-    ssh root@"$ADD_RUNNER" 'bash -s' < deploy_runner_stratuslab.sh
+    ssh root@"$ADD_RUNNER" 'bash -s' < deploy_runner_stratuslab.sh;
 done < $FILE_RUNNERS
 
 rm -r tmp_runner

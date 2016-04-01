@@ -12,9 +12,10 @@ echo $(pwd)
 # Mount disk
 
 # Instal Packages fro the Ubuntu Repositories
-sudo apt-get -y update; sudo apt-get -y upgrade
-sudo apt-get -y install python-pip
-sudo apt-get -y install python-numpy python-scipy python-pandas
+sudo apt-get -y update 
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install python-pip
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install python-numpy python-scipy python-pandas
 sudo pip install scikit-learn
 
 # Install Celery
@@ -38,8 +39,8 @@ mv /root/__init__.py celery/runapp
 #sudo -su celery 
 cd celery
 #source .bash_aliases  # strange, bash_aliases not activated when log in...
-source /root/.bashrc
+source /root/.bash_aliases
 
-# Run workers 
+# Run workers
 mkdir celery_info  
 bash runner_workers.sh start $NB_WORKER
