@@ -4,6 +4,7 @@
 * [How to run it locally?](#how-to-run-it-locally)
 * [How to run it on stratuslab?](#how-to-run-it-on-stratuslab)
 * [How to test it?](#how-to-test-it)
+* [How to deal with migrations](#migrations)
 
 ### How to use it?
 
@@ -103,12 +104,16 @@ For now, we have to execute the command from the instance, since it is asking fo
 Do not forget to change the values and be careful not to commit this file :-)  
 And do not add comments to the file.
 ```
+export DR_DATABASE_USER='database_name'
+export DR_DATABASE_PASSWORD='database_password'
 export DIR_DATA='data'
 export DIR_SUBMISSION='submission'
 export RMQ_VHOST='rabbitMQ_vhost_name'
 export IP_MASTER='xxx.yyy.zz.aaa'
 # NB_WORKER added by scp_runner_stratuslab.sh
 ```
+Values of these environment variables must be the same as what you defined in `env.sh`, they are used to connect to the master and read data from it.
+
 
 * On your local computer, create a file `list_runners.txt` containing the list of runners address address and the number of workers you want on each runner:  
 ```
