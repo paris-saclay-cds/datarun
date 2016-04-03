@@ -18,8 +18,9 @@ import tasks
 # Submission files are temporarilly saved in submission_directory
 # they are likely to be saved in the database as a next step?
 # idem for data
-data_directory = os.environ.get('DIR_DATA', 'data')
-submission_directory = os.environ.get('DIR_SUBMISSION', 'submission')
+data_directory = os.environ.get('DIR_DATA', '/home/datarun/data')
+submission_directory = os.environ.get('DIR_SUBMISSION',
+                                      '/home/datarun/submission')
 
 
 @api_view(('GET',))

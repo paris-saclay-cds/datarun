@@ -95,7 +95,7 @@ rm tt.txt tt1.txt
 
 # Wrapping up some permissions issues
 # I don t think we need it, since nothing has to be written in the project dir
-sudo chown :www-data ../datarun
+sudo chown -R www-data:www-data ../datarun
 sudo chown :www-data ../.
 # To make it works we have to set it to sudo chown www-data ../. but then we cannot connect in ssh to it. Maybe we can try to put datarun in another forlder such as home?...
 
