@@ -106,8 +106,8 @@ And do not add comments to the file.
 ```
 export DR_DATABASE_USER='database_name'
 export DR_DATABASE_PASSWORD='database_password'
-export DIR_DATA='data'
-export DIR_SUBMISSION='submission'
+export DIR_DATA='data_directory'
+export DIR_SUBMISSION='submission_directory'
 export RMQ_VHOST='rabbitMQ_vhost_name'
 export IP_MASTER='xxx.yyy.zz.aaa'
 # NB_WORKER added by scp_runner_stratuslab.sh
@@ -125,8 +125,6 @@ address_runner_3 number_worker_runner_3
 
 * Run `bash scp_runner_stratuslab.sh list_runners.txt`.  
 This will scp some files to the runners and configure them (by executing the script `deploy_runner_stratuslab.sh`)  
-TODO fix this step! It does not work!!
-
 
 You should now be ready to use datarun on stratuslab!  
 
