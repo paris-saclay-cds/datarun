@@ -20,7 +20,7 @@ else:
 # ----------------------
 # TEST WITH IRIS DATASET
 # ----------------------
-data_name = "irisaa"
+data_name = "iris"
 data_file = 'iris.csv'
 n_samples = 150
 held_out_test = 0.5

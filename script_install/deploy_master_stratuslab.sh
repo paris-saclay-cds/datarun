@@ -28,9 +28,10 @@ export LANGUAGE=en_US.UTF-8
 cd /home/
 
 # Install Packages from the Ubuntu Repositories 
-sudo apt-get -y update; sudo apt-get -y upgrade 
-sudo apt-get -y install python-pip apache2 libapache2-mod-wsgi
-sudo apt-get -y install git
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" update 
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade 
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install python-pip apache2 libapache2-mod-wsgi
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install git
 # wget https://raw.github.com/brainsik/virtualenv-burrito/master/virtualenv-burrito.sh
 # bash virtualenv-burrito.sh 
 # source /root/.venvburrito/startup.sh
@@ -87,7 +88,9 @@ while read p;
 do  
    if ! [[ $p == *"IP_MASTER"* ]];
    then 
-    sed -i "22a $p" /etc/apache2/sites-available/000-default.conf; 
+     sed -i "22a $p" /etc/apache2/sites-available/000-default.conf; 
+   else
+     sed -i "22a SetEnv IP_MASTER $IP_MASTER" /etc/apache2/sites-available/000-default.conf;
    fi;
 done < tt.txt
 sed -i "s/SetEnv/    SetEnv/g" /etc/apache2/sites-available/000-default.conf
