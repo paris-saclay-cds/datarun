@@ -150,7 +150,9 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
 
 def train_submission_fold(submission_files_path, train_is, X_train,
                           y_train, list_workflow_elements):
-    module_path = submission_files_path.replace('/', '.')
+    module_path = '/'.join(submission_files_path.replace('//', '/').
+                           split('/')[-2::])
+    module_path = module_path.replace('/', '.')
     train_is = np.fromstring(zlib.decompress(base64.b64decode(train_is)),
                              dtype=int)
     log_message = ''
