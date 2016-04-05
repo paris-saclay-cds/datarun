@@ -180,7 +180,9 @@ BROKER_URL = 'amqp://%s:%s@%s/%s' % (os.environ.get('DR_DATABASE_USER'),
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+# CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+CELERY_RESULT_BACKEND = 'amqp'
+
 TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
 CELERYBEAT_SCHEDULE = {
     'save-train-model-in-db': {

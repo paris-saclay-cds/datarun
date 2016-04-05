@@ -8,6 +8,6 @@ broker_url = 'amqp://%s:%s@%s/%s' % (os.environ.get('DR_DATABASE_USER'),
                                      os.environ.get('RMQ_VHOST'))
 app = Celery('datarun', backend='amqp',
              broker=broker_url)
-
+app.conf.CELERY_TASK_SERIALIZER = 'json'
 
 app.autodiscover_tasks(['runapp'], force=True)
