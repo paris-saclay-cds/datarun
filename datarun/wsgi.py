@@ -24,7 +24,7 @@ else:
                              'DR_DATABASE_PASSWORD', 'DIR_DATA',
                              'DIR_SUBMISSION', 'USER_LOGIN', 'USER_PSWD',
                              'CELERY_SCHEDULER_PERIOD', 'NB_LOCAL_WORKER',
-                             'DR_EMAIL', 'RMQ_VHOST', ]
+                             'DR_EMAIL', 'RMQ_VHOST', 'IP_MASTER',]
 
     def loading_app(environ, start_response):
         global real_app

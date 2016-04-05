@@ -95,7 +95,11 @@ export IP_MASTER=$(/sbin/ifconfig eth0 | grep "inet addr" | awk -F: '{print $2}'
 * Run `bash scp_master_stratuslab.sh master_address` with `master_address` being the master server address (e.g., `onevm-81.lal.in2p3.fr`)   
 This will scp to the master some files that are needed to configure the master.  
 
-* Ssh to the instance and run `bash deploy_master_stratuslab.sh`.   
+* Ssh to the instance and run: 
+```
+bash deploy_master_stratuslab.sh`.  
+source ~/.bashrc
+```
 For now, we have to execute the command from the instance, since it is asking for many parameters. TODO: make changes so that we can run the script with ssh from our local machine.   
  
 ##### 4. Configure runners
