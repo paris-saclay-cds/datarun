@@ -9,7 +9,7 @@ for i in `seq 1 $2`;
 do
     export LOCAL_WORKERS=("$LOCAL_WORKERS lw$i"); 
 done    
-                                                
+export QW=$(echo $LOCAL_WORKERS | tr " " ,)                                                
 if [ $1 = "stop" ]; then
     echo "Stopping the workers";
     # Local workers
@@ -17,8 +17,7 @@ if [ $1 = "stop" ]; then
 else
     echo "$1 the workers";
     # Local workers and starting the scheduler
-    # celery multi $1 $LOCAL_WORKERS -l INFO -A datarun -Q:1-$2 master_periodic \
-    celery multi $1 $LOCAL_WORKERS -l INFO -A datarun \
+    celery multi $1 $LOCAL_WORKERS -l INFO -A datarun -Q:$QW master_periodic \
         --logfile="$(pwd)/celery_info/%n.log" \
         --pidfile="$(pwd)/celery_info/%n.pid";
     celery -A datarun beat -s "$(pwd)/celery_info/celerybeat-schedule" \

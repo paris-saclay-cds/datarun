@@ -18,14 +18,13 @@ while read p; do
     set -- $p
     ADD_RUNNER=$1
     NB_WORKER=$2
-    echo "** Runner: $ADD_RUNNER with $NB_WORKER workers **"
-    echo "1"
+    WORKER_QUEUES=$3
+    echo "** Runner: $ADD_RUNNER with $NB_WORKER workers for queues $WORKER_QUEUES **"
     scp deploy_runner_stratuslab.sh datarun.py runner_workers.sh \
         ../runapp/tasks.py ../runapp/__init__.py root@"$ADD_RUNNER":/root/.
-    echo "2"
     cp env_runner.sh tmp_runner/env_runner.sh
-    echo "3"
     sed -i "$ a export NB_WORKER=$NB_WORKER" tmp_runner/env_runner.sh
+    sed -i "$ a export WORKER_QUEUES=$WORKER_QUEUES" tmp_runner/env_runner.sh
     scp tmp_runner/env_runner.sh root@"$ADD_RUNNER":/root/.
     ssh root@"$ADD_RUNNER" 'bash -s' < deploy_runner_stratuslab.sh;
 done < $FILE_RUNNERS

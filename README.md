@@ -119,13 +119,18 @@ export IP_MASTER='xxx.yyy.zz.aaa'
 Values of these environment variables must be the same as what you defined in `env.sh`, they are used to connect to the master and read data from it.
 
 
-* On your local computer, create a file `list_runners.txt` containing the list of runners address address and the number of workers you want on each runner:  
+* On your local computer, create a file `list_runners.txt` containing the list of runners address address, the number of workers you want on each runner, and the list of queues processed by the workers (at least one of each among `L`, `H`, `celery`):  
 ```
-address_runner_1 number_worker_runner_1  
-address_runner_2 number_worker_runner_2  
+address_runner_1 number_worker_runner_1 list_queues_1  
+address_runner_2 number_worker_runner_2 list_queues_2   
 ...
-address_runner_3 number_worker_runner_3  
+address_runner_3 number_worker_runner_3 list_queues_3   
 ```  
+Example:
+```
+onevm-xxx.yyy.zzzz.fr 2 L,celery  
+onevm-aaa.bbb.cccc.fr 3 H 
+```
 
 * Run `bash scp_runner_stratuslab.sh list_runners.txt`.  
 This will scp some files to the runners and configure them (by executing the script `deploy_runner_stratuslab.sh`)  

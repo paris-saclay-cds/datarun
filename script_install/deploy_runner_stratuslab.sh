@@ -40,4 +40,4 @@ source .bash_aliases  # strange, bash_aliases not activated when log in...
 
 # Run workers
 mkdir celery_info  
-bash runner_workers.sh start $NB_WORKER
+bash runner_workers.sh start $NB_WORKER $WORKER_QUEUES
