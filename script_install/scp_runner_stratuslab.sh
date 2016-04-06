@@ -1,8 +1,9 @@
 #! /bin/bash
-# :Usage: bash scp_runner_stratuslab.sh {file_runner}
+# :Usage: bash scp_runner_stratuslab.sh {file_runner} {private_key_file}
 # To scp to a stratuslab instance (Ubuntu 14.04) files needed to deploy runners 
 # {file_runner} is a text file containing in each line 
 # the address of the runner and the number of workers to start on it
+# and {private_key_file} file of the private key to connect to ScienceFS account (with absolute path)
 
 echo $(pwd)
 if ! [[ $(pwd) == *"script_install" ]]; 
@@ -12,6 +13,7 @@ then
 fi
 
 FILE_RUNNERS=$1
+SCIENCEFS_KEY=$2
 
 mkdir tmp_runner
 while read p; do
@@ -20,6 +22,7 @@ while read p; do
     NB_WORKER=$2
     WORKER_QUEUES=$3
     echo "** Runner: $ADD_RUNNER with $NB_WORKER workers for queues $WORKER_QUEUES **"
+    scp $SCIENCEFS_KEY root@"$ADD_RUNNER":/root/.ssh/id_rsa_sciencefs
     scp deploy_runner_stratuslab.sh datarun.py runner_workers.sh \
         ../runapp/tasks.py ../runapp/__init__.py root@"$ADD_RUNNER":/root/.
     cp env_runner.sh tmp_runner/env_runner.sh

@@ -93,7 +93,7 @@ export RMQ_VHOST='rabbitMQ_vhost_name'
 export IP_MASTER=$(/sbin/ifconfig eth0 | grep "inet addr" | awk -F: '{print $2}' | awk '{print $1}')
 ```   
 
-* Run `bash scp_master_stratuslab.sh master_address` with `master_address` being the master server address (e.g., `onevm-81.lal.in2p3.fr`)   
+* Run `bash scp_master_stratuslab.sh master_address scienceFS_private_key` with `master_address` being the master server address (e.g., `onevm-81.lal.in2p3.fr`) and `scienceFS_private_key` being the file name (with absolute path) of the private key to connect to ScienceFS account.     
 This will scp to the master some files that are needed to configure the master.  
 
 * Ssh to the instance and run: 
@@ -134,7 +134,8 @@ onevm-xxx.yyy.zzzz.fr 2 L,celery
 onevm-aaa.bbb.cccc.fr 3 H 
 ```
 
-* Run `bash scp_runner_stratuslab.sh list_runners.txt`.  
+* Run `bash scp_runner_stratuslab.sh list_runners.txt scienceFS_private_key`.  
+As above, `scienceFS_private_key` is the file name (with absolute path) of the private key to connect to ScienceFS account.  
 This will scp some files to the runners and configure them (by executing the script `deploy_runner_stratuslab.sh`)  
 
 You should now be ready to use datarun on stratuslab!  
