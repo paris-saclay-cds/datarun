@@ -27,6 +27,7 @@ sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force
 # source /root/.venvburrito/startup.sh
 
 # Mount ScienceFS disk
+apt-get -y install sshfs
 mkdir /mnt/datarun
 sshfs -o Ciphers=arcfour256 -o allow_other -o IdentityFile=/root/.ssh/id_rsa_sciencefs "$SCIENCEFS_LOGIN"@sciencefs.di.u-psud.fr:/sciencefs/homes/"$SCIENCEFS_LOGIN" /mnt/datarun
 

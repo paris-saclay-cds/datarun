@@ -7,16 +7,18 @@ cd /home/
 export LC_ALL=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 
-# Mount SienceFS disk
-mkdir /mnt/datarun
-sshfs -o Ciphers=arcfour256 -o allow_other -o IdentityFile=/root/.ssh/id_rsa_sciencefs "$SCIENCEFS_LOGIN"@sciencefs.di.u-psud.fr:/sciencefs/homes/"$SCIENCEFS_LOGIN" /mnt/datarun
-
 # Instal Packages fro the Ubuntu Repositories
 sudo apt-get -y update 
 sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install python-pip
 sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install python-numpy python-scipy python-pandas
 sudo pip install scikit-learn
+
+# Mount SienceFS disk
+source /root/env_runner.sh
+apt-get -y install sshfs
+mkdir /mnt/datarun
+sshfs -o Ciphers=arcfour256 -o allow_other -o IdentityFile=/root/.ssh/id_rsa_sciencefs "$SCIENCEFS_LOGIN"@sciencefs.di.u-psud.fr:/sciencefs/homes/"$SCIENCEFS_LOGIN" /mnt/datarun
 
 # Install Celery
 sudo pip install celery
