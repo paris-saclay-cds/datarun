@@ -78,11 +78,12 @@ stratus-run-instance BJILII-tFu00rKKM-enj9l83rsn --cpu=2 --ram=4000
 Do not forget to change the values and be careful not to commit this file :-)  
 And do not add comments to the file.     
 ```
+export SCIENCEFS_LOGIN='login_for_scienceFS_account'
 export DR_DATABASE_NAME='database_name'
 export DR_DATABASE_USER='database_user'
 export DR_DATABASE_PASSWORD='database_password'
-export DIR_DATA='/home/datarun/data'
-export DIR_SUBMISSION='/home/datarun/submission'
+export DIR_DATA='/mnt/datarun/data'
+export DIR_SUBMISSION='/mnt/datarun/submission'
 export USER_LOGIN='user_name'
 export USER_PSWD='user_password'
 export CELERY_SCHEDULER_PERIOD='*/2' 
@@ -108,10 +109,11 @@ For now, we have to execute the command from the instance, since it is asking fo
 Do not forget to change the values and be careful not to commit this file :-)  
 And do not add comments to the file.
 ```
+export SCIENCEFS_LOGIN='login_for_scienceFS_account'
 export DR_DATABASE_USER='database_name'
 export DR_DATABASE_PASSWORD='database_password'
-export DIR_DATA='data_directory'
-export DIR_SUBMISSION='submission_directory'
+export DIR_DATA='/mnt/datarun/data'
+export DIR_SUBMISSION='/mnt/datarun/submission'
 export RMQ_VHOST='rabbitMQ_vhost_name'
 export IP_MASTER='xxx.yyy.zz.aaa'
 # NB_WORKER added by scp_runner_stratuslab.sh

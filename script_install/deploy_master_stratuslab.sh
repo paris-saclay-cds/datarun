@@ -15,16 +15,6 @@ source .bash_aliases
 export LC_ALL=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 
-# Format attached disk and mount disk
-# TODO: change it to use ScienceFS
-# if ! [[ -z "$1" ]];
-#     then
-#         mkfs.ext3 $1;
-#         mount $1 /mnt;
-#     else
-#         echo "No external disk was given"
-# fi;
-
 cd /home/
 
 # Install Packages from the Ubuntu Repositories 
@@ -35,6 +25,10 @@ sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force
 # wget https://raw.github.com/brainsik/virtualenv-burrito/master/virtualenv-burrito.sh
 # bash virtualenv-burrito.sh 
 # source /root/.venvburrito/startup.sh
+
+# Mount ScienceFS disk
+mkdir /mnt/datarun
+sshfs -o Ciphers=arcfour256 -o allow_other "$SCIENCEFS_LOGIN"@sciencefs.di.u-psud.fr:/sciencefs/homes/"$SCIENCEFS_LOGIN" /mnt/datarun
 
 # Clone the project
 sudo git clone https://github.com/camillemarini/datarun.git
