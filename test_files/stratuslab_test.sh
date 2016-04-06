@@ -21,4 +21,4 @@ EOF
 done
 ################################################################
 
-# python test_workflow.py http://"$MASTER" $DR_USERNAME $DR_USERPSSD
+python test_workflow.py http://"$MASTER" $DR_USERNAME $DR_USERPSSD
