@@ -46,9 +46,9 @@ def save_submission_fold_db(submission_fold, submission_fold_state, metrics,
     submission_fold.test_predictions = test_predictions
     submission_fold.full_train_predictions = full_train_predictions
     # TODO: add resources
-    submission_fold.train_time = metrics['train_time']
-    submission_fold.validation_time = metrics['validation_time']
-    submission_fold.test_time = metrics['test_time']
+    submission_fold.train_time = metrics[u'train_time']
+    submission_fold.validation_time = metrics[u'validation_time']
+    submission_fold.test_time = metrics[u'test_time']
     submission_fold.save()
 
 
@@ -71,7 +71,7 @@ def task_save_submission_fold_db():
             if task.state == 'SUCCESS':
                 log_message, submission_fold_state, metrics,\
                     full_train_predictions, test_predictions = task.result
-                if 'error' not in log_message:
+                if 'ERROR' not in log_message and 'error' not in log_message:
                     save_submission_fold_db(submission_fold,
                                             submission_fold_state,
                                             metrics, full_train_predictions,
@@ -169,10 +169,10 @@ def train_submission_fold(submission_files_path, train_is, X_train,
     try:
         trained_submission = train_model(module_path, list_workflow_elements,
                                          X_train, y_train, train_is)
-        submission_fold_state = 'trained'
+        submission_fold_state = 'TRAINED'
     except Exception, e:
-        submission_fold_state = 'error'
-        log_message = log_message + _make_error_message(e) + '\n'
+        submission_fold_state = 'ERROR'
+        log_message = log_message + _make_error_message(e) + ' - ERROR\n'
         return None, log_message, submission_fold_state, None, None
     end = timeit.default_timer()
     metrics['train_time'] = end - start
@@ -186,16 +186,17 @@ def train_submission_fold(submission_files_path, train_is, X_train,
             predictions = base64.b64encode(zlib.compress(
                 predictions.tostring()))
             full_train_predictions = predictions
-            submission_fold_state = 'validated'
+            submission_fold_state = 'VALIDATED'
         else:
             log_message = log_message + 'Wrong full train prediction size: \n'\
                           + '{} instead of {} \n'.format(len(predictions),
-                                                         len(y_train))
-            submission_fold_state = 'error'
+                                                         len(y_train))\
+                          + ' - ERROR\n'
+            submission_fold_state = 'ERROR'
             full_train_predictions = None
     except Exception, e:
-        submission_fold_state = 'error'
-        log_message = log_message + _make_error_message(e) + '\n'
+        submission_fold_state = 'ERROR'
+        log_message = log_message + _make_error_message(e) + ' - ERROR\n'
         return None, log_message, submission_fold_state, None, None
     end = timeit.default_timer()
     metrics['validation_time'] = end - start
@@ -214,12 +215,13 @@ def test_submission_fold(trained_submission, X_test, y_test,
         if len(predictions) == len(y_test):
             test_predictions = base64.b64encode(zlib.compress(
                 predictions.tostring()))
-            submission_fold_state = 'tested'
+            submission_fold_state = 'TESTED'
         else:
             log_message = log_message + 'Wrong test prediction size: \n'\
                           + '{} instead of {} \n'.format(len(predictions),
-                                                         len(y_test))
-            submission_fold_state = 'error'
+                                                         len(y_test))\
+                          + ' - ERROR\n'
+            submission_fold_state = 'ERROR'
             test_predictions = None
     except:
         pass

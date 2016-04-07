@@ -29,7 +29,7 @@ sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force
 # Mount ScienceFS disk
 apt-get -y install sshfs
 mkdir /mnt/datarun
-sshfs -o Ciphers=arcfour256 -o allow_other -o IdentityFile=/root/.ssh/id_rsa_sciencefs "$SCIENCEFS_LOGIN"@sciencefs.di.u-psud.fr:/sciencefs/homes/"$SCIENCEFS_LOGIN" /mnt/datarun
+sshfs -o Ciphers=arcfour256 -o allow_other -o IdentityFile=/root/.ssh/id_rsa_sciencefs -o StrictHostKeyChecking=no "$SCIENCEFS_LOGIN"@sciencefs.di.u-psud.fr:/sciencefs/homes/"$SCIENCEFS_LOGIN" /mnt/datarun
 mkdir $DIR_SUBMISSION
 touch $DIR_SUBMISSION/__init__.py
 mkdir $DIR_DATA
@@ -99,6 +99,8 @@ rm tt.txt tt1.txt
 # I don t think we need it, since nothing has to be written in the project dir
 sudo chown -R www-data:www-data ../datarun
 sudo chown :www-data ../.
+sudo chmod -R 777 $DIR_DATA
+sudo chmod -R 777 $DIR_SUBMISSION
 # To make it works we have to set it to sudo chown www-data ../. but then we cannot connect in ssh to it. Maybe we can try to put datarun in another forlder such as home?...
 
 # Restart Apache
