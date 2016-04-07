@@ -280,7 +280,7 @@ class GetTestPredictionList(APIView):
         try:
             ind = data['list_submission_fold']
             tested_sub = SubmissionFold.objects.filter(databoard_sf_id__in=ind,
-                                                       state='tested')
+                                                       state='TESTED')
             serializer = TestPredSubmissionFoldSerializer(tested_sub, many=True)
             for sub in tested_sub:
                 sub.new = False
@@ -324,10 +324,10 @@ class GetTestPredictionNew(APIView):
         try:
             if 'raw_data_id' in data.keys():
                 tested_sub = SubmissionFold.\
-                   objects.filter(state='tested', new=True,
+                   objects.filter(state='TESTED', new=True,
                                   databoard_s__raw_data__id=data['raw_data_id'])
             else:
-                tested_sub = SubmissionFold.objects.filter(state='tested',
+                tested_sub = SubmissionFold.objects.filter(state='TESTED',
                                                            new=True)
             serializer = TestPredSubmissionFoldSerializer(tested_sub, many=True)
             for sub in tested_sub:
