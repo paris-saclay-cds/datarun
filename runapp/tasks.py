@@ -1,4 +1,5 @@
-# import os
+import sys
+import os
 import timeit
 import zlib
 import base64
@@ -10,6 +11,7 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 # os.environ['DJANGO_SETTINGS_MODULE'] = 'datarun.settings'
 # from django.conf import settings
+sys.path.insert(0, os.environ.get('DIR_SUBMISSION'))
 
 logger = get_task_logger(__name__)
 
