@@ -11,6 +11,9 @@
 The API documentation can be found at [http://host/docs/](http://127.0.0.1:8000/docs/) 
 (you need to be logged-in to see it, you can log in via the admin page).  
 
+You can also use functions from [`test_files/post_api.py`](https://github.com/camillemarini/datarun/blob/master/test_files/post_api.py) to send data, submission on cv fold, and to get back predictions.  
+
+
 ### How to run it (locally)?
 
 #### 1. Install the application
