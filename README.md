@@ -153,6 +153,7 @@ If two 'Oh yeah' are printed, tests are ok!
 #### for tests on stratuslab  
 Run: `cd test_files; bash stratuslab_test.sh master_address username password`  
 with `master_address` being the master server address (e.g., `onevm-81.lal.in2p3.fr`), `username` being a datarun user, and `password` its password.    
+Be careful not to already have a fold `$DIR_DATA/iris` on your scienceFS disk.  
 If two 'Oh yeah' are printed, tests are ok!     
 
 ### Migrations

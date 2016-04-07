@@ -72,6 +72,7 @@ sudo rabbitmqctl set_permissions -p $RMQ_VHOST $DR_DATABASE_USER ".*" ".*" ".*"
 sudo service rabbitmq-server restart
 
 # Start the worker and scheduler
+mkdir celery_info
 bash script_install/master_workers.sh start $NB_LOCAL_WORKER
 
 # Configure Apache: copy apache conf file to /etc/apache2/sites-available/

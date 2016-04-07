@@ -34,12 +34,15 @@ def api_root(request, format=None):
 
 def save_files(dir_data, data):
     "save files from data['files'] in directory dir_data"
-    os.mkdir(dir_data)
-    os.system('touch ' + dir_data + '/__init__.py')
-    for n_ff, ff in data['files'].items():
-        with open(dir_data + '/' + n_ff, 'w') as o_ff:
-            ff = zlib.decompress(base64.b64decode(ff))
-            o_ff.write(ff)
+    try:
+        os.mkdir(dir_data)
+        os.system('touch ' + dir_data + '/__init__.py')
+        for n_ff, ff in data['files'].items():
+            with open(dir_data + '/' + n_ff, 'w') as o_ff:
+                ff = zlib.decompress(base64.b64decode(ff))
+                o_ff.write(ff)
+    except Exception as e:
+        print(e)
 
 
 class RawDataList(APIView):

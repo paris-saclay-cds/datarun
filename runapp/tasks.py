@@ -11,7 +11,12 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 # os.environ['DJANGO_SETTINGS_MODULE'] = 'datarun.settings'
 # from django.conf import settings
-sys.path.insert(0, os.environ.get('DIR_SUBMISSION'))
+list_path = os.environ.get('DIR_SUBMISSION').split('/')
+if '' == list_path[-1]:
+    list_path = list_path[0:-1]
+list_path = list_path[0:-1]
+dir_module = '/'.join(list_path)
+sys.path.insert(0, dir_module)
 
 logger = get_task_logger(__name__)
 
