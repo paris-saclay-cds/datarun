@@ -78,6 +78,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'datarun.wsgi.application'
 
 
+# REST Framework
+# REST_FRAMEWORK = {
+#     'DEFAULT_VERSIONING_CLASS':
+#     'rest_framework.versioning.AcceptHeaderVersioning',
+#     'ALLOWED_VERSIONS': ('0.0'),
+#     'DEFAULT_VERSION': '0.0',
+# }
+
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
@@ -130,6 +138,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 # API documentation django-rest-swagger
 # http://django-rest-swagger.readthedocs.org/en/latest/index.html
@@ -163,16 +172,24 @@ SWAGGER_SETTINGS = {
 }
 
 # Celery settings
-BROKER_URL = 'amqp://'  # 'amqp://guest:guest@localhost//'
+# BROKER_URL = 'amqp://'  # 'amqp://guest:guest@localhost//'
+BROKER_URL = 'amqp://%s:%s@%s/%s' % (os.environ.get('DR_DATABASE_USER'),
+                                     os.environ.get('DR_DATABASE_PASSWORD'),
+                                     os.environ.get('IP_MASTER'),
+                                     os.environ.get('RMQ_VHOST'))
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+# CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+CELERY_RESULT_BACKEND = 'amqp'
+
 TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
 CELERYBEAT_SCHEDULE = {
     'save-train-model-in-db': {
         'task': 'runapp.tasks.task_save_submission_fold_db',
         'schedule': crontab(minute=os.environ.get('CELERY_SCHEDULER_PERIOD',
                                                   '*/15')),
+        'options': {'queue': 'master_periodic'},
+#        'queue': 'master_periodic',
     },
 }

@@ -18,8 +18,9 @@ import tasks
 # Submission files are temporarilly saved in submission_directory
 # they are likely to be saved in the database as a next step?
 # idem for data
-data_directory = os.environ.get('DIR_DATA', 'data')
-submission_directory = os.environ.get('DIR_SUBMISSION', 'submission')
+data_directory = os.environ.get('DIR_DATA', '/home/datarun/data')
+submission_directory = os.environ.get('DIR_SUBMISSION',
+                                      '/home/datarun/submission')
 
 
 @api_view(('GET',))
@@ -43,7 +44,7 @@ def save_files(dir_data, data):
 
 class RawDataList(APIView):
 
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, format=None):
         """
@@ -104,7 +105,7 @@ class RawDataList(APIView):
 
 class SubmissionFoldList(APIView):
 
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, format=None):
         """
@@ -192,12 +193,13 @@ class SubmissionFoldList(APIView):
                 submission_files_path = submission_fold.databoard_s.\
                     files_path
                 train_is = submission_fold.train_is
-                # task = tasks.train_test_submission_fold.apply_async(
-                #     (data['databoard_sf_id']),
-                #     queue=priority)
-                task = tasks.train_test_submission_fold.delay(
-                    raw_data_files_path, workflow_elements,
-                    raw_data_target_column, submission_files_path, train_is)
+                task = tasks.train_test_submission_fold.apply_async(
+                    (raw_data_files_path, workflow_elements,
+                     raw_data_target_column, submission_files_path, train_is),
+                    queue=priority)
+                # task = tasks.train_test_submission_fold.delay(
+                #     raw_data_files_path, workflow_elements,
+                #     raw_data_target_column, submission_files_path, train_is)
                 task_id = task.id
                 submission_fold.task_id = task_id
                 submission_fold.save()
@@ -213,7 +215,7 @@ class SubmissionFoldList(APIView):
 
 class SubmissionFoldDetail(APIView):
 
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_object(self, pk):
         try:
@@ -246,7 +248,7 @@ class SubmissionFoldDetail(APIView):
 
 class GetTestPredictionList(APIView):
 
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request, format=None):
         """
@@ -289,7 +291,7 @@ class GetTestPredictionList(APIView):
 
 class GetTestPredictionNew(APIView):
 
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request, format=None):
         """
@@ -336,7 +338,7 @@ class GetTestPredictionNew(APIView):
 
 class SplitTrainTest(APIView):
 
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request, format=None):
         """
