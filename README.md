@@ -106,11 +106,6 @@ source ~/.bashrc
 ```
 For now, we have to execute the command from the instance, since it is asking for many parameters. TODO: make changes so that we can run the script with ssh from our local machine.   
  
-Supplementary step (until the pb with sshfs is fixed): run on the instance
-```
-sshfs -o Ciphers=arcfour256 -o allow_other -o IdentityFile=/root/.ssh/id_rsa_sciencefs -o StrictHostKeyChecking=no "$SCIENCEFS_LOGIN"@sciencefs.di.u-psud.fr:/sciencefs/homes/"$SCIENCEFS_LOGIN" /mnt/datarun
-```
-It is made in `deploy_master_stratuslab.sh` and should not ask for a password, but it fails sometimes... TODO: fix this...
 
 ##### 4. Configure runners
 
@@ -147,12 +142,6 @@ onevm-aaa.bbb.cccc.fr 3 H
 As above, `scienceFS_private_key` is the file name (with absolute path) of the private key to connect to ScienceFS account.  
 This will scp some files to the runners and configure them (by executing the script `deploy_runner_stratuslab.sh`)  
 
-* Supplementary step (until the pb with sshfs is fixed): run on all instances
-```
-source /home/celery/.bash_aliases
-sshfs -o Ciphers=arcfour256 -o allow_other -o IdentityFile=/root/.ssh/id_rsa_sciencefs -o StrictHostKeyChecking=no "$SCIENCEFS_LOGIN"@sciencefs.di.u-psud.fr:/sciencefs/homes/"$SCIENCEFS_LOGIN" /mnt/datarun
-```
-It is made in `deploy_runner_stratuslab.sh` and should not ask for a password, but it fails sometimes... TODO: fix this...
 
 You should now be ready to use datarun on stratuslab!  
 
