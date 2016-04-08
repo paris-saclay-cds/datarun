@@ -86,7 +86,7 @@ class RawDataList(APIView):
         response_serializer: RawDataSerializer
         """
         data = request.data
-        if 'name' in data.keys() and 'files_path' not in data.keys():
+        if 'name' in data.keys():
             this_data_directory = data_directory + '/' + request.data['name']
             data['files_path'] = this_data_directory
         serializer = RawDataSerializer(data=data)
@@ -153,10 +153,9 @@ class SubmissionFoldList(APIView):
         data = request.data
         if 'databoard_s_id' in data.keys():
             data['databoard_s'] = data['databoard_s_id']
-            if 'files_path' not in data.keys():
-                this_submission_directory = submission_directory + \
-                                '/sub_{}'.format(request.data['databoard_s_id'])
-                data['files_path'] = this_submission_directory
+            this_submission_directory = submission_directory + \
+                '/sub_{}'.format(request.data['databoard_s_id'])
+            data['files_path'] = this_submission_directory
         # create associated submission if it does not exist in the db
         try:
             Submission.objects.get(
