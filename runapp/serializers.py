@@ -38,4 +38,4 @@ class TestPredSubmissionFoldSerializer(serializers.ModelSerializer):
         model = SubmissionFold
         fields = ('databoard_sf_id', 'test_predictions', 'train_time',
                   'validation_time', 'test_time', 'train_cpu_time',
-                  'train_memory')
+                  'train_memory', 'test_cpu_time', 'test_memory')

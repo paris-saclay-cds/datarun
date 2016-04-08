@@ -3,6 +3,7 @@ import os
 import timeit
 import zlib
 import base64
+import resource
 import numpy as np
 import pandas as pd
 from importlib import import_module
@@ -35,6 +36,17 @@ def _make_error_message(e):
         return repr(e)
 
 
+def cpu_time_resource():
+    cpu_user = resource.getrusage(resource.RUSAGE_SELF).ru_utime
+    cpu_system = resource.getrusage(resource.RUSAGE_SELF).ru_stime
+    return cpu_user + cpu_system
+
+
+def memory_usage_resource():
+    mem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024.
+    return mem
+
+
 @shared_task
 def add(x, y):
     return x + y
@@ -45,10 +57,13 @@ def save_submission_fold_db(submission_fold, submission_fold_state, metrics,
     submission_fold.state = submission_fold_state
     submission_fold.test_predictions = test_predictions
     submission_fold.full_train_predictions = full_train_predictions
-    # TODO: add resources
     submission_fold.train_time = metrics[u'train_time']
     submission_fold.validation_time = metrics[u'validation_time']
     submission_fold.test_time = metrics[u'test_time']
+    submission_fold.train_cpu_time = metrics[u'train_cpu_time']
+    submission_fold.test_cpu_time = metrics[u'test_cpu_time']
+    submission_fold.train_memory = metrics[u'train_memory']
+    submission_fold.test_memory = metrics[u'test_memory']
     submission_fold.save()
 
 
@@ -151,6 +166,8 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
     else:
         full_train_predictions = None
         test_predictions = None
+    metrics['train_memory'] = memory_usage_resource()
+    metrics['test_memory'] = metrics['train_memory']
     return log_message, submission_fold_state, metrics,\
         full_train_predictions, test_predictions
 
@@ -166,6 +183,7 @@ def train_submission_fold(submission_files_path, train_is, X_train,
     metrics = {}
     # Train
     start = timeit.default_timer()
+    start_cpu = cpu_time_resource()
     try:
         trained_submission = train_model(module_path, list_workflow_elements,
                                          X_train, y_train, train_is)
@@ -175,8 +193,9 @@ def train_submission_fold(submission_files_path, train_is, X_train,
         log_message = log_message + _make_error_message(e) + ' - ERROR\n'
         return None, log_message, submission_fold_state, None, None
     end = timeit.default_timer()
+    end_cpu = cpu_time_resource()
     metrics['train_time'] = end - start
-    # TODO add resources...
+    metrics['train_cpu_time'] = end_cpu - start_cpu
     # Validation
     start = timeit.default_timer()
     try:
@@ -199,6 +218,7 @@ def train_submission_fold(submission_files_path, train_is, X_train,
         log_message = log_message + _make_error_message(e) + ' - ERROR\n'
         return None, log_message, submission_fold_state, None, None
     end = timeit.default_timer()
+    end_cpu = cpu_time_resource()
     metrics['validation_time'] = end - start
     return trained_submission, log_message, submission_fold_state,\
         metrics, full_train_predictions
@@ -209,6 +229,7 @@ def test_submission_fold(trained_submission, X_test, y_test,
     log_message = ''
     metrics = {}
     start = timeit.default_timer()
+    start_cpu = cpu_time_resource()
     try:
         predictions = test_model(trained_submission, list_workflow_elements,
                                  X_test, range(len(y_test)))
@@ -226,7 +247,9 @@ def test_submission_fold(trained_submission, X_test, y_test,
     except:
         pass
     end = timeit.default_timer()
+    end_cpu = cpu_time_resource()
     metrics['test_time'] = end - start
+    metrics['test_cpu_time'] = end_cpu - start_cpu
     return log_message, submission_fold_state, metrics, test_predictions
 
 
