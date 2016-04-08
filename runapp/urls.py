@@ -6,6 +6,8 @@ urlpatterns = [
     url(r'^rawdata/$', views.RawDataList.as_view(), name='rawdata'),
     url(r'^submissionfold/$', views.SubmissionFoldList.as_view(),
         name='submissionfold-list'),
+    url(r'^submissionfold-light/$', views.SubmissionFoldLightList.as_view(),
+        name='submissionfold-light-list'),
     url(r'^submissionfold/(?P<pk>[0-9]+)/$',
         views.SubmissionFoldDetail.as_view(), name='submissionfold-detail'),
     url(r'^rawdata/split/$',

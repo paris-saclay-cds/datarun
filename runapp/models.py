@@ -52,7 +52,7 @@ class Submission(models.Model):
 class SubmissionFold(models.Model):
     """
     :param databoard_sf_id: id of the submission on cv fold in databoard db
-    :param submission: associated submission
+    :param databoard_s: associated submission
     :param train_is: train indices
     :param test_is: test indices
     :param priority: priority to train-test the fold
@@ -71,7 +71,7 @@ class SubmissionFold(models.Model):
     :param new: True when it has not already been sent by the API
 
     :type databoard_sf_id: IntegerField(primary_key=True)
-    :type submission: ForeignKey(Submission, null=True, blank=True)
+    :type databoard_s: ForeignKey(Submission, null=True, blank=True)
     :type train_is: TextField
     :type test_is: TextField
     :type priority: CharField, choices.

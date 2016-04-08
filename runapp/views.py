@@ -3,7 +3,7 @@ import zlib
 import base64
 from .models import RawData, Submission, SubmissionFold
 from .serializers import RawDataSerializer, SubmissionSerializer
-from .serializers import SubmissionFoldSerializer
+from .serializers import SubmissionFoldSerializer, SubmissionFoldLightSerializer
 from .serializers import TestPredSubmissionFoldSerializer
 from django.http import Http404
 from rest_framework import permissions
@@ -104,6 +104,28 @@ class RawDataList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SubmissionFoldLightList(APIView):
+
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, format=None):
+        """
+        List main info (id, submission id, state, new) about all submission
+        on CV fold \n
+        - Example with curl (on localhost): \n
+            curl -u username:password GET
+            http://127.0.0.1:8000/runapp/submissionfold-light/ \n
+        - Example with the python package requests (on localhost): \n
+            requests.get('http://127.0.0.1:8000/runapp/submissionfold-light/',
+            auth=('username', 'password'))
+        ---
+        response_serializer: SubmissionFoldLightSerializer
+        """
+        submission_folds = SubmissionFold.objects.all()
+        serializer = SubmissionFoldLightSerializer(submission_folds, many=True)
+        return Response(serializer.data)
 
 
 class SubmissionFoldList(APIView):

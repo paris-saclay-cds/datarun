@@ -29,6 +29,15 @@ class SubmissionFoldSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class SubmissionFoldLightSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the SubmissionFold model with all fields
+    """
+    class Meta:
+        model = SubmissionFold
+        fields = ('databoard_sf_id', 'databoard_s', 'state', 'new')
+
+
 class TestPredSubmissionFoldSerializer(serializers.ModelSerializer):
     """
     Serializer for the SubmissionFold model with the id, the predictions on the
@@ -36,6 +45,7 @@ class TestPredSubmissionFoldSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = SubmissionFold
-        fields = ('databoard_sf_id', 'test_predictions', 'train_time',
-                  'validation_time', 'test_time', 'train_cpu_time',
-                  'train_memory', 'test_cpu_time', 'test_memory')
+        fields = ('databoard_sf_id', 'databoard_s', 'test_predictions',
+                  'train_time', 'validation_time', 'test_time',
+                  'train_cpu_time', 'test_cpu_time',
+                  'train_memory', 'test_memory')
