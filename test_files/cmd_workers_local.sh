@@ -42,9 +42,6 @@ else
             export WQH=("$WQH,rw$i")
         done
     fi
-    celery multi show $REMOTE_WORKERS -l INFO -A datarun -Q:$WQL L,celery -Q:$WQH H \
-        --logfile="$(pwd)/celery_info/%n.log" \
-        --pidfile="$(pwd)/celery_info/%n.pid"; 
     celery multi $1 $REMOTE_WORKERS -l INFO -A datarun -Q:$WQL L,celery -Q:$WQH H \
         --logfile="$(pwd)/celery_info/%n.log" \
         --pidfile="$(pwd)/celery_info/%n.pid"; 
