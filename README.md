@@ -1,5 +1,7 @@
 ## Datarun
 
+Datarun goal is to train and test machine learning models. It is a REST API written in Django ([more info here](https://github.com/camillemarini/datarun/wiki/Project-description-and-milestones#datarun-api-to-evaluate-models-submitted-using-databoard)).
+
 * [How to use it?](#how-to-use-it)
 * [How to run it locally?](#how-to-run-it-locally)
 * [How to run it on stratuslab?](#how-to-run-it-on-stratuslab)
