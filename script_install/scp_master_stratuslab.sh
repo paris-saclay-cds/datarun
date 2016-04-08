@@ -6,5 +6,5 @@
 
 ADD_MASTER=$1
 SCIENCEFS_KEY=$2
-scp env.sh deploy_master_stratuslab.sh root@"$ADD_MASTER":/root/.
+scp env.sh deploy_master_stratuslab.sh root@"$ADD_MASTER":/root/
 scp $SCIENCEFS_KEY root@"$ADD_MASTER":/root/.ssh/id_rsa_sciencefs

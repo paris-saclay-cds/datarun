@@ -182,6 +182,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 # CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
 CELERY_RESULT_BACKEND = 'amqp'
+CELERY_RESULT_PERSISTENT = True
 
 TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
 CELERYBEAT_SCHEDULE = {
