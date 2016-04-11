@@ -15,6 +15,14 @@ def url_post(url1, url2, username, password, data):
     return requests.post(url, auth=(username, password), json=data)
 
 
+def url_get(url1, url2, username, password, r_id=None):
+    url = url1 + url2
+    url = url[0:9] + url[9::].replace('//', '/')
+    if r_id:
+        url = url + str(r_id) + '/'
+    return requests.get(url, auth=(username, password))
+
+
 def post_data(host_url, username, password,
               data_name, target_column, workflow_elements, data_file):
     """
@@ -137,3 +145,69 @@ def get_prediction_new(host_url, username, password,
     data = {'raw_data_id': raw_data_id}
     return url_post(host_url, '/runapp/testpredictions/new/', username,
                     password, data)
+
+
+def get_raw_data(host_url, username, password):
+    """
+    Get all raw data sets
+
+    :param host_url: api host url, such as http://127.0.0.1:8000/ (localhost)
+    :param username: username to be used for authentication
+    :param password: password to be used for authentication
+
+    :type host_url: string
+    :type username: string
+    :type password: string
+    """
+    return url_get(host_url, '/runapp/rawdata/', username, password)
+
+
+def get_submission_fold_light(host_url, username, password):
+    """
+    Get all submissions on cv fold
+    only main info: id, associated submission id, state, and new
+
+    :param host_url: api host url, such as http://127.0.0.1:8000/ (localhost)
+    :param username: username to be used for authentication
+    :param password: password to be used for authentication
+
+    :type host_url: string
+    :type username: string
+    :type password: string
+    """
+    return url_get(host_url, '/runapp/submissionfold-light/', username,
+                   password)
+
+
+def get_submission_fold(host_url, username, password):
+    """
+    Get all submission on cv fold (all attributes)
+
+    :param host_url: api host url, such as http://127.0.0.1:8000/ (localhost)
+    :param username: username to be used for authentication
+    :param password: password to be used for authentication
+
+    :type host_url: string
+    :type username: string
+    :type password: string
+    """
+    return url_get(host_url, '/runapp/submissionfold/', username, password)
+
+
+def get_submission_fold_detail(host_url, username, password,
+                               submission_fold_id):
+    """
+    Get details about a submission on cv fold given its id
+
+    :param host_url: api host url, such as http://127.0.0.1:8000/ (localhost)
+    :param username: username to be used for authentication
+    :param password: password to be used for authentication
+    :param submission_fold_id: id of the submission on cv fold
+
+    :type host_url: string
+    :type username: string
+    :type password: string
+    :param submission_fold_id: integer
+    """
+    return url_get(host_url, '/runapp/submissionfold/', username, password,
+                   r_id=submission_fold_id)
