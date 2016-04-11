@@ -10,10 +10,12 @@ Datarun goal is to train and test machine learning models. It is a REST API writ
 
 ### How to use it?
 
-The API documentation can be found at [http://host/docs/](http://127.0.0.1:8000/docs/) 
-(you need to be logged-in to see it, you can log in via the admin page).  
+The API documentation can be found: 
+- at [http://host/docs/](http://127.0.0.1:8000/docs/) 
+(you need to be logged-in to see it, you can log in via the admin page [http://host/admin/](http://127.0.0.1:8000/admin/)).  
+- in the sphinx documentation (cf docs folder), [pdf here](https://github.com/camillemarini/datarun/blob/master/docs/_build/latex/datarun.pdf).   
 
-You can also use functions from [`test_files/post_api.py`](https://github.com/camillemarini/datarun/blob/master/test_files/post_api.py) to send data, submission on cv fold, and to get back predictions.  
+To easily use the API, you can use functions from [`test_files/post_api.py`](https://github.com/camillemarini/datarun/blob/master/test_files/post_api.py) to send data, submission on cv fold, and to get back predictions. The documentation can be found in the sphinx documentation. 
 
 
 ### How to run it (locally)?
