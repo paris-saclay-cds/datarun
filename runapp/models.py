@@ -55,8 +55,8 @@ class SubmissionFold(models.Model):
     :param databoard_s: associated submission
     :param train_is: train indices
     :param test_is: test indices
-    :param priority: priority to train-test the fold
-    ('L' for low priority, 'H' for high priority)
+    :param priority: priority to train-test the fold\
+        ('L' for low priority, 'H' for high priority)
     :param full_train_predictions: predictions of the entire train dataset
     :param test_predictions: predictions of the test dataset
     :param state: TODO, TRAINED, VALIDATED, TESTED, ERROR

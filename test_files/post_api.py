@@ -26,7 +26,7 @@ def url_get(url1, url2, username, password, r_id=None):
 def post_data(host_url, username, password,
               data_name, target_column, workflow_elements, data_file):
     """
-    To post data to the datarun api.
+    To post data to the datarun api.\
     Data are compressed (with zlib) and base64-encoded before being posted.
 
     :param host_url: api host url, such as http://127.0.0.1:8000/ (localhost)
@@ -34,7 +34,7 @@ def post_data(host_url, username, password,
     :param password: password to be used for authentication
     :param data_name: name of the raw dataset
     :param target_column: name of the target column
-    :param workflow_elements: workflow elements associated with this dataset,
+    :param workflow_elements: workflow elements associated with this dataset,\
     e.g., feature_extractor, classifier
     :param data_file: name with absolute of the dataset file
 
@@ -68,8 +68,8 @@ def post_submission_fold(host_url, username, password,
                          priority='L',
                          raw_data_id=None, list_submission_files=None):
     """
-    To post submission on cv fold and submission (if not already posted).
-    Submission files are compressed (with zlib) and base64-encoded before being
+    To post submission on cv fold and submission (if not already posted).\
+    Submission files are compressed (with zlib) and base64-encoded before being\
     posted.
 
     :param host_url: api host url, such as http://127.0.0.1:8000/ (localhost)
@@ -79,7 +79,7 @@ def post_submission_fold(host_url, username, password,
     :param sub_fold_id: id of the submission on cv fold on databoard
     :param train_is: train indices for the cv fold
     :param test_is: test indices for the cv fold
-    :param priority: priority level to train test the model: L for low
+    :param priority: priority level to train test the model: L for low\
     and H for high
 
     :type host_url: string
@@ -114,8 +114,8 @@ def get_prediction_list(host_url, username, password,
     :param host_url: api host url, such as http://127.0.0.1:8000/ (localhost)
     :param username: username to be used for authentication
     :param password: password to be used for authentication
-    :param list_submission_fold_id: list of submission on cv fold ids from which
-    we want the predictions
+    :param list_submission_fold_id: list of submission on cv fold ids from \
+    which we want the predictions
 
     :type host_url: string
     :type username: string
@@ -164,7 +164,7 @@ def get_raw_data(host_url, username, password):
 
 def get_submission_fold_light(host_url, username, password):
     """
-    Get all submissions on cv fold
+    Get all submissions on cv fold\
     only main info: id, associated submission id, state, and new
 
     :param host_url: api host url, such as http://127.0.0.1:8000/ (localhost)
