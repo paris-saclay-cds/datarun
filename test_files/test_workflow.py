@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 import json
@@ -6,6 +7,8 @@ import base64
 import numpy as np
 from sklearn import cross_validation
 import post_api
+sys.path.insert(0, '..')
+from runapp import tasks
 
 if len(sys.argv) > 1:
     host_url = sys.argv[1]
@@ -19,31 +22,31 @@ else:
 
 # TEST WITH IRIS DATASET
 dict_param1 = {
-    'data_name': "iris",
+    'data_name': "irisoo",
     'data_file': 'iris.csv',
     'n_samples': 150,
     'n_pred': 3,
     'held_out_test': 0.5,
     'target_column': 'species',
     'workflow_elements': 'classifier',
-    'submission_id': 1,
-    'submission_fold_id1': 1,
-    'submission_fold_id2': 2,
+    'submission_id': 11,
+    'submission_fold_id1': 19,
+    'submission_fold_id2': 20,
     'submission_files': ['feature_extractor.py', 'classifier.py',
                          'calibrator.py'],
 }
 # TEST WITH BOSTON HOUSING DATASET
 dict_param2 = {
-    'data_name': "boston_housing",
+    'data_name': "boston_housingo",
     'data_file': 'boston_housing.csv',
     'n_samples': 506,
     'n_pred': 1,
     'held_out_test': 0.5,
     'target_column': 'medv',
     'workflow_elements': 'regressor',
-    'submission_id': 2,
-    'submission_fold_id1': 3,
-    'submission_fold_id2': 4,
+    'submission_id': 10,
+    'submission_fold_id1': 19,
+    'submission_fold_id2': 20,
     'submission_files': ['regressor.py']
 }
 
@@ -93,8 +96,7 @@ for dict_param in list_dict_param:
                                                      userpassd, submission_id,
                                                      submission_fold_id2,
                                                      train_is2, test_is2,
-                                                     priority,
-                                                     data_id, submission_files)
+                                                     priority)
     task_id2 = json.loads(post_submission2.content)["task_id"]
     print('train-test task id fold 2: ', task_id2)
 
@@ -107,8 +109,39 @@ for dict_param in list_dict_param:
     pred = json.loads(post_pred.content)[0]['test_predictions']
     pred = np.fromstring(zlib.decompress(base64.b64decode(pred)), dtype=float)
     pred = pred.reshape(int(n_samples * held_out_test), n_pred)
-    sum_prob = np.ones(int(n_samples * held_out_test))
-    if (pred.sum(axis=1) == sum_prob).all():
+    print(pred)
+
+    # Compute predictions locally
+    os.mkdir(data_name)
+    os.system('cp ' + data_file + ' ' + data_name + '/' + data_name + '.csv')
+    raw_data_files_path = '' + data_name + '/'
+    abs_raw_data_files_path = os.path.abspath('.') + '/' + data_name + '/'
+    tasks.prepare_data(abs_raw_data_files_path + data_name + '.csv',
+                       held_out_test,
+                       abs_raw_data_files_path + 'train.csv',
+                       abs_raw_data_files_path + 'test.csv')
+    os.mkdir('sub')
+    for ff in submission_files:
+        os.system('cp ' + ff + ' sub/.')
+    submission_files_path = 'sub'
+    os.system('touch sub/__init__.py')
+    tt1 = base64.b64encode(zlib.compress(train_is1.tostring()))
+    train_test_local = tasks.train_test_submission_fold(raw_data_files_path,
+                                                        workflow_elements,
+                                                        target_column,
+                                                        submission_files_path,
+                                                        tt1)
+    test_pred = train_test_local[4]
+    test_pred = np.fromstring(zlib.decompress(base64.b64decode(test_pred)),
+                              dtype=float)
+    test_pred = test_pred.reshape(int(n_samples * held_out_test), n_pred)
+    print(test_pred)
+    os.system('rm -rf sub')
+    os.system('rm -rf ' + data_name)
+    # Compare predictions
+    # sum_prob = np.ones(int(n_samples * held_out_test))
+    # if (pred.sum(axis=1) == sum_prob).all():
+    if (pred == test_pred).all():
         print('Oh yeah 1!')
 
     post_pred_new = post_api.get_prediction_new(host_url, username, userpassd,

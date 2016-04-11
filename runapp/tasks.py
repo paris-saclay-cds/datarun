@@ -157,7 +157,7 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
         train_submission_fold(submission_files_path, train_is,
                               X_train, y_train, list_workflow_elements)
     log_message = log_message + '\n' + log_train
-    if 'error' not in submission_fold_state:
+    if 'ERROR' not in submission_fold_state:
         log_test, submission_fold_state, metrics_test, test_predictions = \
             test_submission_fold(trained_model, X_test, y_test,
                                  list_workflow_elements)
@@ -245,6 +245,9 @@ def test_submission_fold(trained_submission, X_test, y_test,
             submission_fold_state = 'ERROR'
             test_predictions = None
     except:
+        log_message = log_message + 'Problem in test_model - ERROR'
+        submission_fold_state = 'ERROR'
+        test_predictions = None
         pass
     end = timeit.default_timer()
     end_cpu = cpu_time_resource()
