@@ -154,7 +154,7 @@ class SubmissionFoldList(APIView):
     def post(self, request, format=None):
         """
         Create a submission on CV fold (and if necessary the associated\
-        submission \n
+        submission) \n
         - Example with curl (on localhost): \n
             curl -u username:password   -H "Content-Type: application/json"\
             -X POST\
@@ -171,6 +171,10 @@ class SubmissionFoldList(APIView):
                                 'raw_data': 8, 'train_is': 'GDHRFdfgfd',\
                                 'test_is': 'kdjhLGf2', 'priority': 'L'\
                                 'files': {'classifier.py': 'import skle...'}})\n
+        Possible to force the submission and submission on CV fold (even if the\
+        ids already exist) by adding to the data dictionary \
+        "force": 'submission, submission_fold' to resubmit both, or \
+        "force": 'submission_fold' to resubmit only the submission on CV fold\n
         ---
         request_serializer: SubmissionFoldSerializer
         response_serializer: SubmissionFoldSerializer
@@ -181,6 +185,22 @@ class SubmissionFoldList(APIView):
             this_submission_directory = submission_directory + \
                 '/sub_{}'.format(request.data['databoard_s_id'])
             data['files_path'] = this_submission_directory
+        # if force
+        if 'force' in data.keys():
+            if 'submission' in data['force']:
+                try:
+                    submission = Submission.objects.get(
+                        databoard_s_id=request.data['databoard_s_id'])
+                    submission.delete()
+                except:
+                    pass
+            if 'submission_fold' in data['force']:
+                try:
+                    submission_fold = SubmissionFold.get(
+                        databoard_sf_id=request.data['databoard_sf_id'])
+                    submission_fold.delete()
+                except:
+                    pass
         # create associated submission if it does not exist in the db
         try:
             Submission.objects.get(

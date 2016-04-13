@@ -22,31 +22,31 @@ else:
 
 # TEST WITH IRIS DATASET
 dict_param1 = {
-    'data_name': "irisoo",
+    'data_name': "irisuuu",
     'data_file': 'iris.csv',
     'n_samples': 150,
     'n_pred': 3,
     'held_out_test': 0.5,
     'target_column': 'species',
     'workflow_elements': 'classifier',
-    'submission_id': 11,
-    'submission_fold_id1': 19,
-    'submission_fold_id2': 20,
+    'submission_id': 14,
+    'submission_fold_id1': 24,
+    'submission_fold_id2': 25,
     'submission_files': ['feature_extractor.py', 'classifier.py',
                          'calibrator.py'],
 }
 # TEST WITH BOSTON HOUSING DATASET
 dict_param2 = {
-    'data_name': "boston_housingo",
+    'data_name': "boston_housingu",
     'data_file': 'boston_housing.csv',
     'n_samples': 506,
     'n_pred': 1,
     'held_out_test': 0.5,
     'target_column': 'medv',
     'workflow_elements': 'regressor',
-    'submission_id': 10,
-    'submission_fold_id1': 19,
-    'submission_fold_id2': 20,
+    'submission_id': 15,
+    'submission_fold_id1': 26,
+    'submission_fold_id2': 27,
     'submission_files': ['regressor.py']
 }
 

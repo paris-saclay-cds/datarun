@@ -66,7 +66,8 @@ def post_split(host_url, username, password,
 def post_submission_fold(host_url, username, password,
                          sub_id, sub_fold_id, train_is, test_is,
                          priority='L',
-                         raw_data_id=None, list_submission_files=None):
+                         raw_data_id=None, list_submission_files=None,
+                         force=None):
     """
     To post submission on cv fold and submission (if not already posted).\
     Submission files are compressed (with zlib) and base64-encoded before being\
@@ -81,6 +82,13 @@ def post_submission_fold(host_url, username, password,
     :param test_is: test indices for the cv fold
     :param priority: priority level to train test the model: L for low\
     and H for high
+    :param raw_data_id: id of the associated data, when submitting a submission
+    :param list_submission_files: list of files of the submission,\
+        when submitting a submission
+    :param force: to force the submission even if ids already exist\
+        force can be 'submission, submission_fold' to resubmit both\
+        or 'submission, submission_fold' to resubmit only the submission\
+        on cv fold. False by default.
 
     :type host_url: string
     :type username: string
@@ -90,12 +98,18 @@ def post_submission_fold(host_url, username, password,
     :type train_is: numpy array
     :type test_is: numpy array
     :type priority: string
+    :type raw_data_id: integer
+    :type list_submission_files: list
+    :type force: string
     """
     # Compress train and test indices
     train_is = base64.b64encode(zlib.compress(train_is.tostring()))
     test_is = base64.b64encode(zlib.compress(test_is.tostring()))
     data = {'databoard_sf_id': sub_fold_id, 'databoard_s_id': sub_id,
             'train_is': train_is, 'test_is': test_is}
+    # To force the submission even if ids already exist
+    if force:
+        data['force'] = force
     # If the submission does not exist, post info needed to save it in the db
     if raw_data_id and list_submission_files:
         data['raw_data'] = raw_data_id
