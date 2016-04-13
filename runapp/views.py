@@ -187,17 +187,17 @@ class SubmissionFoldList(APIView):
             data['files_path'] = this_submission_directory
         # if force
         if 'force' in data.keys():
-            if 'submission' in data['force']:
+            if 'submission, submission_fold' in data['force']:
                 try:
                     submission = Submission.objects.get(
-                        databoard_s_id=request.data['databoard_s_id'])
+                        databoard_s_id=data['databoard_s_id'])
                     submission.delete()
                 except:
                     pass
             if 'submission_fold' in data['force']:
                 try:
-                    submission_fold = SubmissionFold.get(
-                        databoard_sf_id=request.data['databoard_sf_id'])
+                    submission_fold = SubmissionFold.objects.get(
+                        databoard_sf_id=data['databoard_sf_id'])
                     submission_fold.delete()
                 except:
                     pass

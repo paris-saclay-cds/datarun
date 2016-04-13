@@ -97,6 +97,12 @@ for dict_param in list_dict_param:
                                                      submission_fold_id2,
                                                      train_is2, test_is2,
                                                      priority)
+    post_submission2 = post_api.post_submission_fold(host_url, username,
+                                                     userpassd, submission_id,
+                                                     submission_fold_id2,
+                                                     train_is2, test_is2,
+                                                     priority,
+                                                     force='submission_fold')
     task_id2 = json.loads(post_submission2.content)["task_id"]
     print('train-test task id fold 2: ', task_id2)
 
@@ -106,10 +112,10 @@ for dict_param in list_dict_param:
     # Get submission prediction
     post_pred = post_api.get_prediction_list(host_url, username, userpassd,
                                              [submission_fold_id1])
+    print(post_pred.content)
     pred = json.loads(post_pred.content)[0]['test_predictions']
     pred = np.fromstring(zlib.decompress(base64.b64decode(pred)), dtype=float)
     pred = pred.reshape(int(n_samples * held_out_test), n_pred)
-    print(pred)
 
     # Compute predictions locally
     os.mkdir(data_name)
@@ -135,7 +141,6 @@ for dict_param in list_dict_param:
     test_pred = np.fromstring(zlib.decompress(base64.b64decode(test_pred)),
                               dtype=float)
     test_pred = test_pred.reshape(int(n_samples * held_out_test), n_pred)
-    print(test_pred)
     os.system('rm -rf sub')
     os.system('rm -rf ' + data_name)
     # Compare predictions
