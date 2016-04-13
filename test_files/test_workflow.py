@@ -101,7 +101,7 @@ for dict_param in list_dict_param:
     print('train-test task id fold 2: ', task_id2)
 
     # Wait to be sure it was trained and tested and saved in the db (every Xmin)
-    time.sleep(58)
+    time.sleep(158)
 
     # Get submission prediction
     post_pred = post_api.get_prediction_list(host_url, username, userpassd,
