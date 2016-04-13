@@ -88,7 +88,7 @@ def post_submission_fold(host_url, username, password,
     :param force: to force the submission even if ids already exist\
         force can be 'submission, submission_fold' to resubmit both\
         or 'submission, submission_fold' to resubmit only the submission\
-        on cv fold. False by default.
+        on cv fold. None by default.
 
     :type host_url: string
     :type username: string
