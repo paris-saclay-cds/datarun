@@ -35,7 +35,8 @@ def api_root(request, format=None):
 def save_files(dir_data, data):
     "save files from data['files'] in directory dir_data"
     try:
-        os.mkdir(dir_data)
+        if not os.path.exists(dir_data):
+            os.makedirs(dir_data)
         os.system('touch ' + dir_data + '/__init__.py')
         for n_ff, ff in data['files'].items():
             with open(dir_data + '/' + n_ff, 'w') as o_ff:
