@@ -116,8 +116,8 @@ def prepare_data(raw_filename, held_out_test_size, train_filename,
     df = pd.read_csv(raw_filename)
     df_train, df_test = train_test_split(
         df, test_size=held_out_test_size, random_state=random_state)
-    df_train.to_csv(train_filename)
-    df_test.to_csv(test_filename)
+    df_train.to_csv(train_filename, index=False)
+    df_test.to_csv(test_filename, index=False)
 
 
 @shared_task
@@ -163,11 +163,11 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
                                  list_workflow_elements)
         metrics.update(metrics_test)
         log_message = log_message + '\n' + log_test
+        metrics['train_memory'] = memory_usage_resource()
+        metrics['test_memory'] = metrics['train_memory']
     else:
         full_train_predictions = None
         test_predictions = None
-    metrics['train_memory'] = memory_usage_resource()
-    metrics['test_memory'] = metrics['train_memory']
     return log_message, submission_fold_state, metrics,\
         full_train_predictions, test_predictions
 

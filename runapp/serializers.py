@@ -46,6 +46,7 @@ class TestPredSubmissionFoldSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubmissionFold
         fields = ('databoard_sf_id', 'databoard_s', 'test_predictions',
+                  'full_train_predictions', 'state',
                   'train_time', 'validation_time', 'test_time',
                   'train_cpu_time', 'test_cpu_time',
                   'train_memory', 'test_memory')

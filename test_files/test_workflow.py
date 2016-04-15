@@ -22,7 +22,7 @@ else:
 
 # TEST WITH IRIS DATASET
 dict_param1 = {
-    'data_name': "irisuuu",
+    'data_name': "iriss",
     'data_file': 'iris.csv',
     'n_samples': 150,
     'n_pred': 3,
@@ -37,7 +37,7 @@ dict_param1 = {
 }
 # TEST WITH BOSTON HOUSING DATASET
 dict_param2 = {
-    'data_name': "boston_housingu",
+    'data_name': "boston_housingg",
     'data_file': 'boston_housing.csv',
     'n_samples': 506,
     'n_pred': 1,
@@ -86,7 +86,9 @@ for dict_param in list_dict_param:
                                                      submission_fold_id1,
                                                      train_is1, test_is1,
                                                      priority,
-                                                     data_id, submission_files)
+                                                     data_id, submission_files,
+                                                     force='submission, ' +
+                                                     'submission_fold')
     task_id1 = json.loads(post_submission1.content)["task_id"]
     print('train-test task id fold 1: ', task_id1)
 
