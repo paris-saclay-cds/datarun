@@ -86,11 +86,11 @@ def task_save_submission_fold_db():
             if task.state == 'SUCCESS':
                 log_message, submission_fold_state, metrics,\
                     full_train_predictions, test_predictions = task.result
-                if 'ERROR' not in log_message and 'error' not in log_message:
-                    save_submission_fold_db(submission_fold,
-                                            submission_fold_state,
-                                            metrics, full_train_predictions,
-                                            test_predictions)
+                # if 'ERROR' not in log_message and 'error' not in log_message:
+                save_submission_fold_db(submission_fold,
+                                        submission_fold_state,
+                                        metrics, full_train_predictions,
+                                        test_predictions)
     except ImportError:
         logger.info('task_save_submission_fold_db ImportError. OK for runners!')
 
@@ -147,7 +147,7 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
         X_test, y_test = read_data(raw_data_files_path + '/test.csv',
                                    raw_data_target_column)
     except:
-        log_message = log_message + 'ERROR: split data \n'
+        log_message = log_message + 'ERROR(split data) \n'
         return log_message, 'TODO', {}, None, None
     # get workflow elements
     list_workflow_elements = workflow_elements.split(',')
@@ -190,7 +190,7 @@ def train_submission_fold(submission_files_path, train_is, X_train,
         submission_fold_state = 'TRAINED'
     except Exception, e:
         submission_fold_state = 'ERROR'
-        log_message = log_message + _make_error_message(e) + ' - ERROR\n'
+        log_message = log_message + _make_error_message(e) + ' - ERROR(train)\n'
         return None, log_message, submission_fold_state, None, None
     end = timeit.default_timer()
     end_cpu = cpu_time_resource()
@@ -210,12 +210,13 @@ def train_submission_fold(submission_files_path, train_is, X_train,
             log_message = log_message + 'Wrong full train prediction size: \n'\
                           + '{} instead of {} \n'.format(len(predictions),
                                                          len(y_train))\
-                          + ' - ERROR\n'
+                          + ' - ERROR(validation)\n'
             submission_fold_state = 'ERROR'
             full_train_predictions = None
     except Exception, e:
         submission_fold_state = 'ERROR'
-        log_message = log_message + _make_error_message(e) + ' - ERROR\n'
+        log_message = log_message + _make_error_message(e) +\
+            ' - ERROR(validation)\n'
         return None, log_message, submission_fold_state, None, None
     end = timeit.default_timer()
     end_cpu = cpu_time_resource()
@@ -241,11 +242,11 @@ def test_submission_fold(trained_submission, X_test, y_test,
             log_message = log_message + 'Wrong test prediction size: \n'\
                           + '{} instead of {} \n'.format(len(predictions),
                                                          len(y_test))\
-                          + ' - ERROR\n'
+                          + ' - ERROR(test)\n'
             submission_fold_state = 'ERROR'
             test_predictions = None
     except:
-        log_message = log_message + 'Problem in test_model - ERROR'
+        log_message = log_message + 'Problem in test_model - ERROR(test)'
         submission_fold_state = 'ERROR'
         test_predictions = None
         pass
