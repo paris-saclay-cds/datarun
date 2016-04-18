@@ -52,18 +52,21 @@ def add(x, y):
     return x + y
 
 
-def save_submission_fold_db(submission_fold, submission_fold_state, metrics,
+def save_submission_fold_db(submission_fold, log_messages,
+                            submission_fold_state, metrics,
                             full_train_predictions, test_predictions):
+    submission_fold.log_messages = log_messages
     submission_fold.state = submission_fold_state
     submission_fold.test_predictions = test_predictions
     submission_fold.full_train_predictions = full_train_predictions
-    submission_fold.train_time = metrics[u'train_time']
-    submission_fold.validation_time = metrics[u'validation_time']
-    submission_fold.test_time = metrics[u'test_time']
-    submission_fold.train_cpu_time = metrics[u'train_cpu_time']
-    submission_fold.test_cpu_time = metrics[u'test_cpu_time']
-    submission_fold.train_memory = metrics[u'train_memory']
-    submission_fold.test_memory = metrics[u'test_memory']
+    if metrics:
+        submission_fold.train_time = metrics[u'train_time']
+        submission_fold.validation_time = metrics[u'validation_time']
+        submission_fold.test_time = metrics[u'test_time']
+        submission_fold.train_cpu_time = metrics[u'train_cpu_time']
+        submission_fold.test_cpu_time = metrics[u'test_cpu_time']
+        submission_fold.train_memory = metrics[u'train_memory']
+        submission_fold.test_memory = metrics[u'test_memory']
     submission_fold.save()
 
 
@@ -87,7 +90,7 @@ def task_save_submission_fold_db():
                 log_message, submission_fold_state, metrics,\
                     full_train_predictions, test_predictions = task.result
                 # if 'ERROR' not in log_message and 'error' not in log_message:
-                save_submission_fold_db(submission_fold,
+                save_submission_fold_db(submission_fold, log_message
                                         submission_fold_state,
                                         metrics, full_train_predictions,
                                         test_predictions)
