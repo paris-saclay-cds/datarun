@@ -71,6 +71,8 @@ Note: to start one worker, run: `celery -A datarun worker -l info`
 
 TODO add figure
 
+Note: you need a scienceFS account. On your scienceFS disk, create in the root directory a folder called `datarun`.
+
 ##### 1. Start one instance for the master and as many instances as you want for the runners.  
 Use the image `BJILII-tFu00rKKM-enj9l83rsn` which corresponds to Ubuntu v14.04 x86_64.    
 ```
