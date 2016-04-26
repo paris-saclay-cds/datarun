@@ -90,7 +90,7 @@ def task_save_submission_fold_db():
                 log_message, submission_fold_state, metrics,\
                     full_train_predictions, test_predictions = task.result
                 # if 'ERROR' not in log_message and 'error' not in log_message:
-                save_submission_fold_db(submission_fold, log_message
+                save_submission_fold_db(submission_fold, log_message,
                                         submission_fold_state,
                                         metrics, full_train_predictions,
                                         test_predictions)
@@ -124,6 +124,27 @@ def prepare_data(raw_filename, held_out_test_size, train_filename,
 
 
 @shared_task
+def custom_prepare_data(raw_data_files_path):
+    '''
+    Split dataset in train and test datasets FOR CUSTOM DATASET (when a specific
+    was submitted with the data)
+
+    :param raw_data_path: path where raw data and specific.py are saved
+
+    :type raw_data_path: string
+    '''
+    try:
+        raw_data_module_path = '/'.join(raw_data_files_path.
+                                        replace('//', '/').
+                                        split('/')[-2::])
+        raw_data_module_path = raw_data_module_path.replace('/', '.')
+        specific = import_module('.specific', raw_data_module_path)
+        specific.prepare_data(raw_data_files_path)
+    except Exception as e:
+        raise e
+
+
+@shared_task
 def train_test_submission_fold(raw_data_files_path, workflow_elements,
                                raw_data_target_column, submission_files_path,
                                train_is):
@@ -145,10 +166,19 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
     '''
     log_message = ''
     try:
-        X_train, y_train = read_data(raw_data_files_path + '/train.csv',
-                                     raw_data_target_column)
-        X_test, y_test = read_data(raw_data_files_path + '/test.csv',
-                                   raw_data_target_column)
+        if os.path.isfile(raw_data_files_path + '/specific.py'):
+            raw_data_module_path = '/'.join(raw_data_files_path.
+                                            replace('//', '/').
+                                            split('/')[-2::])
+            raw_data_module_path = raw_data_module_path.replace('/', '.')
+            specific = import_module('.specific', raw_data_module_path)
+            X_train, y_train, X_test, y_test = specific.\
+                read_data(raw_data_files_path)
+        else:
+            X_train, y_train = read_data(raw_data_files_path + '/train.csv',
+                                         raw_data_target_column)
+            X_test, y_test = read_data(raw_data_files_path + '/test.csv',
+                                       raw_data_target_column)
     except:
         log_message = log_message + 'ERROR(split data) \n'
         return log_message, 'TODO', {}, None, None

@@ -12,6 +12,8 @@ urlpatterns = [
         views.SubmissionFoldDetail.as_view(), name='submissionfold-detail'),
     url(r'^rawdata/split/$',
         views.SplitTrainTest.as_view(), name='rawdata-split'),
+    url(r'^rawdata/customsplit/$',
+        views.CustomSplitTrainTest.as_view(), name='rawdata-customsplit'),
     url(r'^testpredictions/list/$',
         views.GetTestPredictionList.as_view(), name='testpredictions-list'),
     url(r'^testpredictions/new/$',

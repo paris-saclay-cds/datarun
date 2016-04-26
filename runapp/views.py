@@ -69,12 +69,15 @@ class RawDataList(APIView):
     def post(self, request, format=None):
         """
         Create a new dataset \n
+        You have to post the name of the dataset, the target column,\
+        the workflow elements, and the raw data file, as well as a python file\
+            containing two functions: read_data() and prepare_data()\n
         - Example with curl (on localhost): \n
             curl -u username:password   -H "Content-Type: application/json"\
             -X POST\
             -d '{"name": "iris", "target_column": "species",\
                  "workflow_elements": "classifier",\
-                 "files": {"iris.csv": 'blablabla'}}'\
+                "files": {"iris.csv": 'blablabla', 'specific.py': 'bli'}}'\
                 http://127.0.0.1:8000/runapp/rawdata/ \n
             Don't forget double quotes for the json, simple quotes don't work.\n
         - Example with the python package requests (on localhost): \n
@@ -82,7 +85,7 @@ class RawDataList(APIView):
                           auth=('username', 'password'),\
                           json={'name': 'iris', 'target_column': 'species',\
                                  'workflow_elements': 'classifier',\
-                                 'files': {'iris.csv': 'blablabla'}})\n
+                        'files': {'iris.csv': 'bla', 'specific.py': 'bli'}})\n
         ---
         request_serializer: RawDataSerializer
         response_serializer: RawDataSerializer
@@ -94,13 +97,35 @@ class RawDataList(APIView):
         serializer = RawDataSerializer(data=data)
         if serializer.is_valid():
             # save raw data file
-            kk = request.data['files'].keys()[0]
-            if kk != request.data['name'] + '.csv':
-                request.data['files'][request.data['name'] + '.csv'] = \
-                    request.data['files'][kk]
-                request.data['files'].pop(kk)
-            if 'files_path' in data.keys():
-                this_data_directory = data['files_path']
+            if len(request.data['files']) > 1:
+                # A specific and maybe other raw data files have been submitted
+                file_types = [kk.split('.')[-1] for kk in
+                              request.data['files'].keys()]
+                if 'py' not in file_types:
+                    # Error, needs a specific if more that one file is submitted
+                    return Response({'error': 'Submit a specific.py \
+                                               when submitting several files'},
+                                    status=status.HTTP_406_NOT_ACCEPTABLE)
+                else:
+                    # Rename the py file to specific.py
+                    # Raw data file names are not modified, since called in
+                    # functions of the specific
+                    index_specific = file_types.index('py')
+                    kk = request.data['files'].keys()[index_specific]
+                    if kk != 'specific.py':
+                        request.data['files']['specific.py'] = \
+                                                   request.data['files'][kk]
+                        request.data['files'].pop(kk)
+            else:
+                # No specific has been submitted, using default functions
+                # prepare_data() and read_data() from runapp/task.py
+                kk = request.data['files'].keys()[0]
+                if kk != request.data['name'] + '.csv':
+                    request.data['files'][request.data['name'] + '.csv'] = \
+                        request.data['files'][kk]
+                    request.data['files'].pop(kk)
+            # if 'files_path' in data.keys():
+            #     this_data_directory = data['files_path']
             save_files(this_data_directory, request.data)
             # save raw data in the database
             serializer.save()
@@ -387,13 +412,13 @@ class GetTestPredictionNew(APIView):
 
 
 class SplitTrainTest(APIView):
-    """Split data set into train and test datasets"""
+    """Split data set into train and test datasets for normal dataset"""
 
     permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request, format=None):
         """
-        Split raw data into train and test datasets \n
+        Split raw data into train and test datasets for normal dataset \n
         - Example with curl (on localhost): \n
             curl -u username:password -H "Content-Type: application/json"\
             -X POST\
@@ -436,4 +461,39 @@ class SplitTrainTest(APIView):
         task = tasks.prepare_data.delay(raw_filename, held_out_test_size,
                                         train_filename, test_filename,
                                         random_state=random_state)
+        return Response({'task_id': task.id})
+
+
+class CustomSplitTrainTest(APIView):
+    """
+    Split data set into train and test datasets for custom dataset
+    (when a specific.py was submitted along with raw data
+    """
+
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, format=None):
+        """
+        Split raw data into train and test datasets for custom dataset \n
+        - Example with curl (on localhost): \n
+            curl -u username:password -H "Content-Type: application/json"\
+            -X POST\
+            -d '{"raw_data_id": 1}'
+                http://127.0.0.1:8000/runapp/rawdata/customsplit/ \n
+            Don't forget double quotes for the json, simple quotes do not work\n
+        - Example with the python package requests (on localhost): \n
+            requests.post('http://127.0.0.1:8000/runapp/raw_data/customsplit/',\
+                          auth=('username', 'password'),\
+                          json={'raw_data_id': 1})\n
+        ---
+        parameters:
+            - name: raw_data_id
+              description: id of the raw dataset
+              required: true
+              type: integer
+              paramType: form
+        """
+        data = request.data
+        raw_data = RawData.objects.get(id=data['raw_data_id'])
+        task = tasks.custom_prepare_data.delay(raw_data.files_path)
         return Response({'task_id': task.id})
