@@ -167,13 +167,15 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
     log_message = ''
     try:
         if os.path.isfile(raw_data_files_path + '/specific.py'):
+            if raw_data_files_path[-1] == '/':
+                raw_data_files_path = raw_data_files_path[0:-1]
             raw_data_module_path = '/'.join(raw_data_files_path.
                                             replace('//', '/').
                                             split('/')[-2::])
             raw_data_module_path = raw_data_module_path.replace('/', '.')
             specific = import_module('.specific', raw_data_module_path)
-            X_train, y_train, X_test, y_test = specific.\
-                read_data(raw_data_files_path)
+            X_train, y_train = specific.get_train_data(raw_data_files_path)
+            X_test, y_test = specific.get_test_data(raw_data_files_path)
         else:
             X_train, y_train = read_data(raw_data_files_path + '/train.csv',
                                          raw_data_target_column)
@@ -184,6 +186,7 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
         return log_message, 'TODO', {}, None, None
     # get workflow elements
     list_workflow_elements = workflow_elements.split(',')
+    list_workflow_elements = [ww.strip() for ww in list_workflow_elements]
     # train submission on fold
     trained_model, log_train, submission_fold_state, metrics,\
         full_train_predictions = \
@@ -291,8 +294,12 @@ def test_submission_fold(trained_submission, X_test, y_test,
 
 
 def train_model(module_path, list_workflow_elements, X, y, train_is):
-    X_train = X.iloc[train_is]
-    y_train = y.iloc[train_is]
+    if type(X) == pd.core.frame.DataFrame:
+        X_train = X.iloc[train_is]
+        y_train = y.iloc[train_is]
+    else:
+        X_train = [X[i] for i in train_is]
+        y_train = np.array([y[i] for i in train_is])
     nb_applied_elements = 0
     # it is assimed here that feature extractor takes as input pd.dataframe
     # and output np.array
@@ -351,8 +358,11 @@ def train_model(module_path, list_workflow_elements, X, y, train_is):
 
 
 def test_model(trained_model, list_workflow_elements,  X, test_is):
-    X_test = X.iloc[test_is]
-    if 'feature_extraction' in list_workflow_elements:
+    if type(X) == pd.core.frame.DataFrame:
+        X_test = X.iloc[test_is]
+    else:
+        X_test = [X[i] for i in test_is]
+    if 'feature_extractor' in list_workflow_elements:
         fe = trained_model[0]
         X_test = fe.transform(X_test)
     else:
