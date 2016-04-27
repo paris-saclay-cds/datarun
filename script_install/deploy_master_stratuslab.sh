@@ -33,6 +33,7 @@ sshfs -o Ciphers=arcfour256 -o allow_other -o IdentityFile=/root/.ssh/id_rsa_sci
 mkdir $DIR_SUBMISSION
 touch $DIR_SUBMISSION/__init__.py
 mkdir $DIR_DATA
+touch $DIR_DATA/__init__.py
 
 # Clone the project
 sudo git clone https://github.com/camillemarini/datarun.git

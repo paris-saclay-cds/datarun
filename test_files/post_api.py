@@ -24,7 +24,8 @@ def url_get(url1, url2, username, password, r_id=None):
 
 
 def post_data(host_url, username, password,
-              data_name, target_column, workflow_elements, data_file):
+              data_name, target_column, workflow_elements, data_file,
+              extra_files=None):
     """
     To post data to the datarun api.\
     Data are compressed (with zlib) and base64-encoded before being posted.
@@ -36,7 +37,9 @@ def post_data(host_url, username, password,
     :param target_column: name of the target column
     :param workflow_elements: workflow elements associated with this dataset,\
     e.g., feature_extractor, classifier
-    :param data_file: name with absolute of the dataset file
+    :param data_file: name with absolute path of the dataset file
+    :param extra_files: list of names with absolute path of extra files\
+        (such as a specific.py)
 
     :type host_url: string
     :type username: string
@@ -45,12 +48,20 @@ def post_data(host_url, username, password,
     :type target_column: string
     :type workflow_elements: string
     :type data_file: string
+    :type extra_files: list of string
     """
 
     data = {'name': data_name, 'target_column': target_column,
             'workflow_elements': workflow_elements}
     df = read_compress(data_file)
-    data['files'] = {data_name + '.csv': df}
+    short_name = data_file.split('/')[-1]
+    data['files'] = {short_name: df}
+    if extra_files:
+        for filename in extra_files:
+            df = read_compress(filename)
+            short_name = filename.split('/')[-1]
+            data['files'][short_name] = df
+
     return url_post(host_url, '/runapp/rawdata/', username, password,
                     data)
 
@@ -61,6 +72,12 @@ def post_split(host_url, username, password,
             'raw_data_id': raw_data_id}
     return url_post(host_url, '/runapp/rawdata/split/', username, password,
                     data)
+
+
+def custom_post_split(host_url, username, password, raw_data_id):
+    data = {'raw_data_id': raw_data_id}
+    return url_post(host_url, '/runapp/rawdata/customsplit/', username,
+                    password, data)
 
 
 def post_submission_fold(host_url, username, password,

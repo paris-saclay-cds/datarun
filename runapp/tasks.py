@@ -134,6 +134,8 @@ def custom_prepare_data(raw_data_files_path):
     :type raw_data_path: string
     '''
     try:
+        if raw_data_files_path[-1] == '/':
+            raw_data_files_path = raw_data_files_path[0:-1]
         raw_data_module_path = '/'.join(raw_data_files_path.
                                         replace('//', '/').
                                         split('/')[-2::])

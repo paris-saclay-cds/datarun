@@ -22,16 +22,16 @@ else:
 
 # TEST WITH IRIS DATASET
 dict_param1 = {
-    'data_name': "iriss",
+    'data_name': "iris",
     'data_file': 'iris.csv',
     'n_samples': 150,
     'n_pred': 3,
     'held_out_test': 0.5,
     'target_column': 'species',
     'workflow_elements': 'classifier',
-    'submission_id': 14,
-    'submission_fold_id1': 24,
-    'submission_fold_id2': 25,
+    'submission_id': 1,
+    'submission_fold_id1': 1,
+    'submission_fold_id2': 2,
     'submission_files': ['feature_extractor.py', 'classifier.py',
                          'calibrator.py'],
 }
@@ -44,13 +44,34 @@ dict_param2 = {
     'held_out_test': 0.5,
     'target_column': 'medv',
     'workflow_elements': 'regressor',
-    'submission_id': 15,
-    'submission_fold_id1': 26,
-    'submission_fold_id2': 27,
+    'submission_id': 2,
+    'submission_fold_id1': 3,
+    'submission_fold_id2': 4,
     'submission_files': ['regressor.py']
 }
+# TEST WITH VARIABLE STARS DATASET
+dict_param3 = {
+    'data_name': "variable_stars",
+    'data_file': 'variable_stars/data.csv',
+    'extra_files': ['variable_stars/data_varlength_features.csv.gz',
+                    'variable_stars/variable_stars_datarun.py'],
+    'n_samples': 8497,
+    'n_pred': 4,
+    'held_out_test': 0.7,
+    'target_column': 'type',
+    'workflow_elements': 'feature_extractor, classifier, calibrator',
+    'submission_id': 3,
+    'submission_fold_id1': 5,
+    'submission_fold_id2': 6,
+    'submission_files': ['variable_stars/feature_extractor.py',
+                         'variable_stars/classifier.py',
+                         'variable_stars/calibrator.py']
+}
 
-list_dict_param = [dict_param1, dict_param2]
+
+list_dict_param = [dict_param3]  # 1, dict_param2]
+time_sleep_split = 28  # number of sec to wait after sending the split task
+time_sleep_train = 228  # number of sec to wait after sending the split task
 
 for dict_param in list_dict_param:
 
@@ -65,21 +86,33 @@ for dict_param in list_dict_param:
     submission_fold_id1 = dict_param['submission_fold_id1']
     submission_fold_id2 = dict_param['submission_fold_id2']
     submission_files = dict_param['submission_files']
+    if 'extra_files' in dict_param.keys():
+        extra_files = dict_param['extra_files']
+    else:
+        extra_files = None
 
     # Send data
     post_data = post_api.post_data(host_url, username, userpassd,
                                    data_name, target_column, workflow_elements,
-                                   data_file)
+                                   data_file, extra_files=extra_files)
     # Get data id
     data_id = json.loads(post_data.content)["id"]
 
     # Split data into train and test
-    post_split = post_api.post_split(host_url, username, userpassd,
-                                     held_out_test, data_id)
+    if extra_files:
+        post_split = post_api.custom_post_split(host_url, username, userpassd,
+                                                data_id)
+    else:
+        post_split = post_api.post_split(host_url, username, userpassd,
+                                         held_out_test, data_id)
+    print(json.loads(post_split.content))
+    time.sleep(time_sleep_split)
+    os.system('cp variable_stars/*csv ../test_data/variable_stars/.')
 
     # Send submission and fold 1
     priority = 'L'
-    skf = cross_validation.ShuffleSplit(int(n_samples * held_out_test))
+    skf = cross_validation.ShuffleSplit(int(np.round(n_samples *
+                                                     (1 - held_out_test))))
     train_is1, test_is1 = list(skf)[0]
     post_submission1 = post_api.post_submission_fold(host_url, username,
                                                      userpassd, submission_id,
@@ -109,7 +142,7 @@ for dict_param in list_dict_param:
     print('train-test task id fold 2: ', task_id2)
 
     # Wait to be sure it was trained and tested and saved in the db (every Xmin)
-    time.sleep(158)
+    time.sleep(time_sleep_train)
 
     # Get submission prediction
     post_pred = post_api.get_prediction_list(host_url, username, userpassd,
@@ -117,17 +150,30 @@ for dict_param in list_dict_param:
     print(post_pred.content)
     pred = json.loads(post_pred.content)[0]['test_predictions']
     pred = np.fromstring(zlib.decompress(base64.b64decode(pred)), dtype=float)
-    pred = pred.reshape(int(n_samples * held_out_test), n_pred)
+    pred = pred.reshape(int(np.round(n_samples * held_out_test)), n_pred)
 
     # Compute predictions locally
-    os.mkdir(data_name)
-    os.system('cp ' + data_file + ' ' + data_name + '/' + data_name + '.csv')
-    raw_data_files_path = '' + data_name + '/'
-    abs_raw_data_files_path = os.path.abspath('.') + '/' + data_name + '/'
-    tasks.prepare_data(abs_raw_data_files_path + data_name + '.csv',
-                       held_out_test,
-                       abs_raw_data_files_path + 'train.csv',
-                       abs_raw_data_files_path + 'test.csv')
+    temp_data_name = 'temp_test_' + data_name
+    os.mkdir(temp_data_name)
+    os.system('touch ' + temp_data_name + '/__init__.py')
+    raw_data_files_path = '' + temp_data_name + '/'
+    abs_raw_data_files_path = os.path.abspath('.') + '/' + temp_data_name + '/'
+    if extra_files:
+        for ff in (dict_param['extra_files'] + [data_file]):
+            if '.py' in ff:
+                os.system('cp ' + ff + ' ' + temp_data_name +
+                          '/specific.py')
+            else:
+                os.system('cp ' + ff + ' ' + temp_data_name +
+                          '/' + ff.split('/')[-1])
+        tasks.custom_prepare_data.delay(abs_raw_data_files_path)
+    else:
+        os.system('cp ' + data_file + ' ' + temp_data_name +
+                  '/' + data_name + '.csv')
+        tasks.prepare_data(abs_raw_data_files_path + data_name + '.csv',
+                           held_out_test,
+                           abs_raw_data_files_path + 'train.csv',
+                           abs_raw_data_files_path + 'test.csv')
     os.mkdir('sub')
     for ff in submission_files:
         os.system('cp ' + ff + ' sub/.')
@@ -142,18 +188,16 @@ for dict_param in list_dict_param:
     test_pred = train_test_local[4]
     test_pred = np.fromstring(zlib.decompress(base64.b64decode(test_pred)),
                               dtype=float)
-    test_pred = test_pred.reshape(int(n_samples * held_out_test), n_pred)
+    test_pred = test_pred.reshape(int(np.round(n_samples * held_out_test)),
+                                  n_pred)
     os.system('rm -rf sub')
-    os.system('rm -rf ' + data_name)
+    os.system('rm -rf ' + temp_data_name)
     # Compare predictions
-    # sum_prob = np.ones(int(n_samples * held_out_test))
-    # if (pred.sum(axis=1) == sum_prob).all():
     if (pred == test_pred).all():
         print('Oh yeah 1!')
 
     post_pred_new = post_api.get_prediction_new(host_url, username, userpassd,
                                                 data_id)
-    # if json.loads(post_pred_new.content) == []:
     print json.loads(post_pred_new.content)
     if len(json.loads(post_pred_new.content)) == 1:
         print("Oh yeah 2!")

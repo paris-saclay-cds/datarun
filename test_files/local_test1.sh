@@ -14,6 +14,7 @@ export RMQ_VHOST='test'
 export IP_MASTER='localhost'
 rm -r $DIR_DATA/*
 rm -r $DIR_SUBMISSION/*
+touch $DIR_DATA/__init__.py
 touch $DIR_SUBMISSION/__init__.py
 
 # Create a test database
