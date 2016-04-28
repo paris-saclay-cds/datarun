@@ -237,8 +237,10 @@ def train_submission_fold(submission_files_path, train_is, X_train,
     # Validation
     start = timeit.default_timer()
     try:
+        log_message = log_message + ' before test model '
         predictions = test_model(trained_submission, list_workflow_elements,
                                  X_train, range(len(y_train)))
+        log_message = log_message + ' after test model '
         if len(predictions) == len(y_train):
             predictions = base64.b64encode(zlib.compress(
                 predictions.tostring()))

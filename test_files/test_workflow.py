@@ -70,8 +70,8 @@ dict_param3 = {
 
 
 list_dict_param = [dict_param3]  # 1, dict_param2]
-time_sleep_split = 28  # number of sec to wait after sending the split task
-time_sleep_train = 228  # number of sec to wait after sending the split task
+time_sleep_split = 428  # number of sec to wait after sending the split task
+time_sleep_train = 428  # number of sec to wait after sending the split task
 
 for dict_param in list_dict_param:
 
@@ -107,7 +107,7 @@ for dict_param in list_dict_param:
                                          held_out_test, data_id)
     print(json.loads(post_split.content))
     time.sleep(time_sleep_split)
-    os.system('cp variable_stars/*csv ../test_data/variable_stars/.')
+    # os.system('cp variable_stars/*csv* ../test_data/variable_stars/.')
 
     # Send submission and fold 1
     priority = 'L'
@@ -166,7 +166,7 @@ for dict_param in list_dict_param:
             else:
                 os.system('cp ' + ff + ' ' + temp_data_name +
                           '/' + ff.split('/')[-1])
-        tasks.custom_prepare_data.delay(abs_raw_data_files_path)
+        tasks.custom_prepare_data(abs_raw_data_files_path)
     else:
         os.system('cp ' + data_file + ' ' + temp_data_name +
                   '/' + data_name + '.csv')
@@ -185,6 +185,7 @@ for dict_param in list_dict_param:
                                                         target_column,
                                                         submission_files_path,
                                                         tt1)
+    print(train_test_local)
     test_pred = train_test_local[4]
     test_pred = np.fromstring(zlib.decompress(base64.b64decode(test_pred)),
                               dtype=float)
