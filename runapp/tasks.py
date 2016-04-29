@@ -183,8 +183,9 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
                                          raw_data_target_column)
             X_test, y_test = read_data(raw_data_files_path + '/test.csv',
                                        raw_data_target_column)
-    except:
-        log_message = log_message + 'ERROR(split data) \n'
+    except Exception as e:
+        log_message = log_message + _make_error_message(e)\
+            + 'ERROR(split data) \n'
         return log_message, 'TODO', {}, None, None
     # get workflow elements
     list_workflow_elements = workflow_elements.split(',')
@@ -237,10 +238,8 @@ def train_submission_fold(submission_files_path, train_is, X_train,
     # Validation
     start = timeit.default_timer()
     try:
-        log_message = log_message + ' before test model '
         predictions = test_model(trained_submission, list_workflow_elements,
                                  X_train, range(len(y_train)))
-        log_message = log_message + ' after test model '
         if len(predictions) == len(y_train):
             predictions = base64.b64encode(zlib.compress(
                 predictions.tostring()))

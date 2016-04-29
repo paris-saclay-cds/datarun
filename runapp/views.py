@@ -23,6 +23,13 @@ submission_directory = os.environ.get('DIR_SUBMISSION',
                                       '/home/datarun/submission')
 
 
+def _make_error_message(e):
+    if hasattr(e, 'traceback'):
+        return str(e.traceback)
+    else:
+        return repr(e)
+
+
 @api_view(('GET',))
 def api_root(request, format=None):
     return Response({
@@ -276,9 +283,10 @@ class SubmissionFoldList(APIView):
                 task_id = task.id
                 submission_fold.task_id = task_id
                 submission_fold.save()
-            except:
+            except Exception as e:
                 print('Train test not started for submission fold %s'
                       % data['databoard_sf_id'])
+                print(e)
                 task_id = None
             dd = serializer.data
             dd['task_id'] = task_id
@@ -357,9 +365,10 @@ class GetTestPredictionList(APIView):
                 sub.new = False
                 sub.save()
             return Response(serializer.data)
-        except:
-            return Response({'error': 'You need to post list_submission_fold: a\
-                              list of submission on cv fold id'},
+        except Exception as e:
+            error_message = 'You need to post list_submission_fold: a list\
+                of submission on cv fold id' + _make_error_message(e)
+            return Response({'error': error_message},
                             status=status.HTTP_204_NO_CONTENT)
 
 
