@@ -1,7 +1,7 @@
 This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
 Scanning style file ./python.ist......done (6 attributes redefined, 0 ignored).
-Scanning input file datarun.idx....done (31 entries accepted, 0 rejected).
-Sorting entries....done (174 comparisons).
-Generating output file datarun.ind....done (49 lines written, 0 warnings).
+Scanning input file datarun.idx....done (35 entries accepted, 0 rejected).
+Sorting entries....done (192 comparisons).
+Generating output file datarun.ind....done (56 lines written, 0 warnings).
 Output written in datarun.ind.
 Transcript written in datarun.ilg.

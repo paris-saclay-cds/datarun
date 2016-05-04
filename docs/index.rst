@@ -11,6 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   modules/workflow.rst
    modules/models.rst
    modules/views.rst
 

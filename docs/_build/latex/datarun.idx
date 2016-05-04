@@ -1,31 +1,35 @@
-\indexentry{runapp.models (module)|hyperpage}{3}
-\indexentry{RawData (class in runapp.models)|hyperpage}{3}
-\indexentry{Submission (class in runapp.models)|hyperpage}{3}
-\indexentry{SubmissionFold (class in runapp.models)|hyperpage}{3}
-\indexentry{runapp.views (module)|hyperpage}{5}
-\indexentry{GetTestPredictionList (class in runapp.views)|hyperpage}{5}
-\indexentry{post() (runapp.views.GetTestPredictionList method)|hyperpage}{5}
-\indexentry{GetTestPredictionNew (class in runapp.views)|hyperpage}{5}
-\indexentry{post() (runapp.views.GetTestPredictionNew method)|hyperpage}{5}
-\indexentry{RawDataList (class in runapp.views)|hyperpage}{6}
-\indexentry{get() (runapp.views.RawDataList method)|hyperpage}{6}
-\indexentry{post() (runapp.views.RawDataList method)|hyperpage}{6}
-\indexentry{SplitTrainTest (class in runapp.views)|hyperpage}{6}
-\indexentry{post() (runapp.views.SplitTrainTest method)|hyperpage}{6}
-\indexentry{SubmissionFoldDetail (class in runapp.views)|hyperpage}{7}
-\indexentry{get() (runapp.views.SubmissionFoldDetail method)|hyperpage}{7}
-\indexentry{SubmissionFoldLightList (class in runapp.views)|hyperpage}{7}
-\indexentry{get() (runapp.views.SubmissionFoldLightList method)|hyperpage}{7}
-\indexentry{SubmissionFoldList (class in runapp.views)|hyperpage}{7}
-\indexentry{get() (runapp.views.SubmissionFoldList method)|hyperpage}{7}
-\indexentry{post() (runapp.views.SubmissionFoldList method)|hyperpage}{7}
-\indexentry{save\_files() (in module runapp.views)|hyperpage}{8}
-\indexentry{test\_files.post\_api (module)|hyperpage}{8}
-\indexentry{get\_prediction\_list() (in module test\_files.post\_api)|hyperpage}{8}
-\indexentry{get\_prediction\_new() (in module test\_files.post\_api)|hyperpage}{8}
-\indexentry{get\_raw\_data() (in module test\_files.post\_api)|hyperpage}{8}
-\indexentry{get\_submission\_fold() (in module test\_files.post\_api)|hyperpage}{8}
-\indexentry{get\_submission\_fold\_detail() (in module test\_files.post\_api)|hyperpage}{9}
-\indexentry{get\_submission\_fold\_light() (in module test\_files.post\_api)|hyperpage}{9}
-\indexentry{post\_data() (in module test\_files.post\_api)|hyperpage}{9}
-\indexentry{post\_submission\_fold() (in module test\_files.post\_api)|hyperpage}{9}
+\indexentry{runapp.models (module)|hyperpage}{5}
+\indexentry{RawData (class in runapp.models)|hyperpage}{5}
+\indexentry{Submission (class in runapp.models)|hyperpage}{5}
+\indexentry{SubmissionFold (class in runapp.models)|hyperpage}{5}
+\indexentry{runapp.views (module)|hyperpage}{7}
+\indexentry{CustomSplitTrainTest (class in runapp.views)|hyperpage}{7}
+\indexentry{post() (runapp.views.CustomSplitTrainTest method)|hyperpage}{7}
+\indexentry{GetTestPredictionList (class in runapp.views)|hyperpage}{7}
+\indexentry{post() (runapp.views.GetTestPredictionList method)|hyperpage}{7}
+\indexentry{GetTestPredictionNew (class in runapp.views)|hyperpage}{8}
+\indexentry{post() (runapp.views.GetTestPredictionNew method)|hyperpage}{8}
+\indexentry{RawDataList (class in runapp.views)|hyperpage}{8}
+\indexentry{get() (runapp.views.RawDataList method)|hyperpage}{8}
+\indexentry{post() (runapp.views.RawDataList method)|hyperpage}{8}
+\indexentry{SplitTrainTest (class in runapp.views)|hyperpage}{9}
+\indexentry{post() (runapp.views.SplitTrainTest method)|hyperpage}{9}
+\indexentry{SubmissionFoldDetail (class in runapp.views)|hyperpage}{9}
+\indexentry{get() (runapp.views.SubmissionFoldDetail method)|hyperpage}{9}
+\indexentry{SubmissionFoldLightList (class in runapp.views)|hyperpage}{9}
+\indexentry{get() (runapp.views.SubmissionFoldLightList method)|hyperpage}{9}
+\indexentry{SubmissionFoldList (class in runapp.views)|hyperpage}{10}
+\indexentry{get() (runapp.views.SubmissionFoldList method)|hyperpage}{10}
+\indexentry{post() (runapp.views.SubmissionFoldList method)|hyperpage}{10}
+\indexentry{save\_files() (in module runapp.views)|hyperpage}{10}
+\indexentry{test\_files.post\_api (module)|hyperpage}{10}
+\indexentry{custom\_post\_split() (in module test\_files.post\_api)|hyperpage}{10}
+\indexentry{get\_prediction\_list() (in module test\_files.post\_api)|hyperpage}{11}
+\indexentry{get\_prediction\_new() (in module test\_files.post\_api)|hyperpage}{11}
+\indexentry{get\_raw\_data() (in module test\_files.post\_api)|hyperpage}{11}
+\indexentry{get\_submission\_fold() (in module test\_files.post\_api)|hyperpage}{11}
+\indexentry{get\_submission\_fold\_detail() (in module test\_files.post\_api)|hyperpage}{11}
+\indexentry{get\_submission\_fold\_light() (in module test\_files.post\_api)|hyperpage}{11}
+\indexentry{post\_data() (in module test\_files.post\_api)|hyperpage}{12}
+\indexentry{post\_split() (in module test\_files.post\_api)|hyperpage}{12}
+\indexentry{post\_submission\_fold() (in module test\_files.post\_api)|hyperpage}{12}

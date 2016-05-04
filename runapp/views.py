@@ -77,8 +77,12 @@ class RawDataList(APIView):
         """
         Create a new dataset \n
         You have to post the name of the dataset, the target column,\
-        the workflow elements, and the raw data file, as well as a python file\
-            containing two functions: read_data() and prepare_data()\n
+        the workflow elements, and the raw data file. If your data file does\
+        not match the format expected by datarun (a csv with a first row\
+            containing the feature and target column name, and then a row for\
+            each sample), you can submit a python file containing three\
+            functions: prepare_data(data_path), get_train_data(data_path),\
+            and get_test_data(data_path)\n
         - Example with curl (on localhost): \n
             curl -u username:password   -H "Content-Type: application/json"\
             -X POST\
@@ -335,7 +339,7 @@ class GetTestPredictionList(APIView):
 
     def post(self, request, format=None):
         """
-        Retrieve predictions (on the test data set) of SubmissionFold instances
+        Retrieve predictions (on the test data set) of SubmissionFold instances\
         among a list of id that have been trained and tested \n
         - Example with curl (on localhost): \n
             curl -u username:password -H "Content-Type: application/json"\
@@ -431,7 +435,7 @@ class SplitTrainTest(APIView):
         - Example with curl (on localhost): \n
             curl -u username:password -H "Content-Type: application/json"\
             -X POST\
-            -d '{"random_state": 42, "held_out_test": 0.7, "raw_data_id": 1}'
+            -d '{"random_state": 42, "held_out_test": 0.7, "raw_data_id": 1}'\
                 http://127.0.0.1:8000/runapp/rawdata/split/ \n
             Don't forget double quotes for the json, simple quotes do not work\n
         - Example with the python package requests (on localhost): \n
@@ -487,7 +491,7 @@ class CustomSplitTrainTest(APIView):
         - Example with curl (on localhost): \n
             curl -u username:password -H "Content-Type: application/json"\
             -X POST\
-            -d '{"raw_data_id": 1}'
+            -d '{"raw_data_id": 1}'\
                 http://127.0.0.1:8000/runapp/rawdata/customsplit/ \n
             Don't forget double quotes for the json, simple quotes do not work\n
         - Example with the python package requests (on localhost): \n

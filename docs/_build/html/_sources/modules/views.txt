@@ -2,10 +2,16 @@ Requests
 ========
 You can either make direct requests to the datarun API, or use the post_api function.
 
-Direct requests
+
+.. _requestsDirect:
+
+direct requests
 ---------------
 .. automodule:: runapp.views
     :members:
+
+
+.. _requestsModule:
 
 post_api module
 ---------------

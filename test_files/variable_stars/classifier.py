@@ -8,7 +8,8 @@ class Classifier(BaseEstimator):
     def __init__(self):
         self.clf = Pipeline([
             ('imputer', Imputer(strategy='most_frequent')),
-            ('rf', RandomForestClassifier(max_depth=5, n_estimators=10))
+            ('rf', RandomForestClassifier(max_depth=5, n_estimators=10,
+                                          random_state=42))
         ])
 
     def fit(self, X, y):

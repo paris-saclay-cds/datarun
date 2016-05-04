@@ -12,12 +12,13 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 # os.environ['DJANGO_SETTINGS_MODULE'] = 'datarun.settings'
 # from django.conf import settings
-list_path = os.environ.get('DIR_SUBMISSION').split('/')
-if '' == list_path[-1]:
+for vv in ['DIR_SUBMISSION', 'DIR_DATA']:
+    list_path = os.environ.get(vv).split('/')
+    if '' == list_path[-1]:
+        list_path = list_path[0:-1]
     list_path = list_path[0:-1]
-list_path = list_path[0:-1]
-dir_module = '/'.join(list_path)
-sys.path.insert(0, dir_module)
+    dir_module = '/'.join(list_path)
+    sys.path.insert(0, dir_module)
 
 logger = get_task_logger(__name__)
 
@@ -166,7 +167,7 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
     :type submission_files_path: string
     :type train_is: string
     '''
-    log_message = ''
+    log_message = 'Submission-files-path: %s \n' % submission_files_path
     try:
         if os.path.isfile(raw_data_files_path + '/specific.py'):
             if raw_data_files_path[-1] == '/':

@@ -37,7 +37,7 @@ dict_param1 = {
 }
 # TEST WITH BOSTON HOUSING DATASET
 dict_param2 = {
-    'data_name': "boston_housingg",
+    'data_name': "boston_housing",
     'data_file': 'boston_housing.csv',
     'n_samples': 506,
     'n_pred': 1,
@@ -69,9 +69,9 @@ dict_param3 = {
 }
 
 
-# list_dict_param = [dict_param1, dict_param2, dict_param3]
+# list_dict_param = [dict_param1, dict_param2]  # , dict_param3]
 list_dict_param = [dict_param3]
-time_sleep_split = 428  # number of sec to wait after sending the split task
+time_sleep_split = 448  # number of sec to wait after sending the split task
 time_sleep_train = 428  # number of sec to wait after sending the split task
 
 for dict_param in list_dict_param:
@@ -93,22 +93,22 @@ for dict_param in list_dict_param:
         extra_files = None
 
     # Send data
-    #post_data = post_api.post_data(host_url, username, userpassd,
-    #                               data_name, target_column, workflow_elements,
-    #                               data_file, extra_files=extra_files)
-    ## Get data id
-    #data_id = json.loads(post_data.content)["id"]
-    data_id = 3
+    post_data = post_api.post_data(host_url, username, userpassd,
+                                   data_name, target_column, workflow_elements,
+                                   data_file, extra_files=extra_files)
+    # Get data id
+    data_id = json.loads(post_data.content)["id"]
+#    data_id = 3
 
     # Split data into train and test
-#    if extra_files:
-#        post_split = post_api.custom_post_split(host_url, username, userpassd,
-#                                                data_id)
-#    else:
-#        post_split = post_api.post_split(host_url, username, userpassd,
-#                                         held_out_test, data_id)
-#    print(json.loads(post_split.content))
-#    time.sleep(time_sleep_split)
+    if extra_files:
+        post_split = post_api.custom_post_split(host_url, username, userpassd,
+                                                data_id)
+    else:
+        post_split = post_api.post_split(host_url, username, userpassd,
+                                         held_out_test, data_id)
+    print(json.loads(post_split.content))
+    time.sleep(time_sleep_split)
     # os.system('cp variable_stars/*csv* ../test_data/variable_stars/.')
 
     # Send submission and fold 1
@@ -149,7 +149,7 @@ for dict_param in list_dict_param:
     # Get submission prediction
     post_pred = post_api.get_prediction_list(host_url, username, userpassd,
                                              [submission_fold_id1])
-    print(post_pred.content)
+    # print(post_pred.content)
     pred = json.loads(post_pred.content)[0]['test_predictions']
     pred = np.fromstring(zlib.decompress(base64.b64decode(pred)), dtype=float)
     pred = pred.reshape(int(np.round(n_samples * held_out_test)), n_pred)
@@ -187,7 +187,6 @@ for dict_param in list_dict_param:
                                                         target_column,
                                                         submission_files_path,
                                                         tt1)
-    print(train_test_local)
     test_pred = train_test_local[4]
     test_pred = np.fromstring(zlib.decompress(base64.b64decode(test_pred)),
                               dtype=float)
@@ -196,11 +195,13 @@ for dict_param in list_dict_param:
     os.system('rm -rf sub')
     os.system('rm -rf ' + temp_data_name)
     # Compare predictions
+    print(pred[0:4, :])
+    print(test_pred[0:4, :])
     if (pred == test_pred).all():
         print('Oh yeah 1!')
 
     post_pred_new = post_api.get_prediction_new(host_url, username, userpassd,
                                                 data_id)
-    print json.loads(post_pred_new.content)
+    # print json.loads(post_pred_new.content)
     if len(json.loads(post_pred_new.content)) == 1:
         print("Oh yeah 2!")
