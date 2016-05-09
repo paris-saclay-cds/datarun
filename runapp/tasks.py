@@ -48,6 +48,20 @@ def memory_usage_resource():
     return mem
 
 
+def get_path_module(path_file):
+    '''
+    Convert path to module path.
+    It checks if trailing slash or double slash, and remove them
+    '''
+    if path_file[-1] == '/':
+        path_file = path_file[0:-1]
+    module_path = '/'.join(path_file.
+                           replace('//', '/').
+                           split('/')[-2::])
+    module_path = module_path.replace('/', '.')
+    return module_path
+
+
 @shared_task
 def add(x, y):
     return x + y
@@ -135,12 +149,7 @@ def custom_prepare_data(raw_data_files_path):
     :type raw_data_path: string
     '''
     try:
-        if raw_data_files_path[-1] == '/':
-            raw_data_files_path = raw_data_files_path[0:-1]
-        raw_data_module_path = '/'.join(raw_data_files_path.
-                                        replace('//', '/').
-                                        split('/')[-2::])
-        raw_data_module_path = raw_data_module_path.replace('/', '.')
+        raw_data_module_path = get_path_module(raw_data_files_path)
         specific = import_module('.specific', raw_data_module_path)
         specific.prepare_data(raw_data_files_path)
     except Exception as e:
@@ -170,12 +179,7 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
     log_message = 'Submission-files-path: %s \n' % submission_files_path
     try:
         if os.path.isfile(raw_data_files_path + '/specific.py'):
-            if raw_data_files_path[-1] == '/':
-                raw_data_files_path = raw_data_files_path[0:-1]
-            raw_data_module_path = '/'.join(raw_data_files_path.
-                                            replace('//', '/').
-                                            split('/')[-2::])
-            raw_data_module_path = raw_data_module_path.replace('/', '.')
+            raw_data_module_path = get_path_module(raw_data_files_path)
             specific = import_module('.specific', raw_data_module_path)
             X_train, y_train = specific.get_train_data(raw_data_files_path)
             X_test, y_test = specific.get_test_data(raw_data_files_path)
@@ -194,13 +198,14 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
     # train submission on fold
     trained_model, log_train, submission_fold_state, metrics,\
         full_train_predictions = \
-        train_submission_fold(submission_files_path, train_is,
-                              X_train, y_train, list_workflow_elements)
+        train_submission_fold(raw_data_files_path, submission_files_path,
+                              train_is, X_train, y_train,
+                              list_workflow_elements)
     log_message = log_message + '\n' + log_train
     if 'ERROR' not in submission_fold_state:
         log_test, submission_fold_state, metrics_test, test_predictions = \
-            test_submission_fold(trained_model, X_test, y_test,
-                                 list_workflow_elements)
+            test_submission_fold(raw_data_files_path, trained_model,
+                                 X_test, y_test, list_workflow_elements)
         metrics.update(metrics_test)
         log_message = log_message + '\n' + log_test
         metrics['train_memory'] = memory_usage_resource()
@@ -212,8 +217,9 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
         full_train_predictions, test_predictions
 
 
-def train_submission_fold(submission_files_path, train_is, X_train,
-                          y_train, list_workflow_elements):
+def train_submission_fold(raw_data_files_path, submission_files_path,
+                          train_is, X_train, y_train,
+                          list_workflow_elements):
     module_path = '/'.join(submission_files_path.replace('//', '/').
                            split('/')[-2::])
     module_path = module_path.replace('/', '.')
@@ -225,8 +231,16 @@ def train_submission_fold(submission_files_path, train_is, X_train,
     start = timeit.default_timer()
     start_cpu = cpu_time_resource()
     try:
-        trained_submission = train_model(module_path, list_workflow_elements,
-                                         X_train, y_train, train_is)
+        # TODO add here if workflow.py
+        if os.path.isfile(raw_data_files_path + '/workflow.py'):
+            raw_data_module_path = get_path_module(raw_data_files_path)
+            workflow = import_module('.workflow', raw_data_module_path)
+            trained_submission = workflow.train_submission(module_path, X_train,
+                                                           y_train, train_is)
+        else:
+            trained_submission = train_model(module_path,
+                                             list_workflow_elements,
+                                             X_train, y_train, train_is)
         submission_fold_state = 'TRAINED'
     except Exception, e:
         submission_fold_state = 'ERROR'
@@ -239,8 +253,15 @@ def train_submission_fold(submission_files_path, train_is, X_train,
     # Validation
     start = timeit.default_timer()
     try:
-        predictions = test_model(trained_submission, list_workflow_elements,
-                                 X_train, range(len(y_train)))
+        # TODO add here if workflow.py
+        if os.path.isfile(raw_data_files_path + '/workflow.py'):
+            raw_data_module_path = get_path_module(raw_data_files_path)
+            workflow = import_module('.workflow', raw_data_module_path)
+            predictions = workflow.test_submission(trained_submission, X_train,
+                                                   range(len(y_train)))
+        else:
+            predictions = test_model(trained_submission, list_workflow_elements,
+                                     X_train, range(len(y_train)))
         if len(predictions) == len(y_train):
             predictions = base64.b64encode(zlib.compress(
                 predictions.tostring()))
@@ -265,15 +286,22 @@ def train_submission_fold(submission_files_path, train_is, X_train,
         metrics, full_train_predictions
 
 
-def test_submission_fold(trained_submission, X_test, y_test,
-                         list_workflow_elements):
+def test_submission_fold(raw_data_files_path, trained_submission,
+                         X_test, y_test, list_workflow_elements):
     log_message = ''
     metrics = {}
     start = timeit.default_timer()
     start_cpu = cpu_time_resource()
     try:
-        predictions = test_model(trained_submission, list_workflow_elements,
-                                 X_test, range(len(y_test)))
+        # TODO add here if workflow.py
+        if os.path.isfile(raw_data_files_path + '/workflow.py'):
+            raw_data_module_path = get_path_module(raw_data_files_path)
+            workflow = import_module('.workflow', raw_data_module_path)
+            predictions = workflow.test_submission(trained_submission, X_test,
+                                                   range(len(y_test)))
+        else:
+            predictions = test_model(trained_submission, list_workflow_elements,
+                                     X_test, range(len(y_test)))
         if len(predictions) == len(y_test):
             test_predictions = base64.b64encode(zlib.compress(
                 predictions.tostring()))
