@@ -176,7 +176,7 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
     :type submission_files_path: string
     :type train_is: string
     '''
-    log_message = 'Submission-files-path: %s \n' % submission_files_path
+    log_message = ''
     try:
         if os.path.isfile(raw_data_files_path + '/specific.py'):
             raw_data_module_path = get_path_module(raw_data_files_path)
