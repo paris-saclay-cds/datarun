@@ -231,11 +231,11 @@ def train_submission_fold(raw_data_files_path, submission_files_path,
     start = timeit.default_timer()
     start_cpu = cpu_time_resource()
     try:
-        # TODO add here if workflow.py
-        if os.path.isfile(raw_data_files_path + '/workflow.py'):
+        # TODO add here if specific.py
+        if os.path.isfile(raw_data_files_path + '/specific.py'):
             raw_data_module_path = get_path_module(raw_data_files_path)
-            workflow = import_module('.workflow', raw_data_module_path)
-            trained_submission = workflow.train_submission(module_path, X_train,
+            specific = import_module('.specific', raw_data_module_path)
+            trained_submission = specific.train_submission(module_path, X_train,
                                                            y_train, train_is)
         else:
             trained_submission = train_model(module_path,
@@ -253,11 +253,11 @@ def train_submission_fold(raw_data_files_path, submission_files_path,
     # Validation
     start = timeit.default_timer()
     try:
-        # TODO add here if workflow.py
-        if os.path.isfile(raw_data_files_path + '/workflow.py'):
+        # TODO add here if specific.py
+        if os.path.isfile(raw_data_files_path + '/specific.py'):
             raw_data_module_path = get_path_module(raw_data_files_path)
-            workflow = import_module('.workflow', raw_data_module_path)
-            predictions = workflow.test_submission(trained_submission, X_train,
+            specific = import_module('.specific', raw_data_module_path)
+            predictions = specific.test_submission(trained_submission, X_train,
                                                    range(len(y_train)))
         else:
             predictions = test_model(trained_submission, list_workflow_elements,
@@ -293,11 +293,11 @@ def test_submission_fold(raw_data_files_path, trained_submission,
     start = timeit.default_timer()
     start_cpu = cpu_time_resource()
     try:
-        # TODO add here if workflow.py
-        if os.path.isfile(raw_data_files_path + '/workflow.py'):
+        # TODO add here if specific.py
+        if os.path.isfile(raw_data_files_path + '/specific.py'):
             raw_data_module_path = get_path_module(raw_data_files_path)
-            workflow = import_module('.workflow', raw_data_module_path)
-            predictions = workflow.test_submission(trained_submission, X_test,
+            specific = import_module('.specific', raw_data_module_path)
+            predictions = specific.test_submission(trained_submission, X_test,
                                                    range(len(y_test)))
         else:
             predictions = test_model(trained_submission, list_workflow_elements,

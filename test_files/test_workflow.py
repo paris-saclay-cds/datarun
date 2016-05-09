@@ -69,8 +69,8 @@ dict_param3 = {
 }
 
 
-# list_dict_param = [dict_param1, dict_param2]  # , dict_param3]
-list_dict_param = [dict_param3]
+list_dict_param = [dict_param1, dict_param2, dict_param3]
+# list_dict_param = [dict_param3]
 time_sleep_split = 448  # number of sec to wait after sending the split task
 time_sleep_train = 428  # number of sec to wait after sending the split task
 
@@ -98,7 +98,7 @@ for dict_param in list_dict_param:
                                    data_file, extra_files=extra_files)
     # Get data id
     data_id = json.loads(post_data.content)["id"]
-#    data_id = 3
+#     data_id = 3
 
     # Split data into train and test
     if extra_files:
