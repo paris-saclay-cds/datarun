@@ -107,7 +107,7 @@ This will scp to the master some files that are needed to configure the master.
 
 * Ssh to the instance and run: 
 ```
-bash deploy_master_stratuslab.sh`.  
+bash deploy_master_stratuslab.sh  
 source ~/.bashrc
 ```
 For now, we have to execute the command from the instance, since it is asking for many parameters. TODO: make changes so that we can run the script with ssh from our local machine.   
