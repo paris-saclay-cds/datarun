@@ -226,6 +226,7 @@ class SubmissionFoldList(APIView):
         if 'force' in data.keys():
             if 'submission, submission_fold' in data['force']:
                 try:
+                    os.system('rm -rf ' + data['files_path'])
                     submission = Submission.objects.get(
                         databoard_s_id=data['databoard_s_id'])
                     submission.delete()

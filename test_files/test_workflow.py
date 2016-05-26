@@ -70,6 +70,7 @@ dict_param3 = {
 
 
 list_dict_param = [dict_param1, dict_param2, dict_param3]
+# list_dict_param = [dict_param1, dict_param2]
 # list_dict_param = [dict_param3]
 time_sleep_split = 448  # number of sec to wait after sending the split task
 time_sleep_train = 428  # number of sec to wait after sending the split task
@@ -97,8 +98,18 @@ for dict_param in list_dict_param:
                                    data_name, target_column, workflow_elements,
                                    data_file, extra_files=extra_files)
     # Get data id
-    data_id = json.loads(post_data.content)["id"]
-#    data_id = 3
+    if post_data.ok:
+        data_id = json.loads(post_data.content)["id"]
+        print('** Data id on datarun: %s **' % data_id)
+    elif "RawData with this name already exists" in post_data.content:
+        get_data = post_api.get_raw_data(host_url, username, userpassd)
+        list_data = json.loads(get_data.content)
+        data_id = [dd['id'] for dd in list_data if
+                   dd['name'] == data_name][0]
+        print('** Data id on datarun: %s **' % data_id)
+    else:
+        print('** Problem submitting data to datarun, no data id **')
+        raise(NameError, 'problem submissiting')
 
     # Split data into train and test
     if extra_files:
@@ -195,8 +206,6 @@ for dict_param in list_dict_param:
     os.system('rm -rf sub')
     os.system('rm -rf ' + temp_data_name)
     # Compare predictions
-    print(pred[0:4, :])
-    print(test_pred[0:4, :])
     if (pred == test_pred).all():
         print('Oh yeah 1!')
 
