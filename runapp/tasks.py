@@ -159,7 +159,7 @@ def custom_prepare_data(raw_data_files_path):
 @shared_task
 def train_test_submission_fold(raw_data_files_path, workflow_elements,
                                raw_data_target_column, submission_files_path,
-                               train_is):
+                               train_is, hash_submission_files):
     '''
     Train and test a submission on a fold
 
@@ -169,12 +169,14 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
     :param submission_files_path: path of the submission files
     :param train_is: indices of train dataset for this fold (compressed and
     base64 encoded)
+    :param hash_submission_files: checksum of submission files
 
     :type raw_data_files_path: string
     :type workflow_elements: string
     :type raw_data_target_column: string
     :type submission_files_path: string
     :type train_is: string
+    :type hash_submission_files: string
     '''
     log_message = ''
     try:

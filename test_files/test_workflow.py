@@ -77,8 +77,8 @@ dict_param3 = {
 # list_dict_param = [dict_param1, dict_param2, dict_param3]
 # list_dict_param = [dict_param1, dict_param2]
 list_dict_param = [dict_param1]
-time_sleep_split = 48  # 448# number of sec to wait after sending the split task
-time_sleep_train = 48  # 428# number of sec to wait after sending the split task
+time_sleep_split = 108  # 448# number of sec to wait after sending the split task
+time_sleep_train = 108  # 428# number of sec to wait after sending the split task
 
 for dict_param in list_dict_param:
 
@@ -133,7 +133,8 @@ for dict_param in list_dict_param:
     # Send submission and fold 1
     priority = 'L'
     skf = cross_validation.ShuffleSplit(int(np.round(n_samples *
-                                                     (1 - held_out_test))))
+                                                     (1 - held_out_test))),
+                                        random_state=42)
     train_is1, test_is1 = list(skf)[0]
     post_submission1 = post_api.post_submission_fold(host_url, username,
                                                      userpassd, submission_id,

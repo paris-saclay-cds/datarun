@@ -1,6 +1,7 @@
 import os
 import zlib
 import base64
+import hashlib
 from .models import RawData, Submission, SubmissionFold
 from .serializers import RawDataSerializer, SubmissionSerializer
 from .serializers import SubmissionFoldSerializer, SubmissionFoldLightSerializer
@@ -244,11 +245,15 @@ class SubmissionFoldList(APIView):
             Submission.objects.get(
                             databoard_s_id=request.data['databoard_s_id'])
         except:
+            # create hash of the submission files
+            hash_obj = hashlib.md5(open(data['files'].items()[0], 'rb').read())
+            for fname in data['files'].items()[1:]:
+                hash_obj.update(open(fname, 'rb').read())
+            data['hash_files'] = hash_obj.digest()
+            # call submission serializer
             serializer_submission = SubmissionSerializer(data=data)
             if serializer_submission.is_valid():
                 # save submission files
-                if 'files_path' in data.keys():
-                    this_submission_directory = data['files_path']
                 save_files(this_submission_directory, data)
                 # save submission in the database
                 serializer_submission.save()
