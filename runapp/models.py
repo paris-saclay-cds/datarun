@@ -40,7 +40,7 @@ class Submission(models.Model):
     databoard_s_id = models.IntegerField(primary_key=True)
     files_path = models.CharField(max_length=200, null=True)
     raw_data = models.ForeignKey(RawData, null=True, blank=True)
-    hash_files = models.CharField(max_length=300, null=True)
+    hash_files = models.CharField(max_length=16, null=True)
 
     def __unicode__(self):
         return 'Submission(databoard id {}, files_path {}, raw_data_id {})'. \
