@@ -283,9 +283,11 @@ class SubmissionFoldList(APIView):
                 submission_files_path = submission_fold.databoard_s.\
                     files_path
                 train_is = submission_fold.train_is
+                hash_sub_files = submission_fold.databoard_s.hash_files
                 task = tasks.train_test_submission_fold.apply_async(
                     (raw_data_files_path, workflow_elements,
-                     raw_data_target_column, submission_files_path, train_is),
+                     raw_data_target_column, submission_files_path, train_is,
+                     hash_sub_files),
                     queue=priority)
                 # task = tasks.train_test_submission_fold.delay(
                 #     raw_data_files_path, workflow_elements,
