@@ -77,8 +77,8 @@ dict_param3 = {
 # list_dict_param = [dict_param1, dict_param2, dict_param3]
 # list_dict_param = [dict_param1, dict_param2]
 list_dict_param = [dict_param1]
-time_sleep_split = 108  # 448# number of sec to wait after sending the split task
-time_sleep_train = 108  # 428# number of sec to wait after sending the split task
+time_sleep_split = 48  # 448# number of sec to wait after sending the split task
+time_sleep_train = 228  # 428# number of sec to wait after sending the split task
 
 for dict_param in list_dict_param:
 
@@ -126,7 +126,6 @@ for dict_param in list_dict_param:
     else:
         post_split = post_api.post_split(host_url, username, userpassd,
                                          held_out_test, data_id)
-    print(json.loads(post_split.content))
     time.sleep(time_sleep_split)
     # os.system('cp variable_stars/*csv* ../test_data/variable_stars/.')
 
@@ -204,7 +203,7 @@ for dict_param in list_dict_param:
                                                         workflow_elements,
                                                         target_column,
                                                         submission_files_path,
-                                                        tt1)
+                                                        tt1, '')
     test_pred = train_test_local[4]
     test_pred = np.fromstring(zlib.decompress(base64.b64decode(test_pred)),
                               dtype=float)

@@ -1,4 +1,5 @@
 import os
+import glob
 import zlib
 import base64
 import hashlib
@@ -52,6 +53,19 @@ def save_files(dir_data, data):
                 o_ff.write(ff)
     except Exception as e:
         print(e)
+
+
+def checksum_files(data):
+    # hash_obj = hashlib.md5(open(flist[0], 'rb').read())
+    # for fname in flist[1::]:
+    #     hash_obj.update(open(fname, 'rb').read())
+    ff_content = zlib.decompress(base64.b64decode(data['files'].values()[0]))
+    hash_obj = hashlib.md5(ff_content)
+    for ff in data['files'].values()[1::]:
+        ff_content = zlib.decompress(base64.b64decode(ff))
+        hash_obj.update(ff_content)
+    checksum = hash_obj.digest()
+    return base64.b64encode(checksum)
 
 
 class RawDataList(APIView):
@@ -223,7 +237,7 @@ class SubmissionFoldList(APIView):
             this_submission_directory = submission_directory + \
                 '/sub_{}'.format(request.data['databoard_s_id'])
             data['files_path'] = this_submission_directory
-        # if force
+        # if force, remove older submission and/or submission fold
         if 'force' in data.keys():
             if 'submission, submission_fold' in data['force']:
                 try:
@@ -246,10 +260,7 @@ class SubmissionFoldList(APIView):
                             databoard_s_id=request.data['databoard_s_id'])
         except:
             # create hash of the submission files
-            hash_obj = hashlib.md5(open(data['files'].items()[0], 'rb').read())
-            for fname in data['files'].items()[1:]:
-                hash_obj.update(open(fname, 'rb').read())
-            data['hash_files'] = hash_obj.digest()
+            data['hash_files'] = checksum_files(data)
             # call submission serializer
             serializer_submission = SubmissionSerializer(data=data)
             if serializer_submission.is_valid():
@@ -289,9 +300,6 @@ class SubmissionFoldList(APIView):
                      raw_data_target_column, submission_files_path, train_is,
                      hash_sub_files),
                     queue=priority)
-                # task = tasks.train_test_submission_fold.delay(
-                #     raw_data_files_path, workflow_elements,
-                #     raw_data_target_column, submission_files_path, train_is)
                 task_id = task.id
                 submission_fold.task_id = task_id
                 submission_fold.save()
