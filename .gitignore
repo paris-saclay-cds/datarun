@@ -9,3 +9,6 @@ submission/
 test_data/
 test_submission/
 *.swp
+docs/_build
+docs/_templates
+docs/_static
