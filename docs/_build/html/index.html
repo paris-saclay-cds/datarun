@@ -39,6 +39,19 @@
             
   <div class="section" id="welcome-to-datarun-s-documentation">
 <h1>Welcome to datarun&#8217;s documentation!<a class="headerlink" href="#welcome-to-datarun-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Datarun goal is to train and test machine learning models. It is a REST API written in Django.</p>
+<p>The basic workflow is the following (more details can be found in <a class="reference internal" href="modules/workflow.html#workflow"><span class="std std-ref">How to use datarun?</span></a>):</p>
+<ol class="arabic simple">
+<li>Data (on which machine learning models are trained and tested) are sent to datarun.</li>
+<li>Models and train and test indices of CV fold are send to datarun, which train and test these models on these indices.</li>
+<li>The resulting predictions can then be requested.</li>
+</ol>
+<p>In this documentation, we use the following terminology (which corresponds to the database tables, cf <a class="reference internal" href="modules/models.html#models"><span class="std std-ref">Models</span></a>):</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">RawData</span></code> refers to the data on which machine learning models are trained and tested</li>
+<li><code class="docutils literal"><span class="pre">Submission</span></code> refers to a machine learning model</li>
+<li><code class="docutils literal"><span class="pre">Submission</span> <span class="pre">on</span> <span class="pre">cv</span> <span class="pre">fold</span></code> / <code class="docutils literal"><span class="pre">SubmissionFold</span></code> refers to a submission and the indices of train and test of a cv fold.</li>
+</ul>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul>

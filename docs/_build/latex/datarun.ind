@@ -2,55 +2,55 @@
 \def\bigletter#1{{\Large\sffamily#1}\nopagebreak\vspace{1mm}}
 
   \bigletter C
-  \item custom\_post\_split() (in module test\_files.post\_api), \hyperpage{10}
-  \item CustomSplitTrainTest (class in runapp.views), \hyperpage{7}
+  \item custom\_post\_split() (in module test\_files.post\_api), \hyperpage{12}
+  \item CustomSplitTrainTest (class in runapp.views), \hyperpage{9}
 
   \indexspace
   \bigletter G
-  \item get() (runapp.views.RawDataList method), \hyperpage{8}
-  \item get() (runapp.views.SubmissionFoldDetail method), \hyperpage{9}
-  \item get() (runapp.views.SubmissionFoldLightList method), \hyperpage{9}
-  \item get() (runapp.views.SubmissionFoldList method), \hyperpage{10}
-  \item get\_prediction\_list() (in module test\_files.post\_api), \hyperpage{11}
-  \item get\_prediction\_new() (in module test\_files.post\_api), \hyperpage{11}
-  \item get\_raw\_data() (in module test\_files.post\_api), \hyperpage{11}
-  \item get\_submission\_fold() (in module test\_files.post\_api), \hyperpage{11}
-  \item get\_submission\_fold\_detail() (in module test\_files.post\_api), \hyperpage{11}
-  \item get\_submission\_fold\_light() (in module test\_files.post\_api), \hyperpage{11}
-  \item GetTestPredictionList (class in runapp.views), \hyperpage{7}
-  \item GetTestPredictionNew (class in runapp.views), \hyperpage{8}
+  \item get() (runapp.views.RawDataList method), \hyperpage{10}
+  \item get() (runapp.views.SubmissionFoldDetail method), \hyperpage{11}
+  \item get() (runapp.views.SubmissionFoldLightList method), \hyperpage{11}
+  \item get() (runapp.views.SubmissionFoldList method), \hyperpage{12}
+  \item get\_prediction\_list() (in module test\_files.post\_api), \hyperpage{13}
+  \item get\_prediction\_new() (in module test\_files.post\_api), \hyperpage{13}
+  \item get\_raw\_data() (in module test\_files.post\_api), \hyperpage{13}
+  \item get\_submission\_fold() (in module test\_files.post\_api), \hyperpage{13}
+  \item get\_submission\_fold\_detail() (in module test\_files.post\_api), \hyperpage{13}
+  \item get\_submission\_fold\_light() (in module test\_files.post\_api), \hyperpage{13}
+  \item GetTestPredictionList (class in runapp.views), \hyperpage{9}
+  \item GetTestPredictionNew (class in runapp.views), \hyperpage{10}
 
   \indexspace
   \bigletter P
-  \item post() (runapp.views.CustomSplitTrainTest method), \hyperpage{7}
-  \item post() (runapp.views.GetTestPredictionList method), \hyperpage{7}
-  \item post() (runapp.views.GetTestPredictionNew method), \hyperpage{8}
-  \item post() (runapp.views.RawDataList method), \hyperpage{8}
-  \item post() (runapp.views.SplitTrainTest method), \hyperpage{9}
-  \item post() (runapp.views.SubmissionFoldList method), \hyperpage{10}
-  \item post\_data() (in module test\_files.post\_api), \hyperpage{12}
-  \item post\_split() (in module test\_files.post\_api), \hyperpage{12}
-  \item post\_submission\_fold() (in module test\_files.post\_api), \hyperpage{12}
+  \item post() (runapp.views.CustomSplitTrainTest method), \hyperpage{9}
+  \item post() (runapp.views.GetTestPredictionList method), \hyperpage{9}
+  \item post() (runapp.views.GetTestPredictionNew method), \hyperpage{10}
+  \item post() (runapp.views.RawDataList method), \hyperpage{10}
+  \item post() (runapp.views.SplitTrainTest method), \hyperpage{11}
+  \item post() (runapp.views.SubmissionFoldList method), \hyperpage{12}
+  \item post\_data() (in module test\_files.post\_api), \hyperpage{14}
+  \item post\_split() (in module test\_files.post\_api), \hyperpage{14}
+  \item post\_submission\_fold() (in module test\_files.post\_api), \hyperpage{14}
 
   \indexspace
   \bigletter R
-  \item RawData (class in runapp.models), \hyperpage{5}
-  \item RawDataList (class in runapp.views), \hyperpage{8}
-  \item runapp.models (module), \hyperpage{5}
-  \item runapp.views (module), \hyperpage{7}
+  \item RawData (class in runapp.models), \hyperpage{7}
+  \item RawDataList (class in runapp.views), \hyperpage{10}
+  \item runapp.models (module), \hyperpage{7}
+  \item runapp.views (module), \hyperpage{9}
 
   \indexspace
   \bigletter S
-  \item save\_files() (in module runapp.views), \hyperpage{10}
-  \item SplitTrainTest (class in runapp.views), \hyperpage{9}
-  \item Submission (class in runapp.models), \hyperpage{5}
-  \item SubmissionFold (class in runapp.models), \hyperpage{5}
-  \item SubmissionFoldDetail (class in runapp.views), \hyperpage{9}
-  \item SubmissionFoldLightList (class in runapp.views), \hyperpage{9}
-  \item SubmissionFoldList (class in runapp.views), \hyperpage{10}
+  \item save\_files() (in module runapp.views), \hyperpage{12}
+  \item SplitTrainTest (class in runapp.views), \hyperpage{11}
+  \item Submission (class in runapp.models), \hyperpage{7}
+  \item SubmissionFold (class in runapp.models), \hyperpage{8}
+  \item SubmissionFoldDetail (class in runapp.views), \hyperpage{11}
+  \item SubmissionFoldLightList (class in runapp.views), \hyperpage{11}
+  \item SubmissionFoldList (class in runapp.views), \hyperpage{12}
 
   \indexspace
   \bigletter T
-  \item test\_files.post\_api (module), \hyperpage{10}
+  \item test\_files.post\_api (module), \hyperpage{12}
 
 \end{theindex}

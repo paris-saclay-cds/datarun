@@ -28,7 +28,7 @@
 
 
 \title{datarun Documentation}
-\date{May 04, 2016}
+\date{May 31, 2016}
 \release{0.1}
 \author{Camille}
 \newcommand{\sphinxlogo}{}
@@ -140,11 +140,39 @@
 \phantomsection\label{index::doc}
 
 
+Datarun goal is to train and test machine learning models. It is a REST API written in Django.
+
+The basic workflow is the following (more details can be found in {\hyperref[modules/workflow:workflow]{\crossref{\DUrole{std,std-ref}{How to use datarun?}}}}):
+\begin{enumerate}
+\item {} 
+Data (on which machine learning models are trained and tested) are sent to datarun.
+
+\item {} 
+Models and train and test indices of CV fold are send to datarun, which train and test these models on these indices.
+
+\item {} 
+The resulting predictions can then be requested.
+
+\end{enumerate}
+
+In this documentation, we use the following terminology (which corresponds to the database tables, cf {\hyperref[modules/models:models]{\crossref{\DUrole{std,std-ref}{Models}}}}):
+\begin{itemize}
+\item {} 
+\code{RawData} refers to the data on which machine learning models are trained and tested
+
+\item {} 
+\code{Submission} refers to a machine learning model
+
+\item {} 
+\code{Submission on cv fold} / \code{SubmissionFold} refers to a submission and the indices of train and test of a cv fold.
+
+\end{itemize}
+
 Contents:
 
 
 \chapter{How to use datarun?}
-\label{modules/workflow:how-to-use-datarun}\label{modules/workflow::doc}\label{modules/workflow:welcome-to-datarun-s-documentation}
+\label{modules/workflow:how-to-use-datarun}\label{modules/workflow::doc}\label{modules/workflow:welcome-to-datarun-s-documentation}\label{modules/workflow:workflow}
 The workflow to use datarun is the following:
 
 
@@ -189,6 +217,7 @@ the \code{post\_data} function in the module test\_files.post\_api (cf {\hyperre
 \end{itemize}
 
 \textbf{Note for databoard users:}
+To send data to datarun and to split data into train and test dataset, you can user the function \code{send\_data\_datarun} of \code{databoard/db\_tools.py}, which uses the functions \code{post\_data} and \code{post\_split} (or \code{custom\_post\_split}) of the module test\_files.post\_api of datarun.
 
 
 \section{2- Split data into train and test dataset}
@@ -213,6 +242,9 @@ the \code{custom\_post\_split} function in the module test\_files.post\_api (cf 
 
 \end{itemize}
 
+\textbf{Note for databoard users:}
+To send data to datarun and to split data into train and test dataset, you can user the function \code{send\_data\_datarun} of \code{databoard/db\_tools.py}, which uses the functions \code{post\_data} and \code{post\_split} (or \code{custom\_post\_split}) of the module test\_files.post\_api of datarun.
+
 
 \section{3- Send submission on cv fold to be trained on datarun}
 \label{modules/workflow:send-submission-on-cv-fold-to-be-trained-on-datarun}
@@ -226,12 +258,73 @@ the \code{post\_submission\_fold} function in the module test\_files.post\_api (
 
 \end{itemize}
 
+If the associted submission files have already been sent, you'll need to send:
+\begin{itemize}
+\item {} 
+the if of the associated submission
+
+\item {} 
+the id of the submission on cv fold
+
+\item {} 
+the train and test indices of the cv fold.
+* after compression (with zlib) and base64-encoding if you use a post request
+* the raw indices if you use the \code{post\_submission\_fold} function
+
+\item {} 
+the priority level (\code{L} for low or \code{H} for high) of training this submission on cv fold.
+
+\item {} 
+an indication that you want to force retraining the submission on cv fold even if it already exists (\code{force="submission\_fold"} instead of \code{force=None}).
+
+\end{itemize}
+
+If the associated submission files have not been sent, you need to add:
+\begin{itemize}
+\item {} 
+the id of the associated data
+
+\item {} 
+the list of submission files
+
+\item {} 
+an indication that you want to force resending the submission even if its id already exists (\code{force="submission"} instead of \code{force=None}).
+
+\end{itemize}
+
 
 \section{4- Get back your predictions}
 \label{modules/workflow:get-back-your-predictions}
+If you want to get all predictions that have not been requested, you can use:
+\begin{itemize}
+\item {} 
+a post request to \code{\textless{}master-host\textgreater{}/runapp/testpredictions/new/} (cf {\hyperref[modules/views:requestsdirect]{\crossref{\DUrole{std,std-ref}{direct requests}}}}, class runapp.views.GetTestPredictionNew)
+
+\item {} 
+the \code{get\_prediction\_new} function in the module test\_files.post\_api (cf {\hyperref[modules/views:requestsmodule]{\crossref{\DUrole{std,std-ref}{post\_api module}}}})
+
+\end{itemize}
+
+If you want to get predictions given a list of submission on cv fold ids, you can use:
+\begin{itemize}
+\item {} 
+a post request to \code{\textless{}master-host\textgreater{}/runapp/testpredictions/list/} (cf {\hyperref[modules/views:requestsdirect]{\crossref{\DUrole{std,std-ref}{direct requests}}}}, class runapp.views.GetTestPredictionList)
+
+\item {} 
+the \code{get\_prediction\_list} function in the module test\_files.post\_api (cf {\hyperref[modules/views:requestsmodule]{\crossref{\DUrole{std,std-ref}{post\_api module}}}})
+
+\end{itemize}
+
 
 \chapter{Models}
-\label{modules/models:models}\label{modules/models:module-runapp.models}\label{modules/models::doc}\index{runapp.models (module)}\index{RawData (class in runapp.models)}
+\label{modules/models:models}\label{modules/models::doc}\label{modules/models:id1}
+The database schema is the following:
+\begin{figure}[htbp]
+\centering
+
+\includegraphics{{schema_database}.jpg}
+\end{figure}
+\phantomsection\label{modules/models:module-runapp.models}\index{runapp.models (module)}\index{RawData (class in runapp.models)}
 
 \begin{fulllineitems}
 \phantomsection\label{modules/models:runapp.models.RawData}\pysiglinewithargsret{\strong{class }\code{runapp.models.}\bfcode{RawData}}{\emph{*args}, \emph{**kwargs}}{}~\begin{quote}\begin{description}

@@ -39,7 +39,7 @@
           <div class="body" role="main">
             
   <div class="section" id="how-to-use-datarun">
-<h1>How to use datarun?<a class="headerlink" href="#how-to-use-datarun" title="Permalink to this headline">¶</a></h1>
+<span id="workflow"></span><h1>How to use datarun?<a class="headerlink" href="#how-to-use-datarun" title="Permalink to this headline">¶</a></h1>
 <p>The workflow to use datarun is the following:</p>
 <div class="section" id="send-data-to-datarun">
 <h2>1- Send data to datarun<a class="headerlink" href="#send-data-to-datarun" title="Permalink to this headline">¶</a></h2>
@@ -67,7 +67,8 @@
 <li>a post request to <code class="docutils literal"><span class="pre">&lt;master-host&gt;/runapp/rawdata/</span></code> (cf <a class="reference internal" href="views.html#requestsdirect"><span class="std std-ref">direct requests</span></a>, class runapp.views.RawDataList)</li>
 <li>the <code class="docutils literal"><span class="pre">post_data</span></code> function in the module test_files.post_api (cf <a class="reference internal" href="views.html#requestsmodule"><span class="std std-ref">post_api module</span></a>)</li>
 </ul>
-<p><strong>Note for databoard users:</strong></p>
+<p><strong>Note for databoard users:</strong>
+To send data to datarun and to split data into train and test dataset, you can user the function <code class="docutils literal"><span class="pre">send_data_datarun</span></code> of <code class="docutils literal"><span class="pre">databoard/db_tools.py</span></code>, which uses the functions <code class="docutils literal"><span class="pre">post_data</span></code> and <code class="docutils literal"><span class="pre">post_split</span></code> (or <code class="docutils literal"><span class="pre">custom_post_split</span></code>) of the module test_files.post_api of datarun.</p>
 </div>
 <div class="section" id="split-data-into-train-and-test-dataset">
 <h2>2- Split data into train and test dataset<a class="headerlink" href="#split-data-into-train-and-test-dataset" title="Permalink to this headline">¶</a></h2>
@@ -81,6 +82,8 @@
 <li>a post request to <code class="docutils literal"><span class="pre">&lt;master-host&gt;/runapp/rawdata/customsplit/</span></code> (cf <a class="reference internal" href="views.html#requestsdirect"><span class="std std-ref">direct requests</span></a>, class runapp.views.CustomSplitTrainTest)</li>
 <li>the <code class="docutils literal"><span class="pre">custom_post_split</span></code> function in the module test_files.post_api (cf <a class="reference internal" href="views.html#requestsmodule"><span class="std std-ref">post_api module</span></a>)</li>
 </ul>
+<p><strong>Note for databoard users:</strong>
+To send data to datarun and to split data into train and test dataset, you can user the function <code class="docutils literal"><span class="pre">send_data_datarun</span></code> of <code class="docutils literal"><span class="pre">databoard/db_tools.py</span></code>, which uses the functions <code class="docutils literal"><span class="pre">post_data</span></code> and <code class="docutils literal"><span class="pre">post_split</span></code> (or <code class="docutils literal"><span class="pre">custom_post_split</span></code>) of the module test_files.post_api of datarun.</p>
 </div>
 <div class="section" id="send-submission-on-cv-fold-to-be-trained-on-datarun">
 <h2>3- Send submission on cv fold to be trained on datarun<a class="headerlink" href="#send-submission-on-cv-fold-to-be-trained-on-datarun" title="Permalink to this headline">¶</a></h2>
@@ -89,9 +92,35 @@
 <li>a post request to <code class="docutils literal"><span class="pre">&lt;master-host&gt;/runapp/submissionfold/</span></code> (cf <a class="reference internal" href="views.html#requestsdirect"><span class="std std-ref">direct requests</span></a>, class runapp.views.SubmissionFoldList)</li>
 <li>the <code class="docutils literal"><span class="pre">post_submission_fold</span></code> function in the module test_files.post_api (cf <a class="reference internal" href="views.html#requestsmodule"><span class="std std-ref">post_api module</span></a>)</li>
 </ul>
+<p>If the associted submission files have already been sent, you&#8217;ll need to send:</p>
+<ul class="simple">
+<li>the if of the associated submission</li>
+<li>the id of the submission on cv fold</li>
+<li>the train and test indices of the cv fold.
+* after compression (with zlib) and base64-encoding if you use a post request
+* the raw indices if you use the <code class="docutils literal"><span class="pre">post_submission_fold</span></code> function</li>
+<li>the priority level (<code class="docutils literal"><span class="pre">L</span></code> for low or <code class="docutils literal"><span class="pre">H</span></code> for high) of training this submission on cv fold.</li>
+<li>an indication that you want to force retraining the submission on cv fold even if it already exists (<code class="docutils literal"><span class="pre">force=&quot;submission_fold&quot;</span></code> instead of <code class="docutils literal"><span class="pre">force=None</span></code>).</li>
+</ul>
+<p>If the associated submission files have not been sent, you need to add:</p>
+<ul class="simple">
+<li>the id of the associated data</li>
+<li>the list of submission files</li>
+<li>an indication that you want to force resending the submission even if its id already exists (<code class="docutils literal"><span class="pre">force=&quot;submission&quot;</span></code> instead of <code class="docutils literal"><span class="pre">force=None</span></code>).</li>
+</ul>
 </div>
 <div class="section" id="get-back-your-predictions">
 <h2>4- Get back your predictions<a class="headerlink" href="#get-back-your-predictions" title="Permalink to this headline">¶</a></h2>
+<p>If you want to get all predictions that have not been requested, you can use:</p>
+<ul class="simple">
+<li>a post request to <code class="docutils literal"><span class="pre">&lt;master-host&gt;/runapp/testpredictions/new/</span></code> (cf <a class="reference internal" href="views.html#requestsdirect"><span class="std std-ref">direct requests</span></a>, class runapp.views.GetTestPredictionNew)</li>
+<li>the <code class="docutils literal"><span class="pre">get_prediction_new</span></code> function in the module test_files.post_api (cf <a class="reference internal" href="views.html#requestsmodule"><span class="std std-ref">post_api module</span></a>)</li>
+</ul>
+<p>If you want to get predictions given a list of submission on cv fold ids, you can use:</p>
+<ul class="simple">
+<li>a post request to <code class="docutils literal"><span class="pre">&lt;master-host&gt;/runapp/testpredictions/list/</span></code> (cf <a class="reference internal" href="views.html#requestsdirect"><span class="std std-ref">direct requests</span></a>, class runapp.views.GetTestPredictionList)</li>
+<li>the <code class="docutils literal"><span class="pre">get_prediction_list</span></code> function in the module test_files.post_api (cf <a class="reference internal" href="views.html#requestsmodule"><span class="std std-ref">post_api module</span></a>)</li>
+</ul>
 </div>
 </div>
 

@@ -1,3 +1,5 @@
+.. _workflow:
+
 How to use datarun?
 ===================
 
@@ -35,6 +37,8 @@ In both cases, to send you data to datarun, you can use:
 
 
 **Note for databoard users:**
+To send data to datarun and to split data into train and test dataset, you can user the function ``send_data_datarun`` of ``databoard/db_tools.py``, which uses the functions ``post_data`` and ``post_split`` (or ``custom_post_split``) of the module test_files.post_api of datarun.
+
 
 2- Split data into train and test dataset
 -----------------------------------------
@@ -50,6 +54,11 @@ If your data do not match the standard format, you can use:
 * a post request to ``<master-host>/runapp/rawdata/customsplit/`` (cf :ref:`requestsDirect`, class runapp.views.CustomSplitTrainTest)  
 * the ``custom_post_split`` function in the module test_files.post_api (cf :ref:`requestsModule`)  
 
+
+**Note for databoard users:**
+To send data to datarun and to split data into train and test dataset, you can user the function ``send_data_datarun`` of ``databoard/db_tools.py``, which uses the functions ``post_data`` and ``post_split`` (or ``custom_post_split``) of the module test_files.post_api of datarun.
+
+
 3- Send submission on cv fold to be trained on datarun
 ------------------------------------------------------
 
@@ -58,6 +67,32 @@ To send a submission on cv fold, you can use:
 * a post request to ``<master-host>/runapp/submissionfold/`` (cf :ref:`requestsDirect`, class runapp.views.SubmissionFoldList)  
 * the ``post_submission_fold`` function in the module test_files.post_api (cf :ref:`requestsModule`)  
 
+If the associted submission files have already been sent, you'll need to send:
+
+* the if of the associated submission
+* the id of the submission on cv fold  
+* the train and test indices of the cv fold. 
+  * after compression (with zlib) and base64-encoding if you use a post request  
+  * the raw indices if you use the ``post_submission_fold`` function  
+* the priority level (``L`` for low or ``H`` for high) of training this submission on cv fold.  
+* an indication that you want to force retraining the submission on cv fold even if it already exists (``force="submission_fold"`` instead of ``force=None``).  
+
+If the associated submission files have not been sent, you need to add:  
+
+* the id of the associated data  
+* the list of submission files  
+* an indication that you want to force resending the submission even if its id already exists (``force="submission"`` instead of ``force=None``).
+
 4- Get back your predictions
 ----------------------------
 
+If you want to get all predictions that have not been requested, you can use:
+
+* a post request to ``<master-host>/runapp/testpredictions/new/`` (cf :ref:`requestsDirect`, class runapp.views.GetTestPredictionNew)
+* the ``get_prediction_new`` function in the module test_files.post_api (cf :ref:`requestsModule`)
+
+
+If you want to get predictions given a list of submission on cv fold ids, you can use:
+
+* a post request to ``<master-host>/runapp/testpredictions/list/`` (cf :ref:`requestsDirect`, class runapp.views.GetTestPredictionList)
+* the ``get_prediction_list`` function in the module test_files.post_api (cf :ref:`requestsModule`)

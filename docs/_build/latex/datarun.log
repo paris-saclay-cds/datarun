@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.12.21)  4 MAY 2016 17:33
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.12.21)  31 MAY 2016 16:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -970,162 +970,179 @@ LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10> not available
 (Font)              Font shape `T1/phv/b/n' tried instead on input line 139.
 [1
 
-] [2] [1
+] [2]
+LaTeX Font Info:    Try loading font information for TS1+ptm on input line 160.
+
+ (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+)
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 161.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd
+File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
+) [1
 
 ] [2
 
 ]
 Chapter 1.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 146.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 174.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 146.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 174.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <24.88> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 146.
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 157.
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd
-File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
-)
-LaTeX Font Info:    Try loading font information for TS1+ptm on input line 173.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 174.
 
-
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
-File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-)
-Underfull \hbox (badness 10000) in paragraph at lines 174--175
+Underfull \hbox (badness 10000) in paragraph at lines 202--203
 []\T1/ptm/m/n/10 a python file with three spe-cific func-tions: \T1/pcr/m/n/10 
 prepare_data(raw_data_path)\T1/ptm/m/n/10 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 184--185
+Underfull \hbox (badness 10000) in paragraph at lines 212--213
 []\T1/ptm/m/n/10 a post re-quest to \T1/pcr/m/n/10 <master-host>/runapp/rawdata
 / \T1/ptm/m/n/10 (cf [][]\T1/ptm/m/it/10 di-rect re-quests[][]\T1/ptm/m/n/10 , 
 class
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 199--200
+Underfull \hbox (badness 10000) in paragraph at lines 228--229
 []\T1/ptm/m/n/10 a post re-quest to \T1/pcr/m/n/10 <master-host>/runapp/rawdata
 /split/ \T1/ptm/m/n/10 (cf [][]\T1/ptm/m/it/10 di-rect re-quests[][]\T1/ptm/m/n
 /10 , class
  []
 
 [3]
-Underfull \hbox (badness 10000) in paragraph at lines 222--223
+Underfull \hbox (badness 10000) in paragraph at lines 254--255
 []\T1/ptm/m/n/10 a post re-quest to \T1/pcr/m/n/10 <master-host>/runapp/submiss
 ionfold/ \T1/ptm/m/n/10 (cf [][]\T1/ptm/m/it/10 di-rect re-quests[][]\T1/ptm/m/
 n/10 , class
  []
 
-[4]
-Chapter 2.
-LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <10> not available
-(Font)              Font shape `T1/pcr/b/n' tried instead on input line 237.
-LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <10> not available
-(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 240.
-[5
 
-] [6]
+Underfull \hbox (badness 6428) in paragraph at lines 291--292
+[]\T1/ptm/m/n/10 an in-di-ca-tion that you want to force re-send-ing the sub-mi
+s-sion even if its id al-ready ex-ists
+ []
+
+[4] [5] [6
+
+]
+Chapter 2.
+<schema_database.jpg, id=136, 880.28876pt x 501.875pt>
+File: schema_database.jpg Graphic file (type jpg)
+
+<use schema_database.jpg>
+Package pdftex.def Info: schema_database.jpg used on input line 325.
+(pdftex.def)             Requested size: 880.2866pt x 501.87376pt.
+File: schema_database.jpg Graphic file (type jpg)
+ <use schema_database.jpg>
+Package pdftex.def Info: schema_database.jpg used on input line 325.
+(pdftex.def)             Requested size: 469.755pt x 267.81508pt.
+LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <10> not available
+(Font)              Font shape `T1/pcr/b/n' tried instead on input line 330.
+LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <10> not available
+(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 333.
+ [7 <./schema_database.jpg>] [8]
 Chapter 3.
 
-Underfull \hbox (badness 10000) in paragraph at lines 363--364
+Underfull \hbox (badness 10000) in paragraph at lines 456--457
 []\T1/ptm/m/n/10 curl -u user-name:password -H ``Content-Type: ap-pli-ca-tion/j
 son'' -X POST -d
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 372--373
+Underfull \hbox (badness 10000) in paragraph at lines 465--466
 []\T1/ptm/m/n/10 requests.post(`[][]$http : / / 127 . 0 . 0 . 1 : 8000 / runapp
  / raw _ data / customsplit/$[][]`, auth=(`username',
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 409--410
+Underfull \hbox (badness 10000) in paragraph at lines 502--503
 []\T1/ptm/m/n/10 curl -u user-name:password -H ``Content-Type: ap-pli-ca-tion/j
 son'' -X POST -d
  []
 
-[7
+[9
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 457--458
+Underfull \hbox (badness 10000) in paragraph at lines 550--551
 []\T1/ptm/m/n/10 curl -u user-name:password -H ``Content-Type: ap-pli-ca-tion/j
 son'' -X POST -d
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 541--542
+Underfull \hbox (badness 10000) in paragraph at lines 634--635
 []\T1/ptm/m/n/10 requests.post(`[][]$http : / / 127 . 0 . 0 . 1 : 8000 / runapp
  / rawdata/$[][]`, auth=(`username', `pass-word'),
  []
 
-[8]
-Underfull \hbox (badness 10000) in paragraph at lines 570--571
+[10]
+Underfull \hbox (badness 10000) in paragraph at lines 663--664
 []\T1/ptm/m/n/10 curl -u user-name:password -H ``Content-Type: ap-pli-ca-tion/j
 son'' -X POST
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 570--571
+Underfull \hbox (badness 10000) in paragraph at lines 663--664
 \T1/ptm/m/n/10 -d `{``ran-dom_state'': 42, ``held_out_test'': 0.7, ``raw_data_i
 d'': 1}'
  []
 
-[9]
-Underfull \hbox (badness 10000) in paragraph at lines 718--719
+[11]
+Underfull \hbox (badness 10000) in paragraph at lines 811--812
 []\T1/ptm/m/n/10 requests.get(`[][]$http : / / 127 . 0 . 0 . 1 : 8000 / runapp 
 / submissionfold/$[][]`, auth=(`username', `pass-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 738--739
+Underfull \hbox (badness 10000) in paragraph at lines 831--832
 []\T1/ptm/m/n/10 curl -u user-name:password -H ``Content-Type: ap-pli-ca-tion/j
 son'' -X POST -d
  []
 
 
-Underfull \hbox (badness 5741) in paragraph at lines 738--739
+Underfull \hbox (badness 5741) in paragraph at lines 831--832
 \T1/ptm/m/n/10 `{``databoard_s_id'': 1, ``files'': {``clas-si-fier.py'': ``im-p
 ort sklearn..''}, ``train_is'':
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 747--748
+Underfull \hbox (badness 10000) in paragraph at lines 840--841
 []\T1/ptm/m/n/10 requests.post(`[][]$http : / / 127 . 0 . 0 . 1 : 8000 / runapp
  / submissionfold/$[][]`, auth=(`username', `pass-
  []
 
-[10]
-Underfull \hbox (badness 10000) in paragraph at lines 803--803
+[12]
+Underfull \hbox (badness 10000) in paragraph at lines 896--896
 []\T1/ptm/m/it/10 host_url\T1/ptm/m/n/10 , \T1/ptm/m/it/10 user-name\T1/ptm/m/n
 /10 , \T1/ptm/m/it/10 pass-word\T1/ptm/m/n/10 ,
  []
 
-[11]
-Underfull \hbox (badness 10000) in paragraph at lines 1015--1015
+[13]
+Underfull \hbox (badness 10000) in paragraph at lines 1108--1108
 []\T1/ptm/m/it/10 host_url\T1/ptm/m/n/10 , \T1/ptm/m/it/10 user-name\T1/ptm/m/n
 /10 , \T1/ptm/m/it/10 pass-word\T1/ptm/m/n/10 , \T1/ptm/m/it/10 sub_id\T1/ptm/m
 /n/10 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1015--1015
+Underfull \hbox (badness 10000) in paragraph at lines 1108--1108
 \T1/ptm/m/it/10 sub_fold_id\T1/ptm/m/n/10 , \T1/ptm/m/it/10 train_is\T1/ptm/m/n
 /10 , \T1/ptm/m/it/10 test_is\T1/ptm/m/n/10 , \T1/ptm/m/it/10 pri-or-ity='L'\T1
 /ptm/m/n/10 ,
  []
 
-[12] [13] [14
+[14] [15] [16
 
 ]
 Chapter 4.
-[15] [16
+[17] [18
 
-] [17
+] [19
 
 
-] (./datarun.ind [18
+] (./datarun.ind [20
 
 
 ]
@@ -1138,24 +1155,24 @@ Underfull \hbox (badness 10000) in paragraph at lines 19--20
 []\T1/ptm/m/n/10 get_submission_fold_light() (in mod-ule
  []
 
-[19
+[21
 
 ])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1087.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1087.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1180.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1180.
  (./datarun.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1087.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1087.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1180.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1180.
 
 Package rerunfilecheck Info: File `datarun.out' has not changed.
-(rerunfilecheck)             Checksum: 9D89A511175DCD04DD440DC06FCCB565;747.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1087.
+(rerunfilecheck)             Checksum: 68FBAFDD1B2E0C1E0A81786AECB20827;747.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1180.
  ) 
 Here is how much of TeX's memory you used:
- 10156 strings out of 493304
- 141328 string characters out of 6139870
- 245768 words of memory out of 5000000
- 13246 multiletter control sequences out of 15000+600000
+ 10170 strings out of 493304
+ 141536 string characters out of 6139870
+ 245852 words of memory out of 5000000
+ 13252 multiletter control sequences out of 15000+600000
  58555 words of font info for 75 fonts, out of 8000000 for 9000
  958 hyphenation exceptions out of 8191
  36i,11n,45p,510b,579s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1168,10 +1185,10 @@ uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvbo8a.pfb>
 texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-d
 ist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1
 /urw/times/utmri8a.pfb>
-Output written on datarun.pdf (23 pages, 132899 bytes).
+Output written on datarun.pdf (25 pages, 282116 bytes).
 PDF statistics:
- 324 PDF objects out of 1000 (max. 8388607)
- 282 compressed objects within 3 object streams
- 70 named destinations out of 1000 (max. 500000)
- 117 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 347 PDF objects out of 1000 (max. 8388607)
+ 301 compressed objects within 4 object streams
+ 76 named destinations out of 1000 (max. 500000)
+ 122 words of extra memory for PDF output out of 10000 (max. 10000000)
 
