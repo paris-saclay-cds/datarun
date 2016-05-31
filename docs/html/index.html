@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to datarun’s documentation! &mdash; datarun 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="datarun 0.2 documentation" href="#" />
+    <link rel="next" title="How to use datarun?" href="modules/workflow.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-datarun-s-documentation">
+<h1>Welcome to datarun&#8217;s documentation!<a class="headerlink" href="#welcome-to-datarun-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Datarun goal is to train and test machine learning models. It is a REST API written in Django.</p>
+<p>The basic workflow is the following (more details can be found in <a class="reference internal" href="modules/workflow.html#workflow"><span class="std std-ref">How to use datarun?</span></a>):</p>
+<ol class="arabic simple">
+<li>Data (on which machine learning models are trained and tested) are sent to datarun.</li>
+<li>Models and train and test indices of CV fold are send to datarun, which train and test these models on these indices.</li>
+<li>The resulting predictions can then be requested.</li>
+</ol>
+<p>In this documentation, we use the following terminology (which corresponds to the database tables, cf <a class="reference internal" href="modules/models.html#models"><span class="std std-ref">Models</span></a>):</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">RawData</span></code> refers to the data on which machine learning models are trained and tested</li>
+<li><code class="docutils literal"><span class="pre">Submission</span></code> refers to a machine learning model</li>
+<li><code class="docutils literal"><span class="pre">Submission</span> <span class="pre">on</span> <span class="pre">cv</span> <span class="pre">fold</span></code> / <code class="docutils literal"><span class="pre">SubmissionFold</span></code> refers to a submission and the indices of train and test of a cv fold.</li>
+</ul>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/workflow.html">How to use datarun?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/workflow.html#send-data-to-datarun">1- Send data to datarun</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/workflow.html#split-data-into-train-and-test-dataset">2- Split data into train and test dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/workflow.html#send-submission-on-cv-fold-to-be-trained-on-datarun">3- Send submission on cv fold to be trained on datarun</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/workflow.html#get-back-your-predictions">4- Get back your predictions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules/models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/views.html">Requests</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/views.html#module-runapp.views">direct requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/views.html#module-test_files.post_api">post_api module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to datarun&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="modules/workflow.html" title="next chapter">How to use datarun?</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Camille.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="_sources/index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
