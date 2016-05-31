@@ -9,3 +9,13 @@ submission/
 test_data/
 test_submission/
 *.swp
+docs/_build/latex/*.jpg
+docs/_build/latex/*.a*
+docs/_build/latex/*.i*
+docs/_build/latex/*.l*
+docs/_build/latex/*.o*
+docs/_build/latex/*.t*
+docs/_build/latex/*.sty*
+docs/_build/latex/*.c*
+docs/_build/doctrees
+
