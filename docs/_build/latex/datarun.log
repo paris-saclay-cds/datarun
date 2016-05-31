@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.12.21)  31 MAY 2016 16:34
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.12.21)  31 MAY 2016 16:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1025,7 +1025,19 @@ Underfull \hbox (badness 6428) in paragraph at lines 291--292
 s-sion even if its id al-ready ex-ists
  []
 
-[4] [5] [6
+
+Underfull \hbox (badness 10000) in paragraph at lines 295--297
+[]\T1/ptm/b/n/10 Note for databoard users: \T1/ptm/m/n/10 To send a sub-mis-sio
+n on cv fold, you can use the func-tion
+ []
+
+[4]
+Underfull \hbox (badness 10000) in paragraph at lines 321--323
+[]\T1/ptm/b/n/10 Note for databoard users: \T1/ptm/m/n/10 To get back pre-dic-t
+ions, you can use the func-tion
+ []
+
+[5] [6
 
 ]
 Chapter 2.
@@ -1033,32 +1045,32 @@ Chapter 2.
 File: schema_database.jpg Graphic file (type jpg)
 
 <use schema_database.jpg>
-Package pdftex.def Info: schema_database.jpg used on input line 325.
+Package pdftex.def Info: schema_database.jpg used on input line 331.
 (pdftex.def)             Requested size: 880.2866pt x 501.87376pt.
 File: schema_database.jpg Graphic file (type jpg)
  <use schema_database.jpg>
-Package pdftex.def Info: schema_database.jpg used on input line 325.
+Package pdftex.def Info: schema_database.jpg used on input line 331.
 (pdftex.def)             Requested size: 469.755pt x 267.81508pt.
 LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <10> not available
-(Font)              Font shape `T1/pcr/b/n' tried instead on input line 330.
+(Font)              Font shape `T1/pcr/b/n' tried instead on input line 336.
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <10> not available
-(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 333.
+(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 339.
  [7 <./schema_database.jpg>] [8]
 Chapter 3.
 
-Underfull \hbox (badness 10000) in paragraph at lines 456--457
+Underfull \hbox (badness 10000) in paragraph at lines 462--463
 []\T1/ptm/m/n/10 curl -u user-name:password -H ``Content-Type: ap-pli-ca-tion/j
 son'' -X POST -d
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 465--466
+Underfull \hbox (badness 10000) in paragraph at lines 471--472
 []\T1/ptm/m/n/10 requests.post(`[][]$http : / / 127 . 0 . 0 . 1 : 8000 / runapp
  / raw _ data / customsplit/$[][]`, auth=(`username',
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 502--503
+Underfull \hbox (badness 10000) in paragraph at lines 508--509
 []\T1/ptm/m/n/10 curl -u user-name:password -H ``Content-Type: ap-pli-ca-tion/j
 son'' -X POST -d
  []
@@ -1066,68 +1078,68 @@ son'' -X POST -d
 [9
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 550--551
+Underfull \hbox (badness 10000) in paragraph at lines 556--557
 []\T1/ptm/m/n/10 curl -u user-name:password -H ``Content-Type: ap-pli-ca-tion/j
 son'' -X POST -d
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 634--635
+Underfull \hbox (badness 10000) in paragraph at lines 640--641
 []\T1/ptm/m/n/10 requests.post(`[][]$http : / / 127 . 0 . 0 . 1 : 8000 / runapp
  / rawdata/$[][]`, auth=(`username', `pass-word'),
  []
 
 [10]
-Underfull \hbox (badness 10000) in paragraph at lines 663--664
+Underfull \hbox (badness 10000) in paragraph at lines 669--670
 []\T1/ptm/m/n/10 curl -u user-name:password -H ``Content-Type: ap-pli-ca-tion/j
 son'' -X POST
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 663--664
+Underfull \hbox (badness 10000) in paragraph at lines 669--670
 \T1/ptm/m/n/10 -d `{``ran-dom_state'': 42, ``held_out_test'': 0.7, ``raw_data_i
 d'': 1}'
  []
 
 [11]
-Underfull \hbox (badness 10000) in paragraph at lines 811--812
+Underfull \hbox (badness 10000) in paragraph at lines 817--818
 []\T1/ptm/m/n/10 requests.get(`[][]$http : / / 127 . 0 . 0 . 1 : 8000 / runapp 
 / submissionfold/$[][]`, auth=(`username', `pass-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 831--832
+Underfull \hbox (badness 10000) in paragraph at lines 837--838
 []\T1/ptm/m/n/10 curl -u user-name:password -H ``Content-Type: ap-pli-ca-tion/j
 son'' -X POST -d
  []
 
 
-Underfull \hbox (badness 5741) in paragraph at lines 831--832
+Underfull \hbox (badness 5741) in paragraph at lines 837--838
 \T1/ptm/m/n/10 `{``databoard_s_id'': 1, ``files'': {``clas-si-fier.py'': ``im-p
 ort sklearn..''}, ``train_is'':
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 840--841
+Underfull \hbox (badness 10000) in paragraph at lines 846--847
 []\T1/ptm/m/n/10 requests.post(`[][]$http : / / 127 . 0 . 0 . 1 : 8000 / runapp
  / submissionfold/$[][]`, auth=(`username', `pass-
  []
 
 [12]
-Underfull \hbox (badness 10000) in paragraph at lines 896--896
+Underfull \hbox (badness 10000) in paragraph at lines 902--902
 []\T1/ptm/m/it/10 host_url\T1/ptm/m/n/10 , \T1/ptm/m/it/10 user-name\T1/ptm/m/n
 /10 , \T1/ptm/m/it/10 pass-word\T1/ptm/m/n/10 ,
  []
 
 [13]
-Underfull \hbox (badness 10000) in paragraph at lines 1108--1108
+Underfull \hbox (badness 10000) in paragraph at lines 1114--1114
 []\T1/ptm/m/it/10 host_url\T1/ptm/m/n/10 , \T1/ptm/m/it/10 user-name\T1/ptm/m/n
 /10 , \T1/ptm/m/it/10 pass-word\T1/ptm/m/n/10 , \T1/ptm/m/it/10 sub_id\T1/ptm/m
 /n/10 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1108--1108
+Underfull \hbox (badness 10000) in paragraph at lines 1114--1114
 \T1/ptm/m/it/10 sub_fold_id\T1/ptm/m/n/10 , \T1/ptm/m/it/10 train_is\T1/ptm/m/n
 /10 , \T1/ptm/m/it/10 test_is\T1/ptm/m/n/10 , \T1/ptm/m/it/10 pri-or-ity='L'\T1
 /ptm/m/n/10 ,
@@ -1158,15 +1170,15 @@ Underfull \hbox (badness 10000) in paragraph at lines 19--20
 [21
 
 ])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1180.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1180.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1186.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1186.
  (./datarun.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1180.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1180.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1186.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1186.
 
 Package rerunfilecheck Info: File `datarun.out' has not changed.
 (rerunfilecheck)             Checksum: 68FBAFDD1B2E0C1E0A81786AECB20827;747.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1180.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1186.
  ) 
 Here is how much of TeX's memory you used:
  10170 strings out of 493304
@@ -1185,7 +1197,7 @@ uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvbo8a.pfb>
 texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-d
 ist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1
 /urw/times/utmri8a.pfb>
-Output written on datarun.pdf (25 pages, 282116 bytes).
+Output written on datarun.pdf (25 pages, 282603 bytes).
 PDF statistics:
  347 PDF objects out of 1000 (max. 8388607)
  301 compressed objects within 4 object streams

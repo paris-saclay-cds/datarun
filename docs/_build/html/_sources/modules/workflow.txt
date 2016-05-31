@@ -83,6 +83,11 @@ If the associated submission files have not been sent, you need to add:
 * the list of submission files  
 * an indication that you want to force resending the submission even if its id already exists (``force="submission"`` instead of ``force=None``).
 
+
+**Note for databoard users:**
+To send a submission on cv fold, you can use the function ``train_test_submissions_datarun`` of ``databoard/db_tools.py`` (which uses functions from the module test_files.post_api of datarun).
+
+
 4- Get back your predictions
 ----------------------------
 
@@ -96,3 +101,7 @@ If you want to get predictions given a list of submission on cv fold ids, you ca
 
 * a post request to ``<master-host>/runapp/testpredictions/list/`` (cf :ref:`requestsDirect`, class runapp.views.GetTestPredictionList)
 * the ``get_prediction_list`` function in the module test_files.post_api (cf :ref:`requestsModule`)
+
+
+**Note for databoard users:**
+To get back predictions, you can use the function ``get_trained_tested_submissions_datarun`` of ``databoard/db_tools.py`` (which uses functions from the module test_files.post_api of datarun).

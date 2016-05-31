@@ -108,6 +108,8 @@ To send data to datarun and to split data into train and test dataset, you can u
 <li>the list of submission files</li>
 <li>an indication that you want to force resending the submission even if its id already exists (<code class="docutils literal"><span class="pre">force=&quot;submission&quot;</span></code> instead of <code class="docutils literal"><span class="pre">force=None</span></code>).</li>
 </ul>
+<p><strong>Note for databoard users:</strong>
+To send a submission on cv fold, you can use the function <code class="docutils literal"><span class="pre">train_test_submissions_datarun</span></code> of <code class="docutils literal"><span class="pre">databoard/db_tools.py</span></code> (which uses functions from the module test_files.post_api of datarun).</p>
 </div>
 <div class="section" id="get-back-your-predictions">
 <h2>4- Get back your predictions<a class="headerlink" href="#get-back-your-predictions" title="Permalink to this headline">¶</a></h2>
@@ -121,6 +123,8 @@ To send data to datarun and to split data into train and test dataset, you can u
 <li>a post request to <code class="docutils literal"><span class="pre">&lt;master-host&gt;/runapp/testpredictions/list/</span></code> (cf <a class="reference internal" href="views.html#requestsdirect"><span class="std std-ref">direct requests</span></a>, class runapp.views.GetTestPredictionList)</li>
 <li>the <code class="docutils literal"><span class="pre">get_prediction_list</span></code> function in the module test_files.post_api (cf <a class="reference internal" href="views.html#requestsmodule"><span class="std std-ref">post_api module</span></a>)</li>
 </ul>
+<p><strong>Note for databoard users:</strong>
+To get back predictions, you can use the function <code class="docutils literal"><span class="pre">get_trained_tested_submissions_datarun</span></code> of <code class="docutils literal"><span class="pre">databoard/db_tools.py</span></code> (which uses functions from the module test_files.post_api of datarun).</p>
 </div>
 </div>
 

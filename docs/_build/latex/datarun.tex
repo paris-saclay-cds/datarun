@@ -292,6 +292,9 @@ an indication that you want to force resending the submission even if its id alr
 
 \end{itemize}
 
+\textbf{Note for databoard users:}
+To send a submission on cv fold, you can use the function \code{train\_test\_submissions\_datarun} of \code{databoard/db\_tools.py} (which uses functions from the module test\_files.post\_api of datarun).
+
 
 \section{4- Get back your predictions}
 \label{modules/workflow:get-back-your-predictions}
@@ -314,6 +317,9 @@ a post request to \code{\textless{}master-host\textgreater{}/runapp/testpredicti
 the \code{get\_prediction\_list} function in the module test\_files.post\_api (cf {\hyperref[modules/views:requestsmodule]{\crossref{\DUrole{std,std-ref}{post\_api module}}}})
 
 \end{itemize}
+
+\textbf{Note for databoard users:}
+To get back predictions, you can use the function \code{get\_trained\_tested\_submissions\_datarun} of \code{databoard/db\_tools.py} (which uses functions from the module test\_files.post\_api of datarun).
 
 
 \chapter{Models}
