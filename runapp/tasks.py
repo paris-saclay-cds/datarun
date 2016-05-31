@@ -12,12 +12,13 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 # os.environ['DJANGO_SETTINGS_MODULE'] = 'datarun.settings'
 # from django.conf import settings
-list_path = os.environ.get('DIR_SUBMISSION').split('/')
-if '' == list_path[-1]:
+for vv in ['DIR_SUBMISSION', 'DIR_DATA']:
+    list_path = os.environ.get(vv).split('/')
+    if '' == list_path[-1]:
+        list_path = list_path[0:-1]
     list_path = list_path[0:-1]
-list_path = list_path[0:-1]
-dir_module = '/'.join(list_path)
-sys.path.insert(0, dir_module)
+    dir_module = '/'.join(list_path)
+    sys.path.insert(0, dir_module)
 
 logger = get_task_logger(__name__)
 
@@ -45,6 +46,20 @@ def cpu_time_resource():
 def memory_usage_resource():
     mem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024.
     return mem
+
+
+def get_path_module(path_file):
+    '''
+    Convert path to module path.
+    It checks if trailing slash or double slash, and remove them
+    '''
+    if path_file[-1] == '/':
+        path_file = path_file[0:-1]
+    module_path = '/'.join(path_file.
+                           replace('//', '/').
+                           split('/')[-2::])
+    module_path = module_path.replace('/', '.')
+    return module_path
 
 
 @shared_task
@@ -90,7 +105,7 @@ def task_save_submission_fold_db():
                 log_message, submission_fold_state, metrics,\
                     full_train_predictions, test_predictions = task.result
                 # if 'ERROR' not in log_message and 'error' not in log_message:
-                save_submission_fold_db(submission_fold, log_message
+                save_submission_fold_db(submission_fold, log_message,
                                         submission_fold_state,
                                         metrics, full_train_predictions,
                                         test_predictions)
@@ -124,9 +139,27 @@ def prepare_data(raw_filename, held_out_test_size, train_filename,
 
 
 @shared_task
+def custom_prepare_data(raw_data_files_path):
+    '''
+    Split dataset in train and test datasets FOR CUSTOM DATASET (when a specific
+    was submitted with the data)
+
+    :param raw_data_path: path where raw data and specific.py are saved
+
+    :type raw_data_path: string
+    '''
+    try:
+        raw_data_module_path = get_path_module(raw_data_files_path)
+        specific = import_module('.specific', raw_data_module_path)
+        specific.prepare_data(raw_data_files_path)
+    except Exception as e:
+        raise e
+
+
+@shared_task
 def train_test_submission_fold(raw_data_files_path, workflow_elements,
                                raw_data_target_column, submission_files_path,
-                               train_is):
+                               train_is, hash_submission_files):
     '''
     Train and test a submission on a fold
 
@@ -136,34 +169,45 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
     :param submission_files_path: path of the submission files
     :param train_is: indices of train dataset for this fold (compressed and
     base64 encoded)
+    :param hash_submission_files: checksum of submission files
 
     :type raw_data_files_path: string
     :type workflow_elements: string
     :type raw_data_target_column: string
     :type submission_files_path: string
     :type train_is: string
+    :type hash_submission_files: string
     '''
     log_message = ''
     try:
-        X_train, y_train = read_data(raw_data_files_path + '/train.csv',
-                                     raw_data_target_column)
-        X_test, y_test = read_data(raw_data_files_path + '/test.csv',
-                                   raw_data_target_column)
-    except:
-        log_message = log_message + 'ERROR(split data) \n'
+        if os.path.isfile(raw_data_files_path + '/specific.py'):
+            raw_data_module_path = get_path_module(raw_data_files_path)
+            specific = import_module('.specific', raw_data_module_path)
+            X_train, y_train = specific.get_train_data(raw_data_files_path)
+            X_test, y_test = specific.get_test_data(raw_data_files_path)
+        else:
+            X_train, y_train = read_data(raw_data_files_path + '/train.csv',
+                                         raw_data_target_column)
+            X_test, y_test = read_data(raw_data_files_path + '/test.csv',
+                                       raw_data_target_column)
+    except Exception as e:
+        log_message = log_message + _make_error_message(e)\
+            + 'ERROR(split data) \n'
         return log_message, 'TODO', {}, None, None
     # get workflow elements
     list_workflow_elements = workflow_elements.split(',')
+    list_workflow_elements = [ww.strip() for ww in list_workflow_elements]
     # train submission on fold
     trained_model, log_train, submission_fold_state, metrics,\
         full_train_predictions = \
-        train_submission_fold(submission_files_path, train_is,
-                              X_train, y_train, list_workflow_elements)
+        train_submission_fold(raw_data_files_path, submission_files_path,
+                              train_is, X_train, y_train,
+                              list_workflow_elements)
     log_message = log_message + '\n' + log_train
     if 'ERROR' not in submission_fold_state:
         log_test, submission_fold_state, metrics_test, test_predictions = \
-            test_submission_fold(trained_model, X_test, y_test,
-                                 list_workflow_elements)
+            test_submission_fold(raw_data_files_path, trained_model,
+                                 X_test, y_test, list_workflow_elements)
         metrics.update(metrics_test)
         log_message = log_message + '\n' + log_test
         metrics['train_memory'] = memory_usage_resource()
@@ -175,8 +219,9 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
         full_train_predictions, test_predictions
 
 
-def train_submission_fold(submission_files_path, train_is, X_train,
-                          y_train, list_workflow_elements):
+def train_submission_fold(raw_data_files_path, submission_files_path,
+                          train_is, X_train, y_train,
+                          list_workflow_elements):
     module_path = '/'.join(submission_files_path.replace('//', '/').
                            split('/')[-2::])
     module_path = module_path.replace('/', '.')
@@ -188,8 +233,16 @@ def train_submission_fold(submission_files_path, train_is, X_train,
     start = timeit.default_timer()
     start_cpu = cpu_time_resource()
     try:
-        trained_submission = train_model(module_path, list_workflow_elements,
-                                         X_train, y_train, train_is)
+        # TODO add here if specific.py
+        if os.path.isfile(raw_data_files_path + '/specific.py'):
+            raw_data_module_path = get_path_module(raw_data_files_path)
+            specific = import_module('.specific', raw_data_module_path)
+            trained_submission = specific.train_submission(module_path, X_train,
+                                                           y_train, train_is)
+        else:
+            trained_submission = train_model(module_path,
+                                             list_workflow_elements,
+                                             X_train, y_train, train_is)
         submission_fold_state = 'TRAINED'
     except Exception, e:
         submission_fold_state = 'ERROR'
@@ -202,8 +255,15 @@ def train_submission_fold(submission_files_path, train_is, X_train,
     # Validation
     start = timeit.default_timer()
     try:
-        predictions = test_model(trained_submission, list_workflow_elements,
-                                 X_train, range(len(y_train)))
+        # TODO add here if specific.py
+        if os.path.isfile(raw_data_files_path + '/specific.py'):
+            raw_data_module_path = get_path_module(raw_data_files_path)
+            specific = import_module('.specific', raw_data_module_path)
+            predictions = specific.test_submission(trained_submission, X_train,
+                                                   range(len(y_train)))
+        else:
+            predictions = test_model(trained_submission, list_workflow_elements,
+                                     X_train, range(len(y_train)))
         if len(predictions) == len(y_train):
             predictions = base64.b64encode(zlib.compress(
                 predictions.tostring()))
@@ -228,15 +288,22 @@ def train_submission_fold(submission_files_path, train_is, X_train,
         metrics, full_train_predictions
 
 
-def test_submission_fold(trained_submission, X_test, y_test,
-                         list_workflow_elements):
+def test_submission_fold(raw_data_files_path, trained_submission,
+                         X_test, y_test, list_workflow_elements):
     log_message = ''
     metrics = {}
     start = timeit.default_timer()
     start_cpu = cpu_time_resource()
     try:
-        predictions = test_model(trained_submission, list_workflow_elements,
-                                 X_test, range(len(y_test)))
+        # TODO add here if specific.py
+        if os.path.isfile(raw_data_files_path + '/specific.py'):
+            raw_data_module_path = get_path_module(raw_data_files_path)
+            specific = import_module('.specific', raw_data_module_path)
+            predictions = specific.test_submission(trained_submission, X_test,
+                                                   range(len(y_test)))
+        else:
+            predictions = test_model(trained_submission, list_workflow_elements,
+                                     X_test, range(len(y_test)))
         if len(predictions) == len(y_test):
             test_predictions = base64.b64encode(zlib.compress(
                 predictions.tostring()))
@@ -261,8 +328,12 @@ def test_submission_fold(trained_submission, X_test, y_test,
 
 
 def train_model(module_path, list_workflow_elements, X, y, train_is):
-    X_train = X.iloc[train_is]
-    y_train = y.iloc[train_is]
+    if type(X) == pd.core.frame.DataFrame:
+        X_train = X.iloc[train_is]
+        y_train = y.iloc[train_is]
+    else:
+        X_train = [X[i] for i in train_is]
+        y_train = np.array([y[i] for i in train_is])
     nb_applied_elements = 0
     # it is assimed here that feature extractor takes as input pd.dataframe
     # and output np.array
@@ -321,8 +392,11 @@ def train_model(module_path, list_workflow_elements, X, y, train_is):
 
 
 def test_model(trained_model, list_workflow_elements,  X, test_is):
-    X_test = X.iloc[test_is]
-    if 'feature_extraction' in list_workflow_elements:
+    if type(X) == pd.core.frame.DataFrame:
+        X_test = X.iloc[test_is]
+    else:
+        X_test = [X[i] for i in test_is]
+    if 'feature_extractor' in list_workflow_elements:
         fe = trained_model[0]
         X_test = fe.transform(X_test)
     else:

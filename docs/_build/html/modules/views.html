@@ -41,7 +41,44 @@
 <h1>Requests<a class="headerlink" href="#requests" title="Permalink to this headline">¶</a></h1>
 <p>You can either make direct requests to the datarun API, or use the post_api function.</p>
 <div class="section" id="module-runapp.views">
-<span id="direct-requests"></span><h2>Direct requests<a class="headerlink" href="#module-runapp.views" title="Permalink to this headline">¶</a></h2>
+<span id="direct-requests"></span><span id="requestsdirect"></span><h2>direct requests<a class="headerlink" href="#module-runapp.views" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="runapp.views.CustomSplitTrainTest">
+<em class="property">class </em><code class="descclassname">runapp.views.</code><code class="descname">CustomSplitTrainTest</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.CustomSplitTrainTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split data set into train and test datasets for custom dataset
+(when a specific.py was submitted along with raw data</p>
+<dl class="method">
+<dt id="runapp.views.CustomSplitTrainTest.post">
+<code class="descname">post</code><span class="sig-paren">(</span><em>request</em>, <em>format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.CustomSplitTrainTest.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split raw data into train and test datasets for custom dataset</p>
+<ul>
+<li><p class="first">Example with curl (on localhost):</p>
+<blockquote>
+<div><p>curl -u username:password -H &#8220;Content-Type: application/json&#8221;            -X POST            -d &#8216;{&#8220;raw_data_id&#8221;: 1}&#8217;                http://127.0.0.1:8000/runapp/rawdata/customsplit/</p>
+<p>Don&#8217;t forget double quotes for the json, simple quotes do not work</p>
+</div></blockquote>
+</li>
+<li><p class="first">Example with the python package requests (on localhost):</p>
+<blockquote>
+<div><p>requests.post(&#8216;<a class="reference external" href="http://127.0.0.1:8000/runapp/raw_data/customsplit/">http://127.0.0.1:8000/runapp/raw_data/customsplit/</a>&#8216;,                          auth=(&#8216;username&#8217;, &#8216;password&#8217;),                          json={&#8216;raw_data_id&#8217;: 1})</p>
+</div></blockquote>
+</li>
+</ul>
+<p>&#8212;
+parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li>name: raw_data_id
+description: id of the raw dataset
+required: true
+type: integer
+paramType: form</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="class">
 <dt id="runapp.views.GetTestPredictionList">
 <em class="property">class </em><code class="descclassname">runapp.views.</code><code class="descname">GetTestPredictionList</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.GetTestPredictionList" title="Permalink to this definition">¶</a></dt>
@@ -49,8 +86,7 @@
 <dl class="method">
 <dt id="runapp.views.GetTestPredictionList.post">
 <code class="descname">post</code><span class="sig-paren">(</span><em>request</em>, <em>format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.GetTestPredictionList.post" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve predictions (on the test data set) of SubmissionFold instances
-among a list of id that have been trained and tested</p>
+<dd><p>Retrieve predictions (on the test data set) of SubmissionFold instances        among a list of id that have been trained and tested</p>
 <ul>
 <li><p class="first">Example with curl (on localhost):</p>
 <blockquote>
@@ -141,16 +177,17 @@ response_serializer: RawDataSerializer</p>
 <dt id="runapp.views.RawDataList.post">
 <code class="descname">post</code><span class="sig-paren">(</span><em>request</em>, <em>format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.RawDataList.post" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new dataset</p>
+<p>You have to post the name of the dataset, the target column,        the workflow elements, and the raw data file. If your data file does        not match the format expected by datarun (a csv with a first row            containing the feature and target column name, and then a row for            each sample), you can submit a python file containing three            functions: prepare_data(data_path), get_train_data(data_path),            and get_test_data(data_path)</p>
 <ul>
 <li><p class="first">Example with curl (on localhost):</p>
 <blockquote>
-<div><p>curl -u username:password   -H &#8220;Content-Type: application/json&#8221;            -X POST            -d &#8216;{&#8220;name&#8221;: &#8220;iris&#8221;, &#8220;target_column&#8221;: &#8220;species&#8221;,                 &#8220;workflow_elements&#8221;: &#8220;classifier&#8221;,                 &#8220;files&#8221;: {&#8220;iris.csv&#8221;: &#8216;blablabla&#8217;}}&#8217;                http://127.0.0.1:8000/runapp/rawdata/</p>
+<div><p>curl -u username:password   -H &#8220;Content-Type: application/json&#8221;            -X POST            -d &#8216;{&#8220;name&#8221;: &#8220;iris&#8221;, &#8220;target_column&#8221;: &#8220;species&#8221;,                 &#8220;workflow_elements&#8221;: &#8220;classifier&#8221;,                &#8220;files&#8221;: {&#8220;iris.csv&#8221;: &#8216;blablabla&#8217;, &#8216;specific.py&#8217;: &#8216;bli&#8217;}}&#8217;                http://127.0.0.1:8000/runapp/rawdata/</p>
 <p>Don&#8217;t forget double quotes for the json, simple quotes don&#8217;t work.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Example with the python package requests (on localhost):</p>
 <blockquote>
-<div><p>requests.post(&#8216;<a class="reference external" href="http://127.0.0.1:8000/runapp/rawdata/">http://127.0.0.1:8000/runapp/rawdata/</a>&#8216;,                          auth=(&#8216;username&#8217;, &#8216;password&#8217;),                          json={&#8216;name&#8217;: &#8216;iris&#8217;, &#8216;target_column&#8217;: &#8216;species&#8217;,                                 &#8216;workflow_elements&#8217;: &#8216;classifier&#8217;,                                 &#8216;files&#8217;: {&#8216;iris.csv&#8217;: &#8216;blablabla&#8217;}})</p>
+<div><p>requests.post(&#8216;<a class="reference external" href="http://127.0.0.1:8000/runapp/rawdata/">http://127.0.0.1:8000/runapp/rawdata/</a>&#8216;,                          auth=(&#8216;username&#8217;, &#8216;password&#8217;),                          json={&#8216;name&#8217;: &#8216;iris&#8217;, &#8216;target_column&#8217;: &#8216;species&#8217;,                                 &#8216;workflow_elements&#8217;: &#8216;classifier&#8217;,                        &#8216;files&#8217;: {&#8216;iris.csv&#8217;: &#8216;bla&#8217;, &#8216;specific.py&#8217;: &#8216;bli&#8217;}})</p>
 </div></blockquote>
 </li>
 </ul>
@@ -164,19 +201,15 @@ response_serializer: RawDataSerializer</p>
 <dl class="class">
 <dt id="runapp.views.SplitTrainTest">
 <em class="property">class </em><code class="descclassname">runapp.views.</code><code class="descname">SplitTrainTest</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.SplitTrainTest" title="Permalink to this definition">¶</a></dt>
-<dd><p>Split data set into train and test datasets</p>
+<dd><p>Split data set into train and test datasets for normal dataset</p>
 <dl class="method">
 <dt id="runapp.views.SplitTrainTest.post">
 <code class="descname">post</code><span class="sig-paren">(</span><em>request</em>, <em>format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.SplitTrainTest.post" title="Permalink to this definition">¶</a></dt>
-<dd><p>Split raw data into train and test datasets</p>
+<dd><p>Split raw data into train and test datasets for normal dataset</p>
 <ul>
 <li><p class="first">Example with curl (on localhost):</p>
 <blockquote>
-<div><dl class="docutils">
-<dt>curl -u username:password -H &#8220;Content-Type: application/json&#8221;            -X POST            -d &#8216;{&#8220;random_state&#8221;: 42, &#8220;held_out_test&#8221;: 0.7, &#8220;raw_data_id&#8221;: 1}&#8217;</dt>
-<dd><p class="first last"><a class="reference external" href="http://127.0.0.1:8000/runapp/rawdata/split/">http://127.0.0.1:8000/runapp/rawdata/split/</a></p>
-</dd>
-</dl>
+<div><p>curl -u username:password -H &#8220;Content-Type: application/json&#8221;            -X POST            -d &#8216;{&#8220;random_state&#8221;: 42, &#8220;held_out_test&#8221;: 0.7, &#8220;raw_data_id&#8221;: 1}&#8217;                http://127.0.0.1:8000/runapp/rawdata/split/</p>
 <p>Don&#8217;t forget double quotes for the json, simple quotes do not work</p>
 </div></blockquote>
 </li>
@@ -300,7 +333,7 @@ response_serializer: SubmissionFoldSerializer</p>
 <dl class="method">
 <dt id="runapp.views.SubmissionFoldList.post">
 <code class="descname">post</code><span class="sig-paren">(</span><em>request</em>, <em>format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.SubmissionFoldList.post" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a submission on CV fold (and if necessary the associated        submission</p>
+<dd><p>Create a submission on CV fold (and if necessary the associated        submission)</p>
 <ul>
 <li><p class="first">Example with curl (on localhost):</p>
 <blockquote>
@@ -314,6 +347,7 @@ response_serializer: SubmissionFoldSerializer</p>
 </div></blockquote>
 </li>
 </ul>
+<p>Possible to force the submission and submission on CV fold (even if the        ids already exist) by adding to the data dictionary         &#8220;force&#8221;: &#8216;submission, submission_fold&#8217; to resubmit both, or         &#8220;force&#8221;: &#8216;submission_fold&#8217; to resubmit only the submission on CV fold</p>
 <p>&#8212;
 request_serializer: SubmissionFoldSerializer
 response_serializer: SubmissionFoldSerializer</p>
@@ -329,7 +363,28 @@ response_serializer: SubmissionFoldSerializer</p>
 
 </div>
 <div class="section" id="module-test_files.post_api">
-<span id="post-api-module"></span><h2>post_api module<a class="headerlink" href="#module-test_files.post_api" title="Permalink to this headline">¶</a></h2>
+<span id="post-api-module"></span><span id="requestsmodule"></span><h2>post_api module<a class="headerlink" href="#module-test_files.post_api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="test_files.post_api.custom_post_split">
+<code class="descclassname">test_files.post_api.</code><code class="descname">custom_post_split</code><span class="sig-paren">(</span><em>host_url</em>, <em>username</em>, <em>password</em>, <em>raw_data_id</em><span class="sig-paren">)</span><a class="headerlink" href="#test_files.post_api.custom_post_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>To split data between train and test on datarun using a specific
+prepare_data function sent by databoard</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>host_url</strong> (<em>string</em>) &#8211; api host url, such as <a class="reference external" href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> (localhost)</li>
+<li><strong>username</strong> (<em>string</em>) &#8211; username to be used for authentication</li>
+<li><strong>password</strong> (<em>string</em>) &#8211; password to be used for authentication</li>
+<li><strong>raw_data_id</strong> (<em>integer</em>) &#8211; id of the raw dataset on datarun</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="function">
 <dt id="test_files.post_api.get_prediction_list">
 <code class="descclassname">test_files.post_api.</code><code class="descname">get_prediction_list</code><span class="sig-paren">(</span><em>host_url</em>, <em>username</em>, <em>password</em>, <em>list_submission_fold_id</em><span class="sig-paren">)</span><a class="headerlink" href="#test_files.post_api.get_prediction_list" title="Permalink to this definition">¶</a></dt>
@@ -450,7 +505,7 @@ response_serializer: SubmissionFoldSerializer</p>
 
 <dl class="function">
 <dt id="test_files.post_api.post_data">
-<code class="descclassname">test_files.post_api.</code><code class="descname">post_data</code><span class="sig-paren">(</span><em>host_url</em>, <em>username</em>, <em>password</em>, <em>data_name</em>, <em>target_column</em>, <em>workflow_elements</em>, <em>data_file</em><span class="sig-paren">)</span><a class="headerlink" href="#test_files.post_api.post_data" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">test_files.post_api.</code><code class="descname">post_data</code><span class="sig-paren">(</span><em>host_url</em>, <em>username</em>, <em>password</em>, <em>data_name</em>, <em>target_column</em>, <em>workflow_elements</em>, <em>data_file</em>, <em>extra_files=None</em><span class="sig-paren">)</span><a class="headerlink" href="#test_files.post_api.post_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>To post data to the datarun api.    Data are compressed (with zlib) and base64-encoded before being posted.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -463,7 +518,30 @@ response_serializer: SubmissionFoldSerializer</p>
 <li><strong>data_name</strong> (<em>string</em>) &#8211; name of the raw dataset</li>
 <li><strong>target_column</strong> (<em>string</em>) &#8211; name of the target column</li>
 <li><strong>workflow_elements</strong> (<em>string</em>) &#8211; workflow elements associated with this dataset,    e.g., feature_extractor, classifier</li>
-<li><strong>data_file</strong> (<em>string</em>) &#8211; name with absolute of the dataset file</li>
+<li><strong>data_file</strong> (<em>string</em>) &#8211; name with absolute path of the dataset file</li>
+<li><strong>extra_files</strong> (<em>list of string</em>) &#8211; list of names with absolute path of extra files        (such as a specific.py)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="test_files.post_api.post_split">
+<code class="descclassname">test_files.post_api.</code><code class="descname">post_split</code><span class="sig-paren">(</span><em>host_url</em>, <em>username</em>, <em>password</em>, <em>held_out_test</em>, <em>raw_data_id</em>, <em>random_state=42</em><span class="sig-paren">)</span><a class="headerlink" href="#test_files.post_api.post_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>To split data between train and test on datarun</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>host_url</strong> (<em>string</em>) &#8211; api host url, such as <a class="reference external" href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> (localhost)</li>
+<li><strong>username</strong> (<em>string</em>) &#8211; username to be used for authentication</li>
+<li><strong>password</strong> (<em>string</em>) &#8211; password to be used for authentication</li>
+<li><strong>held_out_test</strong> (<em>float (between 0 and 1)</em>) &#8211; ratio of data for the test set</li>
+<li><strong>raw_data_id</strong> (<em>integer</em>) &#8211; id of the raw dataset on datarun</li>
+<li><strong>random_state</strong> (<em>integer</em>) &#8211; random state to be used in the shuffle split</li>
 </ul>
 </td>
 </tr>
@@ -473,7 +551,7 @@ response_serializer: SubmissionFoldSerializer</p>
 
 <dl class="function">
 <dt id="test_files.post_api.post_submission_fold">
-<code class="descclassname">test_files.post_api.</code><code class="descname">post_submission_fold</code><span class="sig-paren">(</span><em>host_url</em>, <em>username</em>, <em>password</em>, <em>sub_id</em>, <em>sub_fold_id</em>, <em>train_is</em>, <em>test_is</em>, <em>priority='L'</em>, <em>raw_data_id=None</em>, <em>list_submission_files=None</em><span class="sig-paren">)</span><a class="headerlink" href="#test_files.post_api.post_submission_fold" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">test_files.post_api.</code><code class="descname">post_submission_fold</code><span class="sig-paren">(</span><em>host_url</em>, <em>username</em>, <em>password</em>, <em>sub_id</em>, <em>sub_fold_id</em>, <em>train_is</em>, <em>test_is</em>, <em>priority='L'</em>, <em>raw_data_id=None</em>, <em>list_submission_files=None</em>, <em>force=None</em><span class="sig-paren">)</span><a class="headerlink" href="#test_files.post_api.post_submission_fold" title="Permalink to this definition">¶</a></dt>
 <dd><p>To post submission on cv fold and submission (if not already posted).    Submission files are compressed (with zlib) and base64-encoded before being    posted.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -488,6 +566,9 @@ response_serializer: SubmissionFoldSerializer</p>
 <li><strong>train_is</strong> (<em>numpy array</em>) &#8211; train indices for the cv fold</li>
 <li><strong>test_is</strong> (<em>numpy array</em>) &#8211; test indices for the cv fold</li>
 <li><strong>priority</strong> (<em>string</em>) &#8211; priority level to train test the model: L for low    and H for high</li>
+<li><strong>raw_data_id</strong> (<em>integer</em>) &#8211; id of the associated data, when submitting a submission</li>
+<li><strong>list_submission_files</strong> (<em>list</em>) &#8211; list of files of the submission,        when submitting a submission</li>
+<li><strong>force</strong> (<em>string</em>) &#8211; to force the submission even if ids already exist        force can be &#8216;submission, submission_fold&#8217; to resubmit both        or &#8216;submission, submission_fold&#8217; to resubmit only the submission        on cv fold. None by default.</li>
 </ul>
 </td>
 </tr>
@@ -507,7 +588,7 @@ response_serializer: SubmissionFoldSerializer</p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Requests</a><ul>
-<li><a class="reference internal" href="#module-runapp.views">Direct requests</a></li>
+<li><a class="reference internal" href="#module-runapp.views">direct requests</a></li>
 <li><a class="reference internal" href="#module-test_files.post_api">post_api module</a></li>
 </ul>
 </li>

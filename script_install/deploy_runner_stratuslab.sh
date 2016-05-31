@@ -11,7 +11,8 @@ export LANGUAGE=en_US.UTF-8
 sudo apt-get -y update 
 sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install python-pip
-sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install python-numpy python-scipy python-pandas
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install python-numpy python-scipy 
+sudo pip install pandas
 sudo pip install scikit-learn
 
 # Mount SienceFS disk
