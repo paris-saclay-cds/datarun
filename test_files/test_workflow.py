@@ -44,7 +44,7 @@ dict_param2 = {
     'extra_files': None,
     'n_samples': 506,
     'n_pred': 1,
-    'held_out_test': 0.5,
+    'held_out_test': 0.2,
     'target_column': 'medv',
     'workflow_elements': 'regressor',
     'submission_id': 2,
@@ -76,9 +76,9 @@ dict_param3 = {
 
 # list_dict_param = [dict_param1, dict_param2, dict_param3]
 # list_dict_param = [dict_param1, dict_param2]
-list_dict_param = [dict_param1]
-time_sleep_split = 48  # 448# number of sec to wait after sending the split task
-time_sleep_train = 228  # 428# number of sec to wait after sending the split task
+list_dict_param = [dict_param2]
+time_sleep_split = 58  # number of sec to wait after sending the split task
+time_sleep_train = 228  # number of sec to wait after sending the split task
 
 for dict_param in list_dict_param:
 
@@ -131,7 +131,7 @@ for dict_param in list_dict_param:
 
     # Send submission and fold 1
     priority = 'L'
-    skf = cross_validation.ShuffleSplit(int(np.round(n_samples *
+    skf = cross_validation.ShuffleSplit(int(np.floor(n_samples *
                                                      (1 - held_out_test))),
                                         random_state=42)
     train_is1, test_is1 = list(skf)[0]
@@ -170,7 +170,7 @@ for dict_param in list_dict_param:
                                              [submission_fold_id1])
     pred = json.loads(post_pred.content)[0]['test_predictions']
     pred = np.fromstring(zlib.decompress(base64.b64decode(pred)), dtype=float)
-    pred = pred.reshape(int(np.round(n_samples * held_out_test)), n_pred)
+    pred = pred.reshape(int(np.ceil(n_samples * held_out_test)), n_pred)
 
     # Compute locally predictions of fold 1 with original submission file
     os.mkdir(temp_data_name)
@@ -207,7 +207,7 @@ for dict_param in list_dict_param:
     test_pred = train_test_local[4]
     test_pred = np.fromstring(zlib.decompress(base64.b64decode(test_pred)),
                               dtype=float)
-    test_pred = test_pred.reshape(int(np.round(n_samples * held_out_test)),
+    test_pred = test_pred.reshape(int(np.ceil(n_samples * held_out_test)),
                                   n_pred)
     os.system('rm -rf sub')
     os.system('rm -rf ' + temp_data_name)
@@ -243,7 +243,7 @@ for dict_param in list_dict_param:
         pred3 = json.loads(post_pred3.content)[0]['test_predictions']
         pred3 = np.fromstring(zlib.decompress(base64.b64decode(pred3)),
                               dtype=float)
-        pred3 = pred3.reshape(int(np.round(n_samples * held_out_test)), n_pred)
+        pred3 = pred3.reshape(int(np.ceil(n_samples * held_out_test)), n_pred)
         print('pred', pred[0:4, :])
         print('pred3', pred3[0:4, :])
         if (pred == pred3).all():
