@@ -52,11 +52,13 @@
 <span class="mf">4.6</span><span class="p">,</span><span class="mf">3.1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="n">setosa</span>
 </pre></div>
 </div>
-<p>If your data match the standard data file, you need to send:
-- the name of the data set (for instance if you use databoard, you can use the problem name)
-- your data file
-- the name of the target column
-- the workflow elements of the problem related to the dataset (for instance feature_extractor, classifier, ...)</p>
+<p>If your data match the standard data file, you need to send:</p>
+<ul class="simple">
+<li>the dataset name (for instance if you use databoard, you can use the problem name)</li>
+<li>your data file</li>
+<li>the name of the target column</li>
+<li>the workflow elements of the problem related to the dataset (for instance feature_extractor, classifier, ...)</li>
+</ul>
 <p>If your data do not match the standard data file, you need to send in addition to above:</p>
 <ul class="simple">
 <li>a python file with three specific functions: <code class="docutils literal"><span class="pre">prepare_data(raw_data_path)</span></code>, <code class="docutils literal"><span class="pre">get_train_data(raw_data_path)</span></code>, and <code class="docutils literal"><span class="pre">get_test_data(raw_data_path)</span></code>. An example of such file is <code class="docutils literal"><span class="pre">test_files/variable_stars/variable_stars_datarun.py</span></code>.</li>

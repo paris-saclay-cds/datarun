@@ -10,7 +10,7 @@ The workflow to use datarun is the following:
 
 The standard format of a data file excepted by datarun is a csv file whose first row contains the feature and target names, each line corresponds to a data sample.
 
-Here is an example of a standard data file:  
+Here is an example of a standard data file:
 ::
     sepal length,sepal width,petal length,petal width,species
     5.1,3.5,1.4,0.2,setosa
@@ -18,11 +18,13 @@ Here is an example of a standard data file:
     4.7,3.2,1.3,0.2,setosa
     4.6,3.1,1.5,0.2,setosa
 
-If your data match the standard data file, you need to send:
-- the name of the data set (for instance if you use databoard, you can use the problem name)
-- your data file  
-- the name of the target column 
-- the workflow elements of the problem related to the dataset (for instance feature_extractor, classifier, ...)
+
+If your data match the standard data file, you need to send:   
+
+* the dataset name (for instance if you use databoard, you can use the problem name)  
+* your data file  
+* the name of the target column   
+* the workflow elements of the problem related to the dataset (for instance feature_extractor, classifier, ...)  
 
 
 If your data do not match the standard data file, you need to send in addition to above:  
