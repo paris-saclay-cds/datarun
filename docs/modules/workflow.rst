@@ -29,10 +29,16 @@ If your data match the standard data file, you need to send:
 
 If your data do not match the standard data file, you need to send in addition to above:  
 
-* a python file with three specific functions: ``prepare_data(raw_data_path)``, ``get_train_data(raw_data_path)``, and ``get_test_data(raw_data_path)``. An example of such file is ``test_files/variable_stars/variable_stars_datarun.py``.   
+* a python file with 5 specific functions (an example of such file is ``test_files/variable_stars/variable_stars_datarun.py``):
+
+  * ``prepare_data(raw_data_path)`` 
+  * ``get_train_data(raw_data_path)``
+  * ``get_test_data(raw_data_path)`` 
+  * ``train_submission(module_path, X, y, train_indices)`` 
+  * ``test_submission(trained_model, X, test_indices)`` 
 * possibly other data files (if your data are split in different files).  
 
-In both cases, to send you data to datarun, you can use:  
+In both cases, to send your data to datarun, you can use:  
 
 * a post request to ``<master-host>/runapp/rawdata/`` (cf :ref:`requestsDirect`, class runapp.views.RawDataList)  
 * the ``post_data`` function in the module test_files.post_api (cf :ref:`requestsModule`)  

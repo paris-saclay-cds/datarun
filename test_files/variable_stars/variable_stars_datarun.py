@@ -1,14 +1,20 @@
+# This file is almost a copy of:
+# - databoard/specific/problem/variable_stars.py for the first part
+# - databoard/specific/workflow/feature_extractor_classifier_ ...
+# ... calibrator_workflow.py for the functions train_submission and
+# test_submission.
+# It must contain 5 functions
+# - prepare_data(raw_data_path)
+# - get_train_data(raw_data_path)
+# - get_test_data(raw_data_path)
+# - train_submission(module_path, X, y, train_indices)
+# - test_submission(trained_model, X, test_indices)
 import os
 from importlib import import_module
 import numpy as np
 import pandas as pd
 from sklearn.cross_validation import train_test_split
 from sklearn.cross_validation import StratifiedShuffleSplit
-# import databoard.multiclass_prediction as prediction
-# from databoard.config import submissions_path, problems_path,\
-#     starting_kit_d_name
-
-# sys.path.append(os.path.dirname(os.path.abspath(submissions_path)))
 
 problem_name = 'variable_stars'  # should be the same as the file name
 
@@ -25,6 +31,7 @@ test_filename = 'test.csv'
 vf_test_filename = 'test_varlength_features.csv'
 
 target_column_name = 'type'
+workflow_name = 'feature_extractor_classifier_calibrator_workflow'
 
 
 def csv_array_to_float(csv_array_string):

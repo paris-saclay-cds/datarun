@@ -61,10 +61,17 @@
 </ul>
 <p>If your data do not match the standard data file, you need to send in addition to above:</p>
 <ul class="simple">
-<li>a python file with three specific functions: <code class="docutils literal"><span class="pre">prepare_data(raw_data_path)</span></code>, <code class="docutils literal"><span class="pre">get_train_data(raw_data_path)</span></code>, and <code class="docutils literal"><span class="pre">get_test_data(raw_data_path)</span></code>. An example of such file is <code class="docutils literal"><span class="pre">test_files/variable_stars/variable_stars_datarun.py</span></code>.</li>
+<li>a python file with 5 specific functions (an example of such file is <code class="docutils literal"><span class="pre">test_files/variable_stars/variable_stars_datarun.py</span></code>):<ul>
+<li><code class="docutils literal"><span class="pre">prepare_data(raw_data_path)</span></code></li>
+<li><code class="docutils literal"><span class="pre">get_train_data(raw_data_path)</span></code></li>
+<li><code class="docutils literal"><span class="pre">get_test_data(raw_data_path)</span></code></li>
+<li><code class="docutils literal"><span class="pre">train_submission(module_path,</span> <span class="pre">X,</span> <span class="pre">y,</span> <span class="pre">train_indices)</span></code></li>
+<li><code class="docutils literal"><span class="pre">test_submission(trained_model,</span> <span class="pre">X,</span> <span class="pre">test_indices)</span></code></li>
+</ul>
+</li>
 <li>possibly other data files (if your data are split in different files).</li>
 </ul>
-<p>In both cases, to send you data to datarun, you can use:</p>
+<p>In both cases, to send your data to datarun, you can use:</p>
 <ul class="simple">
 <li>a post request to <code class="docutils literal"><span class="pre">&lt;master-host&gt;/runapp/rawdata/</span></code> (cf <a class="reference internal" href="views.html#requestsdirect"><span class="std std-ref">direct requests</span></a>, class runapp.views.RawDataList)</li>
 <li>the <code class="docutils literal"><span class="pre">post_data</span></code> function in the module test_files.post_api (cf <a class="reference internal" href="views.html#requestsmodule"><span class="std std-ref">post_api module</span></a>)</li>
