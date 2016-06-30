@@ -88,19 +88,24 @@
 <ol class="arabic">
 <li><dl class="first docutils">
 <dt>create a file <code class="docutils literal"><span class="pre">problems/&lt;problem_name&gt;_datarun.py</span></code> which corresponds to the above mentionned python file.</dt>
-<dd><p class="first last">Functions <code class="docutils literal"><span class="pre">prepare_data(raw_data_path)</span></code>, <code class="docutils literal"><span class="pre">get_train_data(raw_data_path)</span></code>, and <code class="docutils literal"><span class="pre">get_test_data(raw_data_path)</span></code> are almost exact copies of the same functions defined in <code class="docutils literal"><span class="pre">databoard/specific/problems/&lt;problem_name&gt;.py</span></code>, except the dependence on <code class="docutils literal"><span class="pre">raw_data_path</span></code> (which allows datarun to find the data file where it saves it). Be careful to remove all dependence on <code class="docutils literal"><span class="pre">databoard</span></code> module.
+<dd><p class="first last">Functions <code class="docutils literal"><span class="pre">prepare_data(raw_data_path)</span></code>, <code class="docutils literal"><span class="pre">get_train_data(raw_data_path)</span></code>, and <code class="docutils literal"><span class="pre">get_test_data(raw_data_path)</span></code> are almost exact copies of the same functions defined in <code class="docutils literal"><span class="pre">databoard/specific/problems/&lt;problem_name&gt;.py</span></code>, except the dependence on <code class="docutils literal"><span class="pre">raw_data_path</span></code> (which allows datarun to find the data file where it saves it). Be careful to remove all dependencies with <code class="docutils literal"><span class="pre">databoard</span></code> module.
 Functions <code class="docutils literal"><span class="pre">train_submission(module_path,</span> <span class="pre">X,</span> <span class="pre">y,</span> <span class="pre">train_indices)</span></code> and <code class="docutils literal"><span class="pre">test_submission(trained_model,</span> <span class="pre">X,</span> <span class="pre">test_indices)</span></code> are exact copies of the same functions defined in the problem workflow (<code class="docutils literal"><span class="pre">databoard/specific/workflows/&lt;workflow_name&gt;.py</span></code>).</p>
 </dd>
 </dl>
 </li>
-<li><p class="first">Add in <code class="docutils literal"><span class="pre">databoard/specific/problems/&lt;problem_name&gt;.py</span></code> a line specifying the abive mentionned python file and possible other data files. E.g, <code class="docutils literal"><span class="pre">extra_files</span> <span class="pre">=</span> <span class="pre">extra_files</span> <span class="pre">=</span> <span class="pre">[vf_raw_filename,</span> <span class="pre">os.path.join(problems_path,</span> <span class="pre">problem_name,</span> <span class="pre">'variable_star_datarun.py')]</span></code> (for the variable stars problem).</p>
+<li><p class="first">Add in <code class="docutils literal"><span class="pre">databoard/specific/problems/&lt;problem_name&gt;.py</span></code> a line specifying the above mentionned python file and possible other data files. E.g, <code class="docutils literal"><span class="pre">extra_files</span> <span class="pre">=</span> <span class="pre">extra_files</span> <span class="pre">=</span> <span class="pre">[vf_raw_filename,</span> <span class="pre">os.path.join(problems_path,</span> <span class="pre">problem_name,</span> <span class="pre">'variable_star_datarun.py')]</span></code> (for the variable stars problem).</p>
 </li>
 </ol>
 </li>
 </ul>
 </div></blockquote>
-<ol class="arabic simple" start="2">
-<li>To send data to datarun and to split data into train and test dataset, you can use the function <code class="docutils literal"><span class="pre">send_data_datarun</span></code> of <code class="docutils literal"><span class="pre">databoard/db_tools.py</span></code>, which uses the functions <code class="docutils literal"><span class="pre">post_data</span></code> and <code class="docutils literal"><span class="pre">post_split</span></code> (or <code class="docutils literal"><span class="pre">custom_post_split</span></code>) of the module test_files.post_api of datarun.</li>
+<ol class="arabic" start="2">
+<li><dl class="first docutils">
+<dt>To send data to datarun and to split data into train and test dataset, you can use the function <code class="docutils literal"><span class="pre">send_data_datarun</span></code> of <code class="docutils literal"><span class="pre">databoard/db_tools.py</span></code>, which uses the functions <code class="docutils literal"><span class="pre">post_data</span></code> and <code class="docutils literal"><span class="pre">post_split</span></code> (or <code class="docutils literal"><span class="pre">custom_post_split</span></code>) of the module test_files.post_api of datarun.</dt>
+<dd><p class="first last">This function can be called with fab: <code class="docutils literal"><span class="pre">fab</span> <span class="pre">send_data_datarun:&lt;problem_name&gt;,&lt;datarun_master_url&gt;,&lt;datarun_username&gt;,&lt;datarun_password&gt;</span></code></p>
+</dd>
+</dl>
+</li>
 </ol>
 </div>
 <div class="section" id="split-data-into-train-and-test-dataset">
@@ -116,7 +121,9 @@ Functions <code class="docutils literal"><span class="pre">train_submission(modu
 <li>the <code class="docutils literal"><span class="pre">custom_post_split</span></code> function in the module test_files.post_api (cf <a class="reference internal" href="views.html#requestsmodule"><span class="std std-ref">post_api module</span></a>)</li>
 </ul>
 <p><strong>Note for databoard users:</strong>
-To send data to datarun and to split data into train and test dataset, you can user the function <code class="docutils literal"><span class="pre">send_data_datarun</span></code> of <code class="docutils literal"><span class="pre">databoard/db_tools.py</span></code>, which uses the functions <code class="docutils literal"><span class="pre">post_data</span></code> and <code class="docutils literal"><span class="pre">post_split</span></code> (or <code class="docutils literal"><span class="pre">custom_post_split</span></code>) of the module test_files.post_api of datarun.</p>
+To send data to datarun and to split data into train and test dataset, you can use the function <code class="docutils literal"><span class="pre">send_data_datarun</span></code> of <code class="docutils literal"><span class="pre">databoard/db_tools.py</span></code>, which uses the functions <code class="docutils literal"><span class="pre">post_data</span></code> and <code class="docutils literal"><span class="pre">post_split</span></code> (or <code class="docutils literal"><span class="pre">custom_post_split</span></code>) of the module test_files.post_api of datarun (cf previous section).</p>
+<blockquote>
+<div>This function can be called with fab: <code class="docutils literal"><span class="pre">fab</span> <span class="pre">send_data_datarun:&lt;problem_name&gt;,&lt;datarun_master_url&gt;,&lt;datarun_username&gt;,&lt;datarun_password&gt;</span></code></div></blockquote>
 </div>
 <div class="section" id="send-submission-on-cv-fold-to-be-trained-on-datarun">
 <h2>3- Send submission on cv fold to be trained on datarun<a class="headerlink" href="#send-submission-on-cv-fold-to-be-trained-on-datarun" title="Permalink to this headline">¶</a></h2>
@@ -127,7 +134,7 @@ To send data to datarun and to split data into train and test dataset, you can u
 </ul>
 <p>If the associted submission files have already been sent, you&#8217;ll need to send:</p>
 <ul class="simple">
-<li>the if of the associated submission</li>
+<li>the id of the associated submission</li>
 <li>the id of the submission on cv fold</li>
 <li>the train and test indices of the cv fold.
 * after compression (with zlib) and base64-encoding if you use a post request
@@ -137,12 +144,23 @@ To send data to datarun and to split data into train and test dataset, you can u
 </ul>
 <p>If the associated submission files have not been sent, you need to add:</p>
 <ul class="simple">
-<li>the id of the associated data</li>
+<li>the id of the associated data. This id can be retrieved using:</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li>a post request to <code class="docutils literal"><span class="pre">&lt;master-host&gt;/runapp/rawdata/</span></code> (cf <a class="reference internal" href="views.html#requestsdirect"><span class="std std-ref">direct requests</span></a>, class runapp.views.RawDataList)</li>
+<li>the <code class="docutils literal"><span class="pre">get_raw_data</span></code> function in the module test_files.post_api (cf <a class="reference internal" href="views.html#requestsmodule"><span class="std std-ref">post_api module</span></a>)</li>
+</ul>
+</div></blockquote>
+<ul class="simple">
 <li>the list of submission files</li>
 <li>an indication that you want to force resending the submission even if its id already exists (<code class="docutils literal"><span class="pre">force=&quot;submission&quot;</span></code> instead of <code class="docutils literal"><span class="pre">force=None</span></code>).</li>
 </ul>
 <p><strong>Note for databoard users:</strong>
 To send a submission on cv fold, you can use the function <code class="docutils literal"><span class="pre">train_test_submissions_datarun</span></code> of <code class="docutils literal"><span class="pre">databoard/db_tools.py</span></code> (which uses functions from the module test_files.post_api of datarun).</p>
+<blockquote>
+<div>This function can be called with fab: <code class="docutils literal"><span class="pre">fab</span> <span class="pre">train_test_datarun:&lt;data_id_datarun&gt;,&lt;datarun_master_url&gt;,&lt;datarun_username&gt;,&lt;datarun_password&gt;,&lt;problem_name&gt;,&lt;team_name&gt;,&lt;submission_name&gt;(,force=True)</span></code></div></blockquote>
+<p>The &lt;data_id_datarun&gt; is printed when sending data to datarun, or it can be retrieved as mentionned above.</p>
 </div>
 <div class="section" id="get-back-your-predictions">
 <h2>4- Get back your predictions<a class="headerlink" href="#get-back-your-predictions" title="Permalink to this headline">¶</a></h2>
@@ -158,6 +176,8 @@ To send a submission on cv fold, you can use the function <code class="docutils 
 </ul>
 <p><strong>Note for databoard users:</strong>
 To get back predictions, you can use the function <code class="docutils literal"><span class="pre">get_trained_tested_submissions_datarun</span></code> of <code class="docutils literal"><span class="pre">databoard/db_tools.py</span></code> (which uses functions from the module test_files.post_api of datarun).</p>
+<blockquote>
+<div>This function can be called with fab: <code class="docutils literal"><span class="pre">fab</span> <span class="pre">get_trained_tested_datarun:&lt;datarun_master_url&gt;,&lt;datarun_username&gt;,&lt;datarun_password&gt;,&lt;problem_name&gt;,&lt;team_name&gt;,&lt;submission_name&gt;</span></code></div></blockquote>
 </div>
 </div>
 
