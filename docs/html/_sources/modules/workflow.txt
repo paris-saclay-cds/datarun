@@ -45,7 +45,17 @@ In both cases, to send your data to datarun, you can use:
 
 
 **Note for databoard users:**
-To send data to datarun and to split data into train and test dataset, you can user the function ``send_data_datarun`` of ``databoard/db_tools.py``, which uses the functions ``post_data`` and ``post_split`` (or ``custom_post_split``) of the module test_files.post_api of datarun.
+
+1. To prepare data for datarun:
+
+  * If they match the standard data file, there is nothing to do.  
+  * If they do not match the standard data file, 
+
+    1. create a file ``problems/<problem_name>_datarun.py`` which corresponds to the above mentionned python file.   
+           Functions ``prepare_data(raw_data_path)``, ``get_train_data(raw_data_path)``, and ``get_test_data(raw_data_path)`` are almost exact copies of the same functions defined in ``databoard/specific/problems/<problem_name>.py``, except the dependence on ``raw_data_path`` (which allows datarun to find the data file where it saves it). Be careful to remove all dependence on ``databoard`` module. 
+           Functions ``train_submission(module_path, X, y, train_indices)`` and ``test_submission(trained_model, X, test_indices)`` are exact copies of the same functions defined in the problem workflow (``databoard/specific/workflows/<workflow_name>.py``). 
+    2. Add in ``databoard/specific/problems/<problem_name>.py`` a line specifying the abive mentionned python file and possible other data files. E.g, ``extra_files = extra_files = [vf_raw_filename, os.path.join(problems_path, problem_name, 'variable_star_datarun.py')]`` (for the variable stars problem).
+2. To send data to datarun and to split data into train and test dataset, you can use the function ``send_data_datarun`` of ``databoard/db_tools.py``, which uses the functions ``post_data`` and ``post_split`` (or ``custom_post_split``) of the module test_files.post_api of datarun.
 
 
 2- Split data into train and test dataset
