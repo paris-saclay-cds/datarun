@@ -9,22 +9,38 @@
 # Add environment variables
 # env.sh file with environment variables must be in the same folder as this script
 mv env.sh ~/.bash_aliases
+echo 'export LC_ALL=en_US.UTF-8' >> ~/.bash_aliases
+echo 'export LANGUAGE=en_US.UTF-8' >> ~/.bash_aliases
 source .bash_aliases
-
-# Set locales variables
-export LC_ALL=en_US.UTF-8
-export LANGUAGE=en_US.UTF-8
 
 cd /home/
 
-# Install Packages from the Ubuntu Repositories 
-sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" update 
-sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade 
-sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install python-pip apache2 libapache2-mod-wsgi
+# Update Packages from the Ubuntu Repositories 
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" update
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
+# Install pip
+curl -O https://bootstrap.pypa.io/get-pip.py
+python get-pip.py
+pip install pyopenssl ndg-httpsclient pyasn1
+# Install Ubuntu dependencies for Python
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install build-essential python-dev
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install gfortran
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install swig
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install libatlas-dev
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install liblapack-dev
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install libfreetype6 libfreetype6-dev
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install libxft-dev
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install pandoc
+# Install Apache and mod_wsgi
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install apache2 libapache2-mod-wsgi
+# Install git 
 sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install git
-# wget https://raw.github.com/brainsik/virtualenv-burrito/master/virtualenv-burrito.sh
-# bash virtualenv-burrito.sh 
-# source /root/.venvburrito/startup.sh
+# Install numpy, scipy, and ipython
+pip install numpy
+pip install scipy
+pip install pandas
+pip install ipython
+pip install scikit-learn
 
 # Mount ScienceFS disk
 apt-get -y install sshfs
@@ -40,7 +56,7 @@ sudo git clone https://github.com/camillemarini/datarun.git
 cd datarun
 
 # Install Postgres
-sudo apt-get -y install python-dev libpq-dev postgresql postgresql-contrib
+sudo apt-get -y install libpq-dev postgresql postgresql-contrib
 pg_createcluster 9.3 main --start
 # Change postgres permissions
 sed -i "85c local   all             postgres                                trust" /etc/postgresql/9.3/main/pg_hba.conf 
@@ -54,10 +70,8 @@ psql -U postgres -c "ALTER ROLE $DR_DATABASE_USER WITH PASSWORD '$DR_DATABASE_PA
 sed -i "86i local   all             $DR_DATABASE_USER                                 trust" /etc/postgresql/9.3/main/pg_hba.conf
 sudo service postgresql restart
 
-# Configure a Python Virtual Environment
-# mkvirtualenv datarun
-sudo apt-get -y install python-numpy python-scipy  # is it really necessary for the master? 
-pip install -Ur requirements.txt
+# Install required Python packages
+pip install -r requirements.txt
 
 # Complete initial project setup
 python manage.py migrate

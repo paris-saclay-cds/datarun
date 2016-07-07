@@ -6,5 +6,8 @@
 
 ADD_MASTER=$1
 SCIENCEFS_KEY=$2
+# Make it possible to log in as root
+ssh ubuntu@"$ADD_MASTER" 'bash -s' < root_permissions.sh
+# Copy sciencefs key and install scipt
 scp env.sh deploy_master_stratuslab.sh root@"$ADD_MASTER":/root/
 scp $SCIENCEFS_KEY root@"$ADD_MASTER":/root/.ssh/id_rsa_sciencefs

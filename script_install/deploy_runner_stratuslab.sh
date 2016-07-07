@@ -7,13 +7,37 @@ cd /home/
 export LC_ALL=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 
-# Instal Packages fro the Ubuntu Repositories
-sudo apt-get -y update 
+
+# Update Packages from the Ubuntu Repositories 
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" update
 sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
-sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install python-pip
-sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install python-numpy python-scipy 
-sudo pip install pandas
-sudo pip install scikit-learn
+# Install pip
+curl -O https://bootstrap.pypa.io/get-pip.py
+python get-pip.py
+pip install pyopenssl ndg-httpsclient pyasn1
+# Install Ubuntu dependencies for Python
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install build-essential python-dev
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install gfortran
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install swig
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install libatlas-dev
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install liblapack-dev
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install libfreetype6 libfreetype6-dev
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install libxft-dev
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install pandoc
+# Install numpy, scipy, and ipython
+pip install numpy
+pip install scipy
+pip install pandas
+pip install ipython
+pip install scikit-learn
+# Install git 
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install git
+# Install xgboost
+cd; git clone --recursive https://github.com/dmlc/xgboost
+cd xgboost; make -j4
+cd python-package; sudo python setup.py install
+cd /home/
+
 
 # Mount SienceFS disk
 source /root/env_runner.sh
