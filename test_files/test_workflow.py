@@ -76,7 +76,7 @@ dict_param3 = {
 
 # list_dict_param = [dict_param1, dict_param2, dict_param3]
 # list_dict_param = [dict_param1, dict_param2]
-list_dict_param = [dict_param2]
+list_dict_param = [dict_param1]
 time_sleep_split = 58  # number of sec to wait after sending the split task
 time_sleep_train = 228  # number of sec to wait after sending the split task
 

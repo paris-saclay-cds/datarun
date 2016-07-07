@@ -1,7 +1,7 @@
 #!/bin/bash
-# :Usage: bash deploy_runner_stratuslab.sh {fs_device} {nb_workers}
+# :Usage: bash deploy_runner_stratuslab.sh 
 # Prepare Ubuntu (14.04) server instance for runners. 
-# It starts nb_workers on the instance
+# It starts $NB_WORKER on the instance
 
 cd /home/
 export LC_ALL=en_US.UTF-8
@@ -65,7 +65,9 @@ mv /root/__init__.py celery/runapp
 sudo -su celery 
 cd celery
 source .bash_aliases  # strange, bash_aliases not activated when log in...
-#source /root/.bash_aliases
+echo 'if [ -f /home/celery/.bash_aliases ]; then
+    . /home/celery/.bash_aliases
+fi' >> .bashrc
 
 # Run workers
 mkdir celery_info  

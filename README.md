@@ -67,21 +67,25 @@ Run: `bash test_files/cmd_workers.sh start 2 1` for 3 workers, of which one is f
 Note: to start one worker, run: `celery -A datarun worker -l info`  
 
 
-### How to run it on stratuslab?
+### How to run it on stratuslab (openstack)?
 
 TODO add figure
 
-Note: you need a scienceFS account. On your scienceFS disk, create in the root directory a folder called `datarun`.
+There are two possibilities:  
+A. from scratch using an Ubuntu 14.04 image on openstack, or on any other cloud.  
+B. using images `datarun_master` and `datarun_runner` on openstack
 
-##### 1. Start one instance for the master and as many instances as you want for the runners.  
-Use the image `BJILII-tFu00rKKM-enj9l83rsn` which corresponds to Ubuntu v14.04 x86_64.    
-```
-stratus-run-instance BJILII-tFu00rKKM-enj9l83rsn --cpu=2 --ram=4000
-```
+Note: in both cases, you need a scienceFS account. On your scienceFS disk, create in the root directory a folder called `datarun`.
 
-##### 2. Go to the `script_install` directory and stay there while configuring the master and runners.
+#### A. Using an Ubuntu 14.04 image
 
-##### 3. Configure the master
+##### A1. Start one instance for the master and as many instances as you want for the runners. 
+ 
+Use Ubuntu v14.04 images. For the master, an VM os.2 is enough.    
+
+##### A2. Go to the `script_install` directory and stay there while configuring the master and runners.
+
+##### A3. Configure the master
 
 * On your local computer, create a file called `env.sh` (do not change this name) with the content below.  
 Do not forget to change the values and be careful not to commit this file :-)  
@@ -113,7 +117,7 @@ source ~/.bashrc
 For now, we have to execute the command from the instance, since it is asking for many parameters. TODO: make changes so that we can run the script with ssh from our local machine.   
  
 
-##### 4. Configure runners
+##### A4. Configure runners
 
 * On your local computer in the folder `script_install`, create a file called `env_runner.sh` (be careful to use the name `env_runner.sh`) with the content below.  
 Do not forget to change the values and be careful not to commit this file :-)  
@@ -140,8 +144,8 @@ address_runner_3 number_worker_runner_3 list_queues_3
 ```  
 Example:
 ```
-onevm-xxx.yyy.zzzz.fr 2 L,celery  
-onevm-aaa.bbb.cccc.fr 3 H 
+134.158.75.112 2 L,celery  
+134.158.75.113 3 H 
 ```
 
 * Run `bash scp_runner_stratuslab.sh list_runners.txt scienceFS_private_key`.  
@@ -150,6 +154,40 @@ This will scp some files to the runners and configure them (by executing the scr
 
 
 You should now be ready to use datarun on stratuslab!  
+
+#### B. Using images `datarun_master` and `datarun_runner` on openstack
+
+##### B1. Start one instance for the master and as many instances as you want for the runners. 
+
+Use the image `datarun_master` for the master and `datarun_runner` for runners.
+
+##### B2. Go to the `script_install` directory and stay there while configuring the master and runners.
+
+##### B3. Configure master
+
+1. Ssh to the instance  
+2. Go to `/home/datarun/script_install`  
+3. Run `bash deploy_master_from_image.sh`  
+
+##### B4. Configure runners
+
+* On your local computer, create a file `list_runners.txt` containing the list of runners address address, the number of workers you want on each runner, and the list of queues processed by the workers (at least one of each among `L`, `H`, `celery`):  
+```
+address_runner_1 number_worker_runner_1 list_queues_1  
+address_runner_2 number_worker_runner_2 list_queues_2   
+...
+address_runner_3 number_worker_runner_3 list_queues_3   
+```  
+Example:
+```
+134.158.75.112 2 L,celery  
+134.158.75.113 3 H 
+```
+
+* Run `bash scp_runner_from_image.sh list_runners.txt`.  
+This will configure the runners (by executing the script `deploy_runner_from_image.sh`).   
+**Check that the sciencefs disk has been correclty mounted** (ssh to the instance and check if `/mnt/datarun` is not empty), sometimes it fails... 
+
 
 ### How to test it?
 

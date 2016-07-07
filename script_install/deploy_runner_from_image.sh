@@ -1,5 +1,5 @@
 #!/bin/bash
-# :Usage: bash deploy_runner_stratuslab.sh 
+# :Usage: bash deploy_runner_from_image.sh 
 # Prepare for runners instance started from datarun_runner image 
 # It starts $1 workers on the instance with queues $2
 

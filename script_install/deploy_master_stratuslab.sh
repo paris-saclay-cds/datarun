@@ -1,7 +1,6 @@
 #!/bin/bash
-# :Usage: bash deploy_master_stratuslab.sh {device}
+# :Usage: bash deploy_master_stratuslab.sh 
 # Prepare Ubuntu (14.04) server instance for the application deployment 
-# {device} is the attached disk  
 # We follow steps (+ other steps) from 
 # - https://www.digitalocean.com/community/tutorials/how-to-serve-django-applications-with-apache-and-mod_wsgi-on-ubuntu-14-04
 # - https://gist.github.com/eezis/4026247 to install virtualenv-burrito
