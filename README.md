@@ -69,7 +69,7 @@ Note: to start one worker, run: `celery -A datarun worker -l info`
 
 ### How to run it on stratuslab (openstack)?
 
-TODO add figure
+<img src="datarun.png" alt="datarun_schema" style="width: 600px;"/>
 
 There are two possibilities:  
 A. from scratch using an Ubuntu 14.04 image on openstack, or on any other cloud.  

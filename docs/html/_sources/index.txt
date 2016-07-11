@@ -20,6 +20,15 @@ In this documentation, we use the following terminology (which corresponds to th
 * ``Submission`` refers to a machine learning model   
 * ``Submission on cv fold`` / ``SubmissionFold`` refers to a submission and the indices of train and test of a cv fold.  
 
+
+Datarun is made of a master and datarunners, as represented below:
+
+.. figure:: ../datarun.png
+    :width: 600px
+    :align: center
+    :alt: oups!
+
+
 Contents:
 
 .. toctree::
