@@ -22,6 +22,9 @@ while read p; do
     NB_WORKER=$2
     WORKER_QUEUES=$3
     echo "** Runner: $ADD_RUNNER with $NB_WORKER workers for queues $WORKER_QUEUES **"
+    # Make it possible to log in as root
+    ssh ubuntu@"$ADD_RUNNER" 'bash -s' < root_permissions.sh
+    # Copy sciencefs key and install scipt
     scp $SCIENCEFS_KEY root@"$ADD_RUNNER":/root/.ssh/id_rsa_sciencefs
     scp deploy_runner_stratuslab.sh datarun.py runner_workers.sh \
         ../runapp/tasks.py ../runapp/__init__.py root@"$ADD_RUNNER":/root/.
@@ -29,6 +32,7 @@ while read p; do
     sed -i "$ a export NB_WORKER=$NB_WORKER" tmp_runner/env_runner.sh
     sed -i "$ a export WORKER_QUEUES=$WORKER_QUEUES" tmp_runner/env_runner.sh
     scp tmp_runner/env_runner.sh root@"$ADD_RUNNER":/root/.
+    # Install runners
     ssh root@"$ADD_RUNNER" 'bash -s' < deploy_runner_stratuslab.sh;
 done < $FILE_RUNNERS
 
