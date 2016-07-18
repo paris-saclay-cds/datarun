@@ -3,6 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+
 Welcome to datarun's documentation!
 ===================================
 
@@ -37,6 +38,9 @@ Contents:
    modules/workflow.rst
    modules/models.rst
    modules/views.rst
+   modules/deployment.rst
+   modules/tests.rst
+   modules/migrations.rst
 
 
 Indices and tables

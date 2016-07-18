@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tests &mdash; datarun 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="datarun 0.2 documentation" href="../index.html" />
+    <link rel="next" title="How to deal with migrations?" href="migrations.html" />
+    <link rel="prev" title="How to run it locally?" href="deployment.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tests">
+<span id="id1"></span><h1>Tests<a class="headerlink" href="#tests" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="for-django-tests">
+<h2>for django tests<a class="headerlink" href="#for-django-tests" title="Permalink to this headline">¶</a></h2>
+<p>Run: <code class="docutils literal"><span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">test</span></code></p>
+</div>
+<div class="section" id="for-local-celery-tests">
+<h2>for local celery tests<a class="headerlink" href="#for-local-celery-tests" title="Permalink to this headline">¶</a></h2>
+<p>Run in one terminal:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">test_files</span><span class="p">;</span> <span class="n">bash</span> <span class="n">local_test1</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<p>Run in another terminal:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">test_files</span><span class="p">;</span> <span class="n">bash</span> <span class="n">local_test2</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">d</span>
+</pre></div>
+</div>
+<p>It creates a database, start celery workers, and run tests from <code class="docutils literal"><span class="pre">test_files/test_workflow.py</span></code> file.</p>
+<p>If two ‘Oh yeah’ are printed, tests are ok!</p>
+</div>
+<div class="section" id="for-tests-on-stratuslab">
+<h2>for tests on stratuslab<a class="headerlink" href="#for-tests-on-stratuslab" title="Permalink to this headline">¶</a></h2>
+<p>Run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">test_files</span>
+<span class="n">bash</span> <span class="n">stratuslab_test</span><span class="o">.</span><span class="n">sh</span> <span class="n">master_address</span> <span class="n">username</span> <span class="n">password</span>
+</pre></div>
+</div>
+<p>with <code class="docutils literal"><span class="pre">master_address</span></code> being the master server address (e.g.,
+<code class="docutils literal"><span class="pre">onevm-81.lal.in2p3.fr</span></code>), <code class="docutils literal"><span class="pre">username</span></code> being a datarun user, and
+<code class="docutils literal"><span class="pre">password</span></code> its password.</p>
+<p>It runs tests from <code class="docutils literal"><span class="pre">test_files/test_workflow.py</span></code> file.</p>
+<p>If two ‘Oh yeah’ are printed, tests are ok!</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tests</a><ul>
+<li><a class="reference internal" href="#for-django-tests">for django tests</a></li>
+<li><a class="reference internal" href="#for-local-celery-tests">for local celery tests</a></li>
+<li><a class="reference internal" href="#for-tests-on-stratuslab">for tests on stratuslab</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="deployment.html" title="previous chapter">How to run it locally?</a></li>
+      <li>Next: <a href="migrations.html" title="next chapter">How to deal with migrations?</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/modules/tests.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Camille.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="../_sources/modules/tests.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
