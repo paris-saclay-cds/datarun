@@ -71,4 +71,4 @@ fi' >> .bashrc
 
 # Run workers
 mkdir celery_info  
-bash runner_workers.sh start $NB_WORKER $WORKER_QUEUES
+bash runner_workers.sh start $NB_WORKER $WORKER_QUEUES $HARD_TIME_LIMIT $SOFT_TIME_LIMIT

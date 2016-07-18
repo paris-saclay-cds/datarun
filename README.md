@@ -135,17 +135,17 @@ export IP_MASTER='xxx.yyy.zz.aaa'
 Values of these environment variables must be the same as what you defined in `env.sh`, they are used to connect to the master and read data from it.
 
 
-* On your local computer, create a file `list_runners.txt` containing the list of runners address address, the number of workers you want on each runner, and the list of queues processed by the workers (at least one of each among `L`, `H`, `celery`):  
+* On your local computer, create a file `list_runners.txt` containing the list of runners address address, the number of workers you want on each runner, the list of queues processed by the workers (at least one of each among `L`, `H`, `celery`), and the hard and soft time limit in seconds:  
 ```
-address_runner_1 number_worker_runner_1 list_queues_1  
-address_runner_2 number_worker_runner_2 list_queues_2   
+address_runner_1 number_worker_runner_1 list_queues_1 hard_time_limit_1 soft_time_limit_1   
+address_runner_2 number_worker_runner_2 list_queues_2 hard_time_limit_2 soft_time_limit_2       
 ...
-address_runner_3 number_worker_runner_3 list_queues_3   
+address_runner_3 number_worker_runner_3 list_queues_3 hard_time_limit_3 soft_time_limit_3      
 ```  
 Example:
 ```
-134.158.75.112 2 L,celery  
-134.158.75.113 3 H 
+134.158.75.112 2 L,celery 360 300   
+134.158.75.113 3 H 240 200  
 ```
 
 * Run `bash scp_runner_stratuslab.sh list_runners.txt scienceFS_private_key`.  
@@ -171,17 +171,17 @@ Use the image `datarun_master` for the master and `datarun_runner` for runners.
 
 ##### B4. Configure runners
 
-* On your local computer, create a file `list_runners.txt` containing the list of runners address address, the number of workers you want on each runner, and the list of queues processed by the workers (at least one of each among `L`, `H`, `celery`):  
+* On your local computer, create a file `list_runners.txt` containing the list of runners address address, the number of workers you want on each runner, the list of queues processed by the workers (at least one of each among `L`, `H`, `celery`), and the hard and soft time limit in seconds:  
 ```
-address_runner_1 number_worker_runner_1 list_queues_1  
-address_runner_2 number_worker_runner_2 list_queues_2   
+address_runner_1 number_worker_runner_1 list_queues_1 hard_time_limit_1 soft_time_limit_1   
+address_runner_2 number_worker_runner_2 list_queues_2 hard_time_limit_2 soft_time_limit_2       
 ...
-address_runner_3 number_worker_runner_3 list_queues_3   
+address_runner_3 number_worker_runner_3 list_queues_3 hard_time_limit_3 soft_time_limit_3      
 ```  
 Example:
 ```
-134.158.75.112 2 L,celery  
-134.158.75.113 3 H 
+134.158.75.112 2 L,celery 360 300   
+134.158.75.113 3 H 240 200  
 ```
 
 * Run `bash scp_runner_from_image.sh list_runners.txt`.  
