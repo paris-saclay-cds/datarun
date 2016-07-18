@@ -10,6 +10,7 @@ from importlib import import_module
 from sklearn.cross_validation import train_test_split, StratifiedShuffleSplit
 from celery import shared_task
 from celery.utils.log import get_task_logger
+from celery.exceptions import SoftTimeLimitExceeded
 # os.environ['DJANGO_SETTINGS_MODULE'] = 'datarun.settings'
 # from django.conf import settings
 for vv in ['DIR_SUBMISSION', 'DIR_DATA']:
@@ -179,6 +180,10 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
     :type hash_submission_files: string
     '''
     log_message = ''
+    submission_fold_state = 'TODO'
+    metrics = {}
+    full_train_predictions = None
+    test_predictions = None
     try:
         if os.path.isfile(raw_data_files_path + '/specific.py'):
             raw_data_module_path = get_path_module(raw_data_files_path)
@@ -193,30 +198,33 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
     except Exception as e:
         log_message = log_message + _make_error_message(e)\
             + 'ERROR(split data) \n'
-        return log_message, 'TODO', {}, None, None
+        return log_message, submission_fold_state, metrics,\
+            full_train_predictions, test_predictions
     # get workflow elements
     list_workflow_elements = workflow_elements.split(',')
     list_workflow_elements = [ww.strip() for ww in list_workflow_elements]
     # train submission on fold
-    trained_model, log_train, submission_fold_state, metrics,\
-        full_train_predictions = \
-        train_submission_fold(raw_data_files_path, submission_files_path,
-                              train_is, X_train, y_train,
-                              list_workflow_elements)
-    log_message = log_message + '\n' + log_train
-    if 'ERROR' not in submission_fold_state:
-        log_test, submission_fold_state, metrics_test, test_predictions = \
-            test_submission_fold(raw_data_files_path, trained_model,
-                                 X_test, y_test, list_workflow_elements)
-        metrics.update(metrics_test)
-        log_message = log_message + '\n' + log_test
-        metrics['train_memory'] = memory_usage_resource()
-        metrics['test_memory'] = metrics['train_memory']
-    else:
-        full_train_predictions = None
-        test_predictions = None
-    return log_message, submission_fold_state, metrics,\
-        full_train_predictions, test_predictions
+    try:
+        trained_model, log_train, submission_fold_state, metrics,\
+            full_train_predictions = \
+            train_submission_fold(raw_data_files_path, submission_files_path,
+                                  train_is, X_train, y_train,
+                                  list_workflow_elements)
+        log_message = log_message + '\n' + log_train
+        if 'ERROR' not in submission_fold_state:
+            log_test, submission_fold_state, metrics_test, test_predictions = \
+                test_submission_fold(raw_data_files_path, trained_model,
+                                     X_test, y_test, list_workflow_elements)
+            metrics.update(metrics_test)
+            log_message = log_message + '\n' + log_test
+            metrics['train_memory'] = memory_usage_resource()
+            metrics['test_memory'] = metrics['train_memory']
+        return log_message, submission_fold_state, metrics,\
+            full_train_predictions, test_predictions
+    except SoftTimeLimitExceeded:
+        log_message = log_message + '\n Soft Time Limit Exceeded'
+        return log_message, submission_fold_state, metrics,\
+            full_train_predictions, test_predictions
 
 
 def train_submission_fold(raw_data_files_path, submission_files_path,

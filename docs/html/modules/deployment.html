@@ -1,0 +1,353 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>How to run it locally? &mdash; datarun 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="datarun 0.2 documentation" href="../index.html" />
+    <link rel="next" title="Tests" href="tests.html" />
+    <link rel="prev" title="Requests" href="views.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <ul class="simple" id="deployment">
+<li><a class="reference internal" href="#how-to-run-it-locally">How to run it locally?</a></li>
+<li><a class="reference internal" href="#how-to-run-it-on-stratuslab-openstack">How to run it on stratuslab openstack?</a></li>
+</ul>
+<div class="section" id="how-to-run-it-locally">
+<h1>How to run it locally?<a class="headerlink" href="#how-to-run-it-locally" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="install-the-application">
+<h2>1. Install the application<a class="headerlink" href="#install-the-application" title="Permalink to this headline">¶</a></h2>
+<p>Clone the project:
+<code class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/camillemarini/datarun.git</span></code></p>
+<p>Install dependencies (might be useful to create a virtual environment before, eg
+using <a class="reference external" href="https://virtualenvwrapper.readthedocs.org/en/latest/">virtualenv and virtualenvwrapper</a>):</p>
+<ol class="arabic simple">
+<li>For numpy, scipy, and pandas (for Unbuntu &amp; Debian users):
+<code class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">python-numpy</span> <span class="pre">python-scipy</span> <span class="pre">python-pandas</span></code></li>
+<li><code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code></li>
+</ol>
+<p>Install RabbitMQ (celery <a class="reference external" href="http://docs.celeryproject.org/en/latest/getting-started/first-steps-with-celery.html#rabbitmq">broker</a>):
+<code class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">rabbitmq-server</span></code></p>
+</div>
+<div class="section" id="set-up-the-database">
+<h2>2. Set up the database<a class="headerlink" href="#set-up-the-database" title="Permalink to this headline">¶</a></h2>
+<p>Datarun uses a Postgres database. Before starting, <a class="reference external" href="http://www.postgresql.org/download/">install postgres</a>
+if needed and create a database with <code class="docutils literal"><span class="pre">createdb</span> <span class="pre">database_name</span></code>.</p>
+</div>
+<div class="section" id="define-environment-variables">
+<h2>3. Define environment variables<a class="headerlink" href="#define-environment-variables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">DR_WORKING_ENV</span></code>: <code class="docutils literal"><span class="pre">PROD</span></code> for production environment or <code class="docutils literal"><span class="pre">DEV</span></code>
+for development env</li>
+<li><code class="docutils literal"><span class="pre">DR_DATABASE_NAME</span></code>: database name</li>
+<li><code class="docutils literal"><span class="pre">DR_DATABASE_USER</span></code>: database user name</li>
+<li><code class="docutils literal"><span class="pre">DR_DATABASE_PASSWORD</span></code>: database user password (do not use special
+characters)</li>
+<li><code class="docutils literal"><span class="pre">DR_EMAIL</span></code>: email for the platform superuser</li>
+<li><code class="docutils literal"><span class="pre">CELERY_SCHEDULER_PERIOD</span></code>: period (in min) at which the scheduler
+checks new trained models and saves them in the database. Ex: <code class="docutils literal"><span class="pre">*/2</span></code>
+for every 2 min.</li>
+<li><code class="docutils literal"><span class="pre">NB_LOCAL_WORKER</span></code>: number of celery workers for the scheduler</li>
+<li><code class="docutils literal"><span class="pre">RMQ_VHOST</span></code>: RabbitMQ vhost name</li>
+<li><code class="docutils literal"><span class="pre">IP_MASTER</span></code>: ip address of the master, here: <code class="docutils literal"><span class="pre">localhost</span></code></li>
+</ul>
+<p>If your are using virtualenvwrapper, you can store these variables in
+<code class="docutils literal"><span class="pre">$VIRTUAL_ENV/bin/postactivate</span></code></p>
+</div>
+<div class="section" id="apply-migrations">
+<h2>4. Apply migrations<a class="headerlink" href="#apply-migrations" title="Permalink to this headline">¶</a></h2>
+<p>Run: <code class="docutils literal"><span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">migrate</span></code></p>
+</div>
+<div class="section" id="create-a-superuser">
+<h2>5. Create a superuser<a class="headerlink" href="#create-a-superuser" title="Permalink to this headline">¶</a></h2>
+<p>Run: <code class="docutils literal"><span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">createsuperuser</span></code></p>
+</div>
+<div class="section" id="run-the-server-localhost">
+<h2>6. Run the server (localhost)<a class="headerlink" href="#run-the-server-localhost" title="Permalink to this headline">¶</a></h2>
+<p>Run: <code class="docutils literal"><span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">runserver</span></code></p>
+</div>
+<div class="section" id="start-celery-worker-and-scheduler">
+<h2>7. Start celery worker and scheduler<a class="headerlink" href="#start-celery-worker-and-scheduler" title="Permalink to this headline">¶</a></h2>
+<p>Run: <code class="docutils literal"><span class="pre">bash</span> <span class="pre">test_files/cmd_workers.sh</span> <span class="pre">start</span> <span class="pre">2</span> <span class="pre">1</span></code> for 3 workers, of
+which one is for the scheduler Note: to start one worker, run:
+<code class="docutils literal"><span class="pre">celery</span> <span class="pre">-A</span> <span class="pre">datarun</span> <span class="pre">worker</span> <span class="pre">-l</span> <span class="pre">info</span></code></p>
+</div>
+</div>
+<div class="section" id="how-to-run-it-on-stratuslab-openstack">
+<h1>How to run it on stratuslab openstack?<a class="headerlink" href="#how-to-run-it-on-stratuslab-openstack" title="Permalink to this headline">¶</a></h1>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/datarun1.png"><img alt="oups!" src="../_images/datarun1.png" style="width: 600px;" /></a>
+</div>
+<p>There are two possibilities:</p>
+<ol class="upperalpha simple">
+<li>from scratch using an Ubuntu 14.04 image on openstack, or on any other cloud.</li>
+<li>using images <code class="docutils literal"><span class="pre">datarun_master</span></code> and <code class="docutils literal"><span class="pre">datarun_runner</span></code> on openstack</li>
+</ol>
+<p>Note: in both cases, you need a scienceFS account. On your scienceFS
+disk, create in the root directory a folder called <code class="docutils literal"><span class="pre">datarun</span></code>.</p>
+<div class="section" id="a-using-an-ubuntu-14-04-image">
+<h2>A. Using an Ubuntu 14.04 image<a class="headerlink" href="#a-using-an-ubuntu-14-04-image" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="a1-start-one-instance-for-the-master-and-as-many-instances-as-you-want-for-the-runners">
+<h3>A1. Start one instance for the master and as many instances as you want for the runners.<a class="headerlink" href="#a1-start-one-instance-for-the-master-and-as-many-instances-as-you-want-for-the-runners" title="Permalink to this headline">¶</a></h3>
+<p>Use Ubuntu v14.04 images. For the master, an VM os.2 is enough.</p>
+</div>
+<div class="section" id="a2-go-to-the-script-install-directory-and-stay-there-while-configuring-the-master-and-runners">
+<h3>A2. Go to the <code class="docutils literal"><span class="pre">script_install</span></code> directory and stay there while configuring the master and runners.<a class="headerlink" href="#a2-go-to-the-script-install-directory-and-stay-there-while-configuring-the-master-and-runners" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="a3-configure-the-master">
+<h3>A3. Configure the master<a class="headerlink" href="#a3-configure-the-master" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">On your local computer, create a file called <code class="docutils literal"><span class="pre">env.sh</span></code> (do not
+change this name) with the content below.
+Do not forget to change the values and be careful <strong>not to commit this file</strong> :-)
+And <strong>do not add comments to the file</strong>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>export SCIENCEFS_LOGIN=&#39;login_for_scienceFS_account&#39;
+export DR_DATABASE_NAME=&#39;database_name&#39;
+export DR_DATABASE_USER=&#39;database_user&#39;
+export DR_DATABASE_PASSWORD=&#39;database_password&#39;
+export DIR_DATA=&#39;/mnt/datarun/data&#39;
+export DIR_SUBMISSION=&#39;/mnt/datarun/submission&#39;
+export USER_LOGIN=&#39;user_name&#39;
+export USER_PSWD=&#39;user_password&#39;
+export CELERY_SCHEDULER_PERIOD=&#39;*/2&#39;
+export NB_LOCAL_WORKER=1
+export DR_EMAIL=&#39;mail@emailworld.com&#39;
+export RMQ_VHOST=&#39;rabbitMQ_vhost_name&#39;
+export IP_MASTER=$(/sbin/ifconfig eth0 | grep &quot;inet addr&quot; | awk -F: &#39;{print $2}&#39; | awk &#39;{print $1}&#39;)
+</pre></div>
+</div>
+</li>
+<li><p class="first">Run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">bash</span> <span class="n">scp_master_stratuslab</span><span class="o">.</span><span class="n">sh</span> <span class="n">master_address</span> <span class="n">scienceFS_private_key</span>
+</pre></div>
+</div>
+<p>with <code class="docutils literal"><span class="pre">master_address</span></code> being the master server address (e.g.,
+<code class="docutils literal"><span class="pre">onevm-81.lal.in2p3.fr</span></code>) and <code class="docutils literal"><span class="pre">scienceFS_private_key</span></code> being the
+file name (with absolute path) of the private key to connect to
+ScienceFS account. This will scp to the master some files that are
+needed to configure the master.</p>
+</li>
+<li><p class="first">Ssh to the instance and run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">bash</span> <span class="n">deploy_master_stratuslab</span><span class="o">.</span><span class="n">sh</span>
+<span class="n">source</span> <span class="o">~/.</span><span class="n">bashrc</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="a4-configure-runners">
+<h3>A4. Configure runners<a class="headerlink" href="#a4-configure-runners" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">On your local computer in the folder <code class="docutils literal"><span class="pre">script_install</span></code>, create a
+file called <code class="docutils literal"><span class="pre">env_runner.sh</span></code> (be careful to use the name
+<code class="docutils literal"><span class="pre">env_runner.sh</span></code>) with the content below. Do not forget to change
+the values and be careful not to commit this file :-) And do not add
+comments to the file.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">SCIENCEFS_LOGIN</span><span class="o">=</span><span class="s1">&#39;login_for_scienceFS_account&#39;</span>
+<span class="n">export</span> <span class="n">DR_DATABASE_USER</span><span class="o">=</span><span class="s1">&#39;database_name&#39;</span>
+<span class="n">export</span> <span class="n">DR_DATABASE_PASSWORD</span><span class="o">=</span><span class="s1">&#39;database_password&#39;</span>
+<span class="n">export</span> <span class="n">DIR_DATA</span><span class="o">=</span><span class="s1">&#39;/mnt/datarun/data&#39;</span>
+<span class="n">export</span> <span class="n">DIR_SUBMISSION</span><span class="o">=</span><span class="s1">&#39;/mnt/datarun/submission&#39;</span>
+<span class="n">export</span> <span class="n">RMQ_VHOST</span><span class="o">=</span><span class="s1">&#39;rabbitMQ_vhost_name&#39;</span>
+<span class="n">export</span> <span class="n">IP_MASTER</span><span class="o">=</span><span class="s1">&#39;xxx.yyy.zz.aaa&#39;</span>
+<span class="c1"># NB_WORKER added by scp_runner_stratuslab.sh</span>
+</pre></div>
+</div>
+<p>Values of these environment variables must be the same as what you
+defined in <code class="docutils literal"><span class="pre">env.sh</span></code>, they are used to connect to the master and
+read data from it.</p>
+</li>
+<li><p class="first">On your local computer, create a file <code class="docutils literal"><span class="pre">list_runners.txt</span></code> containing
+the list of runners address address, the number of workers you want
+on each runner, the list of queues processed by the workers (at least
+one of each among <code class="docutils literal"><span class="pre">L</span></code>, <code class="docutils literal"><span class="pre">H</span></code>, <code class="docutils literal"><span class="pre">celery</span></code>), and the hard and soft
+time limit in seconds:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">address_runner_1</span> <span class="n">number_worker_runner_1</span> <span class="n">list_queues_1</span> <span class="n">hard_time_limit_1</span> <span class="n">soft_time_limit_1</span>
+<span class="n">address_runner_2</span> <span class="n">number_worker_runner_2</span> <span class="n">list_queues_2</span> <span class="n">hard_time_limit_2</span> <span class="n">soft_time_limit_2</span>
+<span class="o">...</span>
+<span class="n">address_runner_3</span> <span class="n">number_worker_runner_3</span> <span class="n">list_queues_3</span> <span class="n">hard_time_limit_3</span> <span class="n">soft_time_limit_3</span>
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mf">134.158</span><span class="o">.</span><span class="mf">75.112</span> <span class="mi">2</span> <span class="n">L</span><span class="p">,</span><span class="n">celery</span> <span class="mi">360</span> <span class="mi">300</span>
+<span class="mf">134.158</span><span class="o">.</span><span class="mf">75.113</span> <span class="mi">3</span> <span class="n">H</span> <span class="mi">240</span> <span class="mi">200</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">bash</span> <span class="n">scp_runner_stratuslab</span><span class="o">.</span><span class="n">sh</span> <span class="n">list_runners</span><span class="o">.</span><span class="n">txt</span> <span class="n">scienceFS_private_key</span>
+</pre></div>
+</div>
+<p>As above, <code class="docutils literal"><span class="pre">scienceFS_private_key</span></code> is the file name (with absolute
+path) of the private key to connect to ScienceFS account. This will
+scp some files to the runners and configure them (by executing the
+script <code class="docutils literal"><span class="pre">deploy_runner_stratuslab.sh</span></code>)</p>
+</li>
+</ul>
+<p>You should now be ready to use datarun on stratuslab!</p>
+</div>
+</div>
+<div class="section" id="b-using-images-datarun-master-and-datarun-runner-on-openstack">
+<h2>B. Using images <code class="docutils literal"><span class="pre">datarun_master</span></code> and <code class="docutils literal"><span class="pre">datarun_runner</span></code> on openstack<a class="headerlink" href="#b-using-images-datarun-master-and-datarun-runner-on-openstack" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="b1-start-one-instance-for-the-master-and-as-many-instances-as-you-want-for-the-runners">
+<h3>B1. Start one instance for the master and as many instances as you want for the runners.<a class="headerlink" href="#b1-start-one-instance-for-the-master-and-as-many-instances-as-you-want-for-the-runners" title="Permalink to this headline">¶</a></h3>
+<p>Use the image <code class="docutils literal"><span class="pre">datarun_master</span></code> for the master and <code class="docutils literal"><span class="pre">datarun_runner</span></code>
+for runners.</p>
+</div>
+<div class="section" id="b2-go-to-the-script-install-directory-and-stay-there-while-configuring-the-master-and-runners">
+<h3>B2. Go to the <code class="docutils literal"><span class="pre">script_install</span></code> directory and stay there while configuring the master and runners.<a class="headerlink" href="#b2-go-to-the-script-install-directory-and-stay-there-while-configuring-the-master-and-runners" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="b3-configure-master">
+<h3>B3. Configure master<a class="headerlink" href="#b3-configure-master" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Ssh to the instance</li>
+<li>Go to <code class="docutils literal"><span class="pre">/home/datarun/script_install</span></code></li>
+<li>Run <code class="docutils literal"><span class="pre">bash</span> <span class="pre">deploy_master_from_image.sh</span></code></li>
+</ol>
+</div>
+<div class="section" id="b4-configure-runners">
+<h3>B4. Configure runners<a class="headerlink" href="#b4-configure-runners" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">On your local computer, create a file <code class="docutils literal"><span class="pre">list_runners.txt</span></code> containing
+the list of runners address address, the number of workers you want
+on each runner, the list of queues processed by the workers (at least
+one of each among <code class="docutils literal"><span class="pre">L</span></code>, <code class="docutils literal"><span class="pre">H</span></code>, <code class="docutils literal"><span class="pre">celery</span></code>), and the hard and soft
+time limit in seconds:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">address_runner_1</span> <span class="n">number_worker_runner_1</span> <span class="n">list_queues_1</span> <span class="n">hard_time_limit_1</span> <span class="n">soft_time_limit_1</span>
+<span class="n">address_runner_2</span> <span class="n">number_worker_runner_2</span> <span class="n">list_queues_2</span> <span class="n">hard_time_limit_2</span> <span class="n">soft_time_limit_2</span>
+<span class="o">...</span>
+<span class="n">address_runner_3</span> <span class="n">number_worker_runner_3</span> <span class="n">list_queues_3</span> <span class="n">hard_time_limit_3</span> <span class="n">soft_time_limit_3</span>
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mf">134.158</span><span class="o">.</span><span class="mf">75.112</span> <span class="mi">2</span> <span class="n">L</span><span class="p">,</span><span class="n">celery</span> <span class="mi">360</span> <span class="mi">300</span>
+<span class="mf">134.158</span><span class="o">.</span><span class="mf">75.113</span> <span class="mi">3</span> <span class="n">H</span> <span class="mi">240</span> <span class="mi">200</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">bash</span> <span class="n">scp_runner_from_image</span><span class="o">.</span><span class="n">sh</span> <span class="n">list_runners</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>This will configure the runners (by executing the script
+<code class="docutils literal"><span class="pre">deploy_runner_from_image.sh</span></code>). <strong>Check that the sciencefs disk has
+been correclty mounted</strong> (ssh to the instance and check if
+<code class="docutils literal"><span class="pre">/mnt/datarun</span></code> is not empty), sometimes it fails…</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How to run it locally?</a><ul>
+<li><a class="reference internal" href="#install-the-application">1. Install the application</a></li>
+<li><a class="reference internal" href="#set-up-the-database">2. Set up the database</a></li>
+<li><a class="reference internal" href="#define-environment-variables">3. Define environment variables</a></li>
+<li><a class="reference internal" href="#apply-migrations">4. Apply migrations</a></li>
+<li><a class="reference internal" href="#create-a-superuser">5. Create a superuser</a></li>
+<li><a class="reference internal" href="#run-the-server-localhost">6. Run the server (localhost)</a></li>
+<li><a class="reference internal" href="#start-celery-worker-and-scheduler">7. Start celery worker and scheduler</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#how-to-run-it-on-stratuslab-openstack">How to run it on stratuslab openstack?</a><ul>
+<li><a class="reference internal" href="#a-using-an-ubuntu-14-04-image">A. Using an Ubuntu 14.04 image</a><ul>
+<li><a class="reference internal" href="#a1-start-one-instance-for-the-master-and-as-many-instances-as-you-want-for-the-runners">A1. Start one instance for the master and as many instances as you want for the runners.</a></li>
+<li><a class="reference internal" href="#a2-go-to-the-script-install-directory-and-stay-there-while-configuring-the-master-and-runners">A2. Go to the <code class="docutils literal"><span class="pre">script_install</span></code> directory and stay there while configuring the master and runners.</a></li>
+<li><a class="reference internal" href="#a3-configure-the-master">A3. Configure the master</a></li>
+<li><a class="reference internal" href="#a4-configure-runners">A4. Configure runners</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#b-using-images-datarun-master-and-datarun-runner-on-openstack">B. Using images <code class="docutils literal"><span class="pre">datarun_master</span></code> and <code class="docutils literal"><span class="pre">datarun_runner</span></code> on openstack</a><ul>
+<li><a class="reference internal" href="#b1-start-one-instance-for-the-master-and-as-many-instances-as-you-want-for-the-runners">B1. Start one instance for the master and as many instances as you want for the runners.</a></li>
+<li><a class="reference internal" href="#b2-go-to-the-script-install-directory-and-stay-there-while-configuring-the-master-and-runners">B2. Go to the <code class="docutils literal"><span class="pre">script_install</span></code> directory and stay there while configuring the master and runners.</a></li>
+<li><a class="reference internal" href="#b3-configure-master">B3. Configure master</a></li>
+<li><a class="reference internal" href="#b4-configure-runners">B4. Configure runners</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="views.html" title="previous chapter">Requests</a></li>
+      <li>Next: <a href="tests.html" title="next chapter">Tests</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/modules/deployment.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Camille.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="../_sources/modules/deployment.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

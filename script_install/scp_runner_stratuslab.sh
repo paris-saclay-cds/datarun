@@ -21,6 +21,8 @@ while read p; do
     ADD_RUNNER=$1
     NB_WORKER=$2
     WORKER_QUEUES=$3
+    HARD_TIME_LIMIT=$4
+    SOFT_TIME_LIMIT=$5
     echo "** Runner: $ADD_RUNNER with $NB_WORKER workers for queues $WORKER_QUEUES **"
     # Make it possible to log in as root
     ssh ubuntu@"$ADD_RUNNER" 'bash -s' < root_permissions.sh
@@ -31,6 +33,8 @@ while read p; do
     cp env_runner.sh tmp_runner/env_runner.sh
     sed -i "$ a export NB_WORKER=$NB_WORKER" tmp_runner/env_runner.sh
     sed -i "$ a export WORKER_QUEUES=$WORKER_QUEUES" tmp_runner/env_runner.sh
+    sed -i "$ a export HARD_TIME_LIMIT=$HARD_TIME_LIMIT" tmp_runner/env_runner.sh
+    sed -i "$ a export SOFT_TIME_LIMIT=$SOFT_TIME_LIMIT" tmp_runner/env_runner.sh
     scp tmp_runner/env_runner.sh root@"$ADD_RUNNER":/root/.
     # Install runners
     ssh root@"$ADD_RUNNER" 'bash -s' < deploy_runner_stratuslab.sh;
