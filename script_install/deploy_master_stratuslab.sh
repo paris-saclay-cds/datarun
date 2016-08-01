@@ -32,6 +32,8 @@ sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force
 sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install pandoc
 # Install Apache and mod_wsgi
 sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install apache2 libapache2-mod-wsgi
+# Install Apache module for flower (apache as a reverse proxy)
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install libapache2-mod-proxy-html libxml2-dev
 # Install git 
 sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install git
 # Install numpy, scipy, and ipython
@@ -88,6 +90,14 @@ sudo service rabbitmq-server restart
 # Start the worker and scheduler
 mkdir celery_info
 bash script_install/master_workers.sh start $NB_LOCAL_WORKER
+
+# Install supervisord
+easy_install supervisord
+# Start flower with supervisord
+supervisord -c /home/datarun/script_install/supervisord.conf
+# Enable apache module for reverse proxy
+sudo a2enmod proxy
+sudo a2enmod proxy_http
 
 # Configure Apache: copy apache conf file to /etc/apache2/sites-available/
 mv /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/backup.conf
