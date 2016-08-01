@@ -143,6 +143,12 @@ A3. Configure the master
        bash deploy_master_stratuslab.sh
        source ~/.bashrc
 
+-  Once you've checked that the app is running (going to <master_address>/admin for instance), do not forget to change the Django setting ``DEBUG`` to False and add the server name (<IP_MASTER>) in ``ALLOWED_HOSTS`` (preceded with a dot). In ``/home/datarun/datarun/settings.py``:
+
+   ::
+
+       DEBUG = False
+       ALLOWED_HOSTS = ['.<IP_MASTER>']
 
 A4. Configure runners
 '''''''''''''''''''''
@@ -245,7 +251,8 @@ B4. Configure runners
        134.158.75.112 2 L,celery 360 300
        134.158.75.113 3 H 240 200
 
--  Run: 
+-  Run:
+
    ::
         bash scp_runner_from_image.sh list_runners.txt
    

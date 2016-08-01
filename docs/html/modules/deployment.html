@@ -162,6 +162,12 @@ needed to configure the master.</p>
 </pre></div>
 </div>
 </li>
+<li><p class="first">Once you&#8217;ve checked that the app is running (going to &lt;master_address&gt;/admin for instance), do not forget to change the Django setting <code class="docutils literal"><span class="pre">DEBUG</span></code> to False and add the server name (&lt;IP_MASTER&gt;) in <code class="docutils literal"><span class="pre">ALLOWED_HOSTS</span></code> (preceded with a dot). In <code class="docutils literal"><span class="pre">/home/datarun/datarun/settings.py</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">ALLOWED_HOSTS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;.&lt;IP_MASTER&gt;&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</li>
 </ul>
 </div>
 <div class="section" id="a4-configure-runners">
@@ -255,9 +261,11 @@ time limit in seconds:</p>
 </div>
 </li>
 <li><p class="first">Run:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">bash</span> <span class="n">scp_runner_from_image</span><span class="o">.</span><span class="n">sh</span> <span class="n">list_runners</span><span class="o">.</span><span class="n">txt</span>
-</pre></div>
-</div>
+<dl class="docutils">
+<dt>::</dt>
+<dd><p class="first last">bash scp_runner_from_image.sh list_runners.txt</p>
+</dd>
+</dl>
 <p>This will configure the runners (by executing the script
 <code class="docutils literal"><span class="pre">deploy_runner_from_image.sh</span></code>). <strong>Check that the sciencefs disk has
 been correclty mounted</strong> (ssh to the instance and check if
