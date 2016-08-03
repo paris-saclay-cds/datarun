@@ -92,7 +92,7 @@ mkdir celery_info
 bash script_install/master_workers.sh start $NB_LOCAL_WORKER
 
 # Install supervisord
-easy_install supervisord
+easy_install supervisor
 # Start flower with supervisord
 supervisord -c /home/datarun/script_install/supervisord.conf
 # Enable apache module for reverse proxy
