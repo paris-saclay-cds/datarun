@@ -166,7 +166,6 @@ A4. Configure runners
        export DIR_SUBMISSION='/mnt/datarun/submission'
        export RMQ_VHOST='rabbitMQ_vhost_name'
        export IP_MASTER='xxx.yyy.zz.aaa'
-       # NB_WORKER added by scp_runner_stratuslab.sh
 
    Values of these environment variables must be the same as what you
    defined in ``env.sh``, they are used to connect to the master and

@@ -59,10 +59,11 @@ mv /root/env_runner*.sh celery/.bash_aliases
 mv /root/datarun.py celery/.
 #mv /root/runner_workers.sh celery/.
 mv /root/supervisord_runner.conf celery/.
-mv /root/celeryd_runner.conf celery/.
+mv /root/celeryd*_runner.conf celery/.
 mkdir celery/runapp
 mv /root/tasks.py celery/runapp
 mv /root/__init__.py celery/runapp
+mkdir celery/celery_info  
 sudo -su celery<<HERE 
 cd celery
 source .bash_aliases  # strange, bash_aliases not activated when log in...
@@ -71,11 +72,12 @@ echo 'if [ -f /home/celery/.bash_aliases ]; then
 fi' >> .bashrc
 HERE
 
+
+echo $USER
+
 # Run workers
-# mkdir celery_info  
 # bash runner_workers.sh start $NB_WORKER $WORKER_QUEUES $HARD_TIME_LIMIT $SOFT_TIME_LIMIT
 # Install supervisord
 easy_install supervisor
 # Start  celery workers and flower with supervisord
-mkdir celery_info
-supervisord -c /home/datarun/script_install/supervisord_runner.conf
+supervisord -c /home/celery/supervisord_runner.conf
