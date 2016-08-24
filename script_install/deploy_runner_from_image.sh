@@ -22,8 +22,4 @@ cp /root/.bash_aliases /home/celery/.bash_aliases
 sshfs -o Ciphers=arcfour256 -o allow_other -o IdentityFile=/root/.ssh/id_rsa_sciencefs -o StrictHostKeyChecking=no "$SCIENCEFS_LOGIN"@sciencefs.di.u-psud.fr:/sciencefs/homes/"$SCIENCEFS_LOGIN"/datarun /mnt/datarun
 
 # Start workers
-sudo -su celery
-cd /home/celery
-source .bashrc
-source .bash_aliases
-bash runner_workers.sh start $NB_WORKER $WORKER_QUEUES
+supervisord -c /home/celery/supervisord_runner.conf
