@@ -42,7 +42,6 @@ if needed and create a database with ``createdb database_name``.
 -  ``CELERY_SCHEDULER_PERIOD``: period (in min) at which the scheduler
    checks new trained models and saves them in the database. Ex: ``*/2``
    for every 2 min.
--  ``NB_LOCAL_WORKER``: number of celery workers for the scheduler
 -  ``RMQ_VHOST``: RabbitMQ vhost name
 -  ``IP_MASTER``: ip address of the master, here: ``localhost``
 
@@ -119,7 +118,6 @@ A3. Configure the master
        export USER_LOGIN='user_name'
        export USER_PSWD='user_password'
        export CELERY_SCHEDULER_PERIOD='*/2'
-       export NB_LOCAL_WORKER=1
        export DR_EMAIL='mail@emailworld.com'
        export RMQ_VHOST='rabbitMQ_vhost_name'
        export IP_MASTER=$(/sbin/ifconfig eth0 | grep "inet addr" | awk -F: '{print $2}' | awk '{print $1}')
@@ -168,7 +166,6 @@ A4. Configure runners
        export DIR_SUBMISSION='/mnt/datarun/submission'
        export RMQ_VHOST='rabbitMQ_vhost_name'
        export IP_MASTER='xxx.yyy.zz.aaa'
-       # NB_WORKER added by scp_runner_stratuslab.sh
 
    Values of these environment variables must be the same as what you
    defined in ``env.sh``, they are used to connect to the master and

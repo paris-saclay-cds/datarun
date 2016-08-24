@@ -89,12 +89,14 @@ sudo service rabbitmq-server restart
 
 # Start the worker and scheduler
 mkdir celery_info
-bash script_install/master_workers.sh start $NB_LOCAL_WORKER
+rm celery_info/*
+chmod -R 777 celery_info
+# bash script_install/master_workers.sh start $NB_LOCAL_WORKER
 
 # Install supervisord
 easy_install supervisor
-# Start flower with supervisord
-supervisord -c /home/datarun/script_install/supervisord.conf
+# Start  celery workers and flower with supervisord
+supervisord -c /home/datarun/script_install/supervisord_master.conf
 # Enable apache module for reverse proxy
 sudo a2enmod proxy
 sudo a2enmod proxy_http

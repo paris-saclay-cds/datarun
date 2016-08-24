@@ -76,7 +76,6 @@ characters)</li>
 <li><code class="docutils literal"><span class="pre">CELERY_SCHEDULER_PERIOD</span></code>: period (in min) at which the scheduler
 checks new trained models and saves them in the database. Ex: <code class="docutils literal"><span class="pre">*/2</span></code>
 for every 2 min.</li>
-<li><code class="docutils literal"><span class="pre">NB_LOCAL_WORKER</span></code>: number of celery workers for the scheduler</li>
 <li><code class="docutils literal"><span class="pre">RMQ_VHOST</span></code>: RabbitMQ vhost name</li>
 <li><code class="docutils literal"><span class="pre">IP_MASTER</span></code>: ip address of the master, here: <code class="docutils literal"><span class="pre">localhost</span></code></li>
 </ul>
@@ -139,7 +138,6 @@ export DIR_SUBMISSION=&#39;/mnt/datarun/submission&#39;
 export USER_LOGIN=&#39;user_name&#39;
 export USER_PSWD=&#39;user_password&#39;
 export CELERY_SCHEDULER_PERIOD=&#39;*/2&#39;
-export NB_LOCAL_WORKER=1
 export DR_EMAIL=&#39;mail@emailworld.com&#39;
 export RMQ_VHOST=&#39;rabbitMQ_vhost_name&#39;
 export IP_MASTER=$(/sbin/ifconfig eth0 | grep &quot;inet addr&quot; | awk -F: &#39;{print $2}&#39; | awk &#39;{print $1}&#39;)
@@ -185,7 +183,6 @@ comments to the file.</p>
 <span class="n">export</span> <span class="n">DIR_SUBMISSION</span><span class="o">=</span><span class="s1">&#39;/mnt/datarun/submission&#39;</span>
 <span class="n">export</span> <span class="n">RMQ_VHOST</span><span class="o">=</span><span class="s1">&#39;rabbitMQ_vhost_name&#39;</span>
 <span class="n">export</span> <span class="n">IP_MASTER</span><span class="o">=</span><span class="s1">&#39;xxx.yyy.zz.aaa&#39;</span>
-<span class="c1"># NB_WORKER added by scp_runner_stratuslab.sh</span>
 </pre></div>
 </div>
 <p>Values of these environment variables must be the same as what you
