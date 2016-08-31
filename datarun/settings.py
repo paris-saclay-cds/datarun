@@ -180,7 +180,8 @@ BROKER_URL = 'amqp://%s:%s@%s/%s' % (os.environ.get('DR_DATABASE_USER'),
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_RESULT_BACKEND = 'rpc://'  # 'amqp'
+CELERY_RESULT_BACKEND = 'redis://:%s@%s:6379/0'\
+    % (os.environ.get('DR_DATABASE_PASSWORD'), os.environ.get('IP_MASTER'))
 # CELERY_RESULT_PERSISTENT = True
 CELERY_ACKS_LATE = True
 CELERYD_MAX_TASKS_PER_CHILD = 8

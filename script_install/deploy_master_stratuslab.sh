@@ -79,6 +79,13 @@ python manage.py migrate
 python manage.py collectstatic
 python manage.py createuser $DR_DATABASE_USER $DR_EMAIL $DR_DATABASE_PASSWORD --superuser
 
+# Install redis
+sudo apt-get install redis-server
+sudo pip install redis
+sed -i "331a requirepass $DR_DATABASE_USER" /etc/redis/redis.conf 
+sed -i 's/bind 127.0.0.1/# bind 127.0.0.1/g' /etc/redis/redis.conf 
+sudo service redis-server restart 
+
 # Install RabbitMQ 
 sudo apt-get install -y rabbitmq-server
 # Configure so that remote machines can connect to the master
