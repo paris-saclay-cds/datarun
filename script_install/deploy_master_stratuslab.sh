@@ -84,6 +84,8 @@ sudo apt-get install redis-server
 sudo pip install redis
 sed -i "331a requirepass $DR_DATABASE_USER" /etc/redis/redis.conf 
 sed -i 's/bind 127.0.0.1/# bind 127.0.0.1/g' /etc/redis/redis.conf 
+sysctl vm.overcommit_memory=1
+sed -i '\$a vm.overcommit_memory=1' /etc/sysctl.conf
 sudo service redis-server restart 
 
 # Install RabbitMQ 
