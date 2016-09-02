@@ -20,7 +20,6 @@ imagesize==0.7.0
 jdcal==1.2
 Jinja2==2.8
 kombu==3.0.33
-librabbitmq==1.6.1
 MarkupSafe==0.23
 numpy==1.10.4
 openpyxl==2.2.0b1
