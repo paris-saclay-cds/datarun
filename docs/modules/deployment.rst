@@ -23,6 +23,13 @@ using `virtualenv and virtualenvwrapper`_):
 Install RabbitMQ (celery `broker`_):
 ``sudo apt-get install rabbitmq-server``
 
+Install Redis: 
+
+1. ``sudo apt-get install redis-server``  
+2. ``pip install redis``
+3. Add the authentication with a password by adding this line in ``requirepass $DR_DATABASE_PASSWORD$`` (with ``$DR_DATABASE_PASSWORD$`` being datarun database password, cf below in the environment variables section).    
+4. Restart redis server: ``sudo service redis-server restart``
+
 2. Set up the database
 ^^^^^^^^^^^^^^^^^^^^^^
 
