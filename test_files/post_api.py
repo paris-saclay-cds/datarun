@@ -3,6 +3,9 @@ import zlib
 import base64
 
 
+headers = {'Accept': 'application/vnd.datarun.runapp+json; version=0.4'}
+
+
 def read_compress(file_name):
     with open(file_name, 'r') as ff:
         df = ff.read()

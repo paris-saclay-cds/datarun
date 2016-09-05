@@ -79,12 +79,16 @@ WSGI_APPLICATION = 'datarun.wsgi.application'
 
 
 # REST Framework
-# REST_FRAMEWORK = {
-#     'DEFAULT_VERSIONING_CLASS':
-#     'rest_framework.versioning.AcceptHeaderVersioning',
-#     'ALLOWED_VERSIONS': ('0.0'),
-#     'DEFAULT_VERSION': '0.0',
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_VERSIONING_CLASS':
+    'rest_framework.versioning.AcceptHeaderVersioning',
+    'ALLOWED_VERSIONS': ('0.4'),
+    'DEFAULT_VERSION': '0.4',
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'runapp.renderers.RunappJSONRenderer',
+    ),
+}
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
