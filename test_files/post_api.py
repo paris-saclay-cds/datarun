@@ -15,7 +15,8 @@ def read_compress(file_name):
 def url_post(url1, url2, username, password, data):
     url = url1 + url2
     url = url[0:9] + url[9::].replace('//', '/')
-    return requests.post(url, auth=(username, password), json=data)
+    return requests.post(url, auth=(username, password), headers=headers,
+                         json=data)
 
 
 def url_get(url1, url2, username, password, r_id=None):
@@ -23,7 +24,7 @@ def url_get(url1, url2, username, password, r_id=None):
     url = url[0:9] + url[9::].replace('//', '/')
     if r_id:
         url = url + str(r_id) + '/'
-    return requests.get(url, auth=(username, password))
+    return requests.get(url, auth=(username, password), headers=headers)
 
 
 def post_data(host_url, username, password,
