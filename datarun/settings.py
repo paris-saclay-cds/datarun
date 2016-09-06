@@ -185,6 +185,8 @@ CELERY_RESULT_BACKEND = 'redis://:%s@%s:6379/0'\
 # CELERY_RESULT_PERSISTENT = True
 CELERY_ACKS_LATE = True
 CELERYD_MAX_TASKS_PER_CHILD = 8
+CELERY_TASK_RESULT_EXPIRES = 600
+CELERY_MESSAGE_COMPRESSION = "gzip"
 
 
 TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
@@ -192,7 +194,7 @@ CELERYBEAT_SCHEDULE = {
     'save-train-model-in-db': {
         'task': 'runapp.tasks.task_save_submission_fold_db',
         'schedule': crontab(minute=os.environ.get('CELERY_SCHEDULER_PERIOD',
-                                                  '*/15')),
+                                                  '*/2')),
         'options': {'queue': 'master_periodic'},
 #        'queue': 'master_periodic',
     },
