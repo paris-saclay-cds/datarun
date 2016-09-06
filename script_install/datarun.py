@@ -12,5 +12,8 @@ app = Celery('datarun', backend=backend_url,
              broker=broker_url)
 app.conf.CELERY_TASK_SERIALIZER = 'json'
 app.conf.CELERY_RESULT_SERIALIZER = 'json'
-
+app.conf.CELERY_TASK_RESULT_EXPIRES = 600
+app.conf.CELERY_MESSAGE_COMPRESSION = "gzip"
+app.conf.CELERY_ACKS_LATE = True
+app.conf.CELERYD_MAX_TASKS_PER_CHILD = 8
 app.autodiscover_tasks(['runapp'], force=True)
