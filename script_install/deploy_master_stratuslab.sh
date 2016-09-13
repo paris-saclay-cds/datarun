@@ -38,6 +38,7 @@ sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force
 sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install git
 # Install numpy, scipy, and ipython
 pip install numpy
+pip install numpy --upgrade
 pip install scipy
 pip install pandas
 pip install ipython

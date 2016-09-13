@@ -26,6 +26,7 @@ sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force
 sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install pandoc
 # Install numpy, scipy, and ipython
 pip install numpy
+pip install numpy --upgrade
 pip install scipy
 pip install pandas
 pip install ipython
@@ -111,3 +112,4 @@ sudo make check
 sudo make install  # or sudo make install
 cd
 sudo USE_SETUPCFG=0 pip install netcdf
+pip install xarray
