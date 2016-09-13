@@ -39,3 +39,4 @@ SQLAlchemy==1.0.12
 tornado==4.2
 xlrd==0.9.4
 pandas>=0.17.1
+xarray==0.8.2
