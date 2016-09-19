@@ -30,15 +30,12 @@ while read p; do
     scp $SCIENCEFS_KEY root@"$ADD_RUNNER":/root/.ssh/id_rsa_sciencefs
     scp deploy_runner_stratuslab.sh supervisord_runner.conf env_runner.sh root@"$ADD_RUNNER":/root/. 
     scp datarun.py ../runapp/tasks.py ../runapp/__init__.py root@"$ADD_RUNNER":/root/.
-    for iworker in `seq 1 $NB_WORKER`;
-    do
-        cp celeryd_runner.conf tmp_runner/celeryd${iworker}_runner.conf
-        sed -i "s/VAR_QUEUES/$WORKER_QUEUES/g" tmp_runner/celeryd${iworker}_runner.conf
-        sed -i "s/VAR_HARD_TIME_LIMIT/$HARD_TIME_LIMIT/g" tmp_runner/celeryd${iworker}_runner.conf
-        sed -i "s/VAR_SOFT_TIME_LIMIT/$SOFT_TIME_LIMIT/g" tmp_runner/celeryd${iworker}_runner.conf
-        sed -i "s/celery1/celery${iworker}/g" tmp_runner/celeryd${iworker}_runner.conf
-        scp tmp_runner/celeryd${iworker}_runner.conf root@"$ADD_RUNNER":/root/.
-    done
+    cp celeryd_runner.conf tmp_runner/celeryd_runner.conf
+    sed -i "s/CONCURRENCY/$NB_WORKER/g" tmp_runner/celeryd_runner.conf
+    sed -i "s/VAR_QUEUES/$WORKER_QUEUES/g" tmp_runner/celeryd_runner.conf
+    sed -i "s/VAR_HARD_TIME_LIMIT/$HARD_TIME_LIMIT/g" tmp_runner/celeryd_runner.conf
+    sed -i "s/VAR_SOFT_TIME_LIMIT/$SOFT_TIME_LIMIT/g" tmp_runner/celeryd_runner.conf
+    scp tmp_runner/celeryd_runner.conf root@"$ADD_RUNNER":/root/.
     # Install runners
     ssh root@"$ADD_RUNNER" 'bash -s' < deploy_runner_stratuslab.sh;
 done < $FILE_RUNNERS
