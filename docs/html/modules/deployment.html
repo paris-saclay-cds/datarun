@@ -190,14 +190,14 @@ defined in <code class="docutils literal"><span class="pre">env.sh</span></code>
 read data from it.</p>
 </li>
 <li><p class="first">On your local computer, create a file <code class="docutils literal"><span class="pre">list_runners.txt</span></code> containing
-the list of runners address address, the number of workers you want
-on each runner, the list of queues processed by the workers (at least
+the list of runners address address, the number of tasks you want to be run
+concurrently on each runner, the list of queues processed by the workers (at least
 one of each among <code class="docutils literal"><span class="pre">L</span></code>, <code class="docutils literal"><span class="pre">H</span></code>, <code class="docutils literal"><span class="pre">celery</span></code>), and the hard and soft
 time limit in seconds:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">address_runner_1</span> <span class="n">number_worker_runner_1</span> <span class="n">list_queues_1</span> <span class="n">hard_time_limit_1</span> <span class="n">soft_time_limit_1</span>
-<span class="n">address_runner_2</span> <span class="n">number_worker_runner_2</span> <span class="n">list_queues_2</span> <span class="n">hard_time_limit_2</span> <span class="n">soft_time_limit_2</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">address_runner_1</span> <span class="n">number_task_runner_1</span> <span class="n">list_queues_1</span> <span class="n">hard_time_limit_1</span> <span class="n">soft_time_limit_1</span>
+<span class="n">address_runner_2</span> <span class="n">number_task_runner_2</span> <span class="n">list_queues_2</span> <span class="n">hard_time_limit_2</span> <span class="n">soft_time_limit_2</span>
 <span class="o">...</span>
-<span class="n">address_runner_3</span> <span class="n">number_worker_runner_3</span> <span class="n">list_queues_3</span> <span class="n">hard_time_limit_3</span> <span class="n">soft_time_limit_3</span>
+<span class="n">address_runner_3</span> <span class="n">number_task_runner_3</span> <span class="n">list_queues_3</span> <span class="n">hard_time_limit_3</span> <span class="n">soft_time_limit_3</span>
 </pre></div>
 </div>
 <p>Example:</p>
@@ -241,14 +241,14 @@ for runners.</p>
 <h3>B4. Configure runners<a class="headerlink" href="#b4-configure-runners" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">On your local computer, create a file <code class="docutils literal"><span class="pre">list_runners.txt</span></code> containing
-the list of runners address address, the number of workers you want
-on each runner, the list of queues processed by the workers (at least
+the list of runners address address, the number of taskss you want be run
+concurrently on each runner, the list of queues processed by the workers (at least
 one of each among <code class="docutils literal"><span class="pre">L</span></code>, <code class="docutils literal"><span class="pre">H</span></code>, <code class="docutils literal"><span class="pre">celery</span></code>), and the hard and soft
 time limit in seconds:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">address_runner_1</span> <span class="n">number_worker_runner_1</span> <span class="n">list_queues_1</span> <span class="n">hard_time_limit_1</span> <span class="n">soft_time_limit_1</span>
-<span class="n">address_runner_2</span> <span class="n">number_worker_runner_2</span> <span class="n">list_queues_2</span> <span class="n">hard_time_limit_2</span> <span class="n">soft_time_limit_2</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">address_runner_1</span> <span class="n">number_task_runner_1</span> <span class="n">list_queues_1</span> <span class="n">hard_time_limit_1</span> <span class="n">soft_time_limit_1</span>
+<span class="n">address_runner_2</span> <span class="n">number_task_runner_2</span> <span class="n">list_queues_2</span> <span class="n">hard_time_limit_2</span> <span class="n">soft_time_limit_2</span>
 <span class="o">...</span>
-<span class="n">address_runner_3</span> <span class="n">number_worker_runner_3</span> <span class="n">list_queues_3</span> <span class="n">hard_time_limit_3</span> <span class="n">soft_time_limit_3</span>
+<span class="n">address_runner_3</span> <span class="n">number_task_runner_3</span> <span class="n">list_queues_3</span> <span class="n">hard_time_limit_3</span> <span class="n">soft_time_limit_3</span>
 </pre></div>
 </div>
 <p>Example:</p>

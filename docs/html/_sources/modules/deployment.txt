@@ -172,17 +172,17 @@ A4. Configure runners
    read data from it.
 
 -  On your local computer, create a file ``list_runners.txt`` containing
-   the list of runners address address, the number of workers you want
-   on each runner, the list of queues processed by the workers (at least
+   the list of runners address address, the number of tasks you want to be run 
+   concurrently on each runner, the list of queues processed by the workers (at least
    one of each among ``L``, ``H``, ``celery``), and the hard and soft
    time limit in seconds:
 
    ::
 
-       address_runner_1 number_worker_runner_1 list_queues_1 hard_time_limit_1 soft_time_limit_1
-       address_runner_2 number_worker_runner_2 list_queues_2 hard_time_limit_2 soft_time_limit_2
+       address_runner_1 number_task_runner_1 list_queues_1 hard_time_limit_1 soft_time_limit_1
+       address_runner_2 number_task_runner_2 list_queues_2 hard_time_limit_2 soft_time_limit_2
        ...
-       address_runner_3 number_worker_runner_3 list_queues_3 hard_time_limit_3 soft_time_limit_3
+       address_runner_3 number_task_runner_3 list_queues_3 hard_time_limit_3 soft_time_limit_3
 
    Example:
 
@@ -229,17 +229,17 @@ B4. Configure runners
 '''''''''''''''''''''
 
 -  On your local computer, create a file ``list_runners.txt`` containing
-   the list of runners address address, the number of workers you want
-   on each runner, the list of queues processed by the workers (at least
+   the list of runners address address, the number of taskss you want be run 
+   concurrently on each runner, the list of queues processed by the workers (at least
    one of each among ``L``, ``H``, ``celery``), and the hard and soft
    time limit in seconds:
 
    ::
 
-       address_runner_1 number_worker_runner_1 list_queues_1 hard_time_limit_1 soft_time_limit_1
-       address_runner_2 number_worker_runner_2 list_queues_2 hard_time_limit_2 soft_time_limit_2
+       address_runner_1 number_task_runner_1 list_queues_1 hard_time_limit_1 soft_time_limit_1
+       address_runner_2 number_task_runner_2 list_queues_2 hard_time_limit_2 soft_time_limit_2
        ...
-       address_runner_3 number_worker_runner_3 list_queues_3 hard_time_limit_3 soft_time_limit_3
+       address_runner_3 number_task_runner_3 list_queues_3 hard_time_limit_3 soft_time_limit_3
 
    Example:
 
