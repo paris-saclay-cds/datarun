@@ -323,8 +323,9 @@ def test_submission_fold(raw_data_files_path, trained_submission,
                           + ' - ERROR(test)\n'
             submission_fold_state = 'ERROR'
             test_predictions = None
-    except:
-        log_message = log_message + 'Problem in test_model - ERROR(test)'
+    except Exception, e:
+        log_message = log_message + _make_error_message(e) +\
+            ' - ERROR(test)\n'
         submission_fold_state = 'ERROR'
         test_predictions = None
         pass
