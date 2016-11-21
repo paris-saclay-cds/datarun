@@ -25,7 +25,7 @@ while read p; do
     SOFT_TIME_LIMIT=$5
     echo "** Runner: $ADD_RUNNER with $NB_WORKER workers for queues $WORKER_QUEUES **"
     # Make it possible to log in as root
-    ssh ubuntu@"$ADD_RUNNER" 'bash -s' < root_permissions.sh
+    ssh -o "StrictHostKeyChecking no" ubuntu@"$ADD_RUNNER" 'bash -s' < root_permissions.sh
     # Copy sciencefs key and install scipt
     scp $SCIENCEFS_KEY root@"$ADD_RUNNER":/root/.ssh/id_rsa_sciencefs
     scp deploy_runner_stratuslab.sh supervisord_runner.conf env_runner.sh root@"$ADD_RUNNER":/root/. 
