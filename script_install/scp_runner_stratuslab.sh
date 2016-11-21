@@ -37,7 +37,7 @@ while read p; do
     sed -i "s/VAR_SOFT_TIME_LIMIT/$SOFT_TIME_LIMIT/g" tmp_runner/celeryd_runner.conf
     scp tmp_runner/celeryd_runner.conf root@"$ADD_RUNNER":/root/.
     # Install runners
-    ssh root@"$ADD_RUNNER" 'bash -s' < deploy_runner_stratuslab.sh;
+    ssh -o "StrictHostKeyChecking no" root@"$ADD_RUNNER" 'bash -s' < deploy_runner_stratuslab.sh;
 done < $FILE_RUNNERS
 
 rm -r tmp_runner

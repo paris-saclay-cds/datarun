@@ -198,6 +198,7 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
     except Exception as e:
         log_message = log_message + _make_error_message(e)\
             + 'ERROR(split data) \n'
+        submission_fold_state = 'ERROR'
         return log_message, submission_fold_state, metrics,\
             full_train_predictions, test_predictions
     # get workflow elements
@@ -223,6 +224,7 @@ def train_test_submission_fold(raw_data_files_path, workflow_elements,
             full_train_predictions, test_predictions
     except SoftTimeLimitExceeded:
         log_message = log_message + '\n Soft Time Limit Exceeded'
+        submission_fold_state = 'ERROR'
         return log_message, submission_fold_state, metrics,\
             full_train_predictions, test_predictions
 
