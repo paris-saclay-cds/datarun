@@ -5,7 +5,7 @@ import json
 import zlib
 import base64
 import numpy as np
-from sklearn import cross_validation
+from sklearn import model_selection
 import post_api
 sys.path.insert(0, '..')
 from runapp import tasks
@@ -131,10 +131,10 @@ for dict_param in list_dict_param:
 
     # Send submission and fold 1
     priority = 'L'
-    skf = cross_validation.ShuffleSplit(int(np.floor(n_samples *
-                                                     (1 - held_out_test))),
-                                        random_state=42)
-    train_is1, test_is1 = list(skf)[0]
+    skf = model_selection.ShuffleSplit(random_state=42)
+    n_pts = int(np.floor(n_samples * (1 - held_out_test)))
+    skf_list = list(skf.split(np.arange(n_pts)))
+    train_is1, test_is1 = skf_list[0]
     post_submission1 = post_api.post_submission_fold(host_url, username,
                                                      userpassd, submission_id,
                                                      submission_fold_id1,
@@ -147,7 +147,7 @@ for dict_param in list_dict_param:
     print('train-test task id fold 1: ', task_id1)
 
     # Send submission on fold 2
-    train_is2, test_is2 = list(skf)[1]
+    train_is2, test_is2 = skf_list[1]
     post_submission2 = post_api.post_submission_fold(host_url, username,
                                                      userpassd, submission_id,
                                                      submission_fold_id2,

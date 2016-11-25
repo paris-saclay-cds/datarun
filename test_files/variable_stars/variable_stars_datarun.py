@@ -13,8 +13,8 @@ import os
 from importlib import import_module
 import numpy as np
 import pandas as pd
-from sklearn.cross_validation import train_test_split
-from sklearn.cross_validation import StratifiedShuffleSplit
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import StratifiedShuffleSplit
 
 problem_name = 'variable_stars'  # should be the same as the file name
 
@@ -122,10 +122,9 @@ def train_submission(module_path, X_dict, y_array, train_is):
     X_train_array = fe.transform(X_train_dict)
 
     # Train/valid cut for holding out calibration set
-    cv = StratifiedShuffleSplit(
-        y_train_array, n_iter=1, test_size=0.1, random_state=57)
-    calib_train_is, calib_test_is = list(cv)[0]
-
+    cv = StratifiedShuffleSplit(n_splits=1, test_size=0.1, random_state=57)
+    calib_train_is, calib_test_is = list(cv.split(X_train_array,
+                                                  y_train_array))[0]
     X_train_train_array = X_train_array[calib_train_is]
     y_train_train_array = y_train_array[calib_train_is]
     X_calib_train_array = X_train_array[calib_test_is]

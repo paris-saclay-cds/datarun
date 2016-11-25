@@ -2,7 +2,7 @@ import os
 import base64
 import zlib
 import numpy as np
-from sklearn import cross_validation
+from sklearn import model_selection
 from test.test_support import EnvironmentVarGuard
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -107,8 +107,12 @@ class WorkflowTests(APITestCase):
             file3 = 'test_files/calibrator.py'
             data = {'databoard_sf_id': subf_id, 'databoard_s_id': sub_id,
                     'raw_data': raw_data_id}
-            skf = cross_validation.ShuffleSplit(int(n_samples * held_out_test))
-            train_is, test_is = list(skf)[0]
+            skf = model_selection.ShuffleSplit(random_state=42)
+            train_is, test_is = list(skf.split(
+                np.arange(int(n_samples * held_out_test))))[0]
+            # skf = cross_validation.ShuffleSplit(
+            #     int(n_samples * held_out_test))
+            # train_is, test_is = list(skf)[0]
             train_is = base64.b64encode(zlib.compress(train_is.tostring()))
             test_is = base64.b64encode(zlib.compress(test_is.tostring()))
             data['train_is'] = train_is

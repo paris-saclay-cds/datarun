@@ -57,6 +57,13 @@ using <a class="reference external" href="https://virtualenvwrapper.readthedocs.
 </ol>
 <p>Install RabbitMQ (celery <a class="reference external" href="http://docs.celeryproject.org/en/latest/getting-started/first-steps-with-celery.html#rabbitmq">broker</a>):
 <code class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">rabbitmq-server</span></code></p>
+<p>Install Redis and set it up for our app (celery <a class="reference external" href="http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend">result backend</a>):</p>
+<blockquote>
+<div>::
+sudo apt-get install -y redis-server
+pip install redis
+sudo sed -i &#8220;331a requirepass $DR_DATABASE_PASSWORD&#8221; /etc/redis/redis.conf
+sudo service redis-server restart</div></blockquote>
 </div>
 <div class="section" id="set-up-the-database">
 <h2>2. Set up the database<a class="headerlink" href="#set-up-the-database" title="Permalink to this headline">¶</a></h2>
@@ -68,6 +75,8 @@ if needed and create a database with <code class="docutils literal"><span class=
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">DR_WORKING_ENV</span></code>: <code class="docutils literal"><span class="pre">PROD</span></code> for production environment or <code class="docutils literal"><span class="pre">DEV</span></code>
 for development env</li>
+<li><code class="docutils literal"><span class="pre">DIR_DATA</span></code>: directory where to save data</li>
+<li><code class="docutils literal"><span class="pre">DIR_SUBMISSION</span></code>: directory where to save submissions</li>
 <li><code class="docutils literal"><span class="pre">DR_DATABASE_NAME</span></code>: database name</li>
 <li><code class="docutils literal"><span class="pre">DR_DATABASE_USER</span></code>: database user name</li>
 <li><code class="docutils literal"><span class="pre">DR_DATABASE_PASSWORD</span></code>: database user password (do not use special

@@ -7,7 +7,7 @@ import resource
 import numpy as np
 import pandas as pd
 from importlib import import_module
-from sklearn.cross_validation import train_test_split, StratifiedShuffleSplit
+from sklearn.model_selection import train_test_split, StratifiedShuffleSplit
 from celery import shared_task
 from celery.utils.log import get_task_logger
 from celery.exceptions import SoftTimeLimitExceeded
@@ -254,7 +254,7 @@ def train_submission_fold(raw_data_files_path, submission_files_path,
                                              list_workflow_elements,
                                              X_train, y_train, train_is)
         submission_fold_state = 'TRAINED'
-    except Exception, e:
+    except Exception as e:
         submission_fold_state = 'ERROR'
         log_message = log_message + _make_error_message(e) + ' - ERROR(train)\n'
         return None, log_message, submission_fold_state, None, None
@@ -368,9 +368,10 @@ def train_model(module_path, list_workflow_elements, X, y, train_is):
             if 'calibrator' in list_workflow_elements:
                 nb_applied_elements += 1
                 # Train/valid cut for holding out calibration set
-                cv = StratifiedShuffleSplit(y_train, n_iter=1, test_size=0.1,
+                cv = StratifiedShuffleSplit(n_splits=1, test_size=0.1,
                                             random_state=57)
-                calib_train_is, calib_test_is = list(cv)[0]
+                calib_train_is, calib_test_is = list(cv.split(X_train,
+                                                              y_train))[0]
                 X_train_train = X_train[calib_train_is]
                 y_train_train = y_train[calib_train_is]
                 X_calib_train = X_train[calib_test_is]

@@ -23,6 +23,15 @@ using `virtualenv and virtualenvwrapper`_):
 Install RabbitMQ (celery `broker`_):
 ``sudo apt-get install rabbitmq-server``
 
+Install Redis and set it up for our app (celery `result backend`_):  
+
+    ::
+    sudo apt-get install -y redis-server
+    pip install redis
+    sudo sed -i "331a requirepass $DR_DATABASE_PASSWORD" /etc/redis/redis.conf
+    sudo service redis-server restart
+
+
 2. Set up the database
 ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -34,6 +43,8 @@ if needed and create a database with ``createdb database_name``.
 
 -  ``DR_WORKING_ENV``: ``PROD`` for production environment or ``DEV``
    for development env
+-  ``DIR_DATA``: directory where to save data  
+-  ``DIR_SUBMISSION``: directory where to save submissions  
 -  ``DR_DATABASE_NAME``: database name
 -  ``DR_DATABASE_USER``: database user name
 -  ``DR_DATABASE_PASSWORD``: database user password (do not use special
@@ -265,6 +276,7 @@ B4. Configure runners
 
 .. _virtualenv and virtualenvwrapper: https://virtualenvwrapper.readthedocs.org/en/latest/
 .. _broker: http://docs.celeryproject.org/en/latest/getting-started/first-steps-with-celery.html#rabbitmq
+.. _result backend: http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
 .. _install postgres: http://www.postgresql.org/download/
 
 
