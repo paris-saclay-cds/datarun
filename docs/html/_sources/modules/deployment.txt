@@ -105,11 +105,13 @@ A3. Configure the master
 -  On your local computer, create a file called ``env.sh`` (do not
    change this name) with the content below. 
    Do not forget to change the values and be careful **not to commit this file** :-) 
-   And **do not add comments to the file**.
+   And **do not add comments to the file**.  
+   Make sure that the directory ``SCIENCEFS_DATARUN`` has been created on the sciencefs disk beforehand.  
 
    ::
 
        export SCIENCEFS_LOGIN='login_for_scienceFS_account'
+       export SCIENCEFS_DATARUN='path_of_sciencefs_disk'
        export DR_DATABASE_NAME='database_name'
        export DR_DATABASE_USER='database_user'
        export DR_DATABASE_PASSWORD='database_password'
@@ -154,12 +156,14 @@ A4. Configure runners
 -  On your local computer in the folder ``script_install``, create a
    file called ``env_runner.sh`` (be careful to use the name
    ``env_runner.sh``) with the content below. Do not forget to change
-   the values and be careful not to commit this file :-) And do not add
-   comments to the file.
+   the values and **be careful not to commit this file** :-) And **do not add
+   comments to the file**.  
+   Make sure that the directory ``SCIENCEFS_DATARUN`` has been created on the sciencefs disk beforehand.  
 
    ::
 
        export SCIENCEFS_LOGIN='login_for_scienceFS_account'
+       export SCIENCEFS_DATARUN='path_of_sciencefs_disk'
        export DR_DATABASE_USER='database_name'
        export DR_DATABASE_PASSWORD='database_password'
        export DIR_DATA='/mnt/datarun/data'
@@ -262,3 +266,9 @@ B4. Configure runners
 .. _virtualenv and virtualenvwrapper: https://virtualenvwrapper.readthedocs.org/en/latest/
 .. _broker: http://docs.celeryproject.org/en/latest/getting-started/first-steps-with-celery.html#rabbitmq
 .. _install postgres: http://www.postgresql.org/download/
+
+
+C. How to install missing packages on runners
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If the package can be installed with pip, run: ``runner_install {list_runner.txt} {package name}`` with ``{list_runner.txt}`` being the file mentionned (A and B sections) specifying runners. It is going to run on each runner the following ``pip install {package_name}``

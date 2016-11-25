@@ -1,7 +1,6 @@
 #!/bin/bash
 # :Usage: bash deploy_runner_stratuslab.sh 
 # Prepare Ubuntu (14.04) server instance for runners. 
-# It starts $NB_WORKER on the instance
 
 cd /home/
 export LC_ALL=en_US.UTF-8
@@ -44,7 +43,7 @@ cd /home/
 source /root/env_runner.sh
 apt-get -y install sshfs
 mkdir /mnt/datarun
-sshfs -o Ciphers=arcfour256 -o allow_other -o IdentityFile=/root/.ssh/id_rsa_sciencefs -o StrictHostKeyChecking=no "$SCIENCEFS_LOGIN"@sciencefs.di.u-psud.fr:/sciencefs/homes/"$SCIENCEFS_LOGIN"/datarun /mnt/datarun
+sshfs -o Ciphers=arcfour256 -o allow_other -o IdentityFile=/root/.ssh/id_rsa_sciencefs -o StrictHostKeyChecking=no "$SCIENCEFS_LOGIN"@sciencefs.di.u-psud.fr:/sciencefs/homes/"$SCIENCEFS_LOGIN"/"$SCIENCEFS_DATARUN" /mnt/datarun
 
 # Install redis
 pip install redis
@@ -88,28 +87,28 @@ supervisord -c /home/celery/supervisord_runner.conf
 
 cd
 # Install python-netcdf4 (requires zlib, hdf5, and netCDF-C)
-sudo apt-get -y install m4
-wget http://zlib.net/zlib-1.2.8.tar.gz
-wget https://support.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.17.tar
-wget https://github.com/Unidata/netcdf-c/archive/v4.4.1.tar.gz
-tar -xzvf zlib-1.2.8.tar.gz
-tar -xvf hdf5-1.8.17.tar
-tar -xzvf v4.4.1.tar.gz
-cd zlib-1.2.8
-export ZDIR=/usr/local
-./configure --prefix=${ZDIR}
-sudo make check
-sudo make install
-cd ../hdf5-1.8.17
-export H5DIR=/usr/local
-./configure --with-zlib=${ZDIR} --prefix=${H5DIR}
-sudo make check   # Fails here, but seems ok for netcdf
-sudo make install
-cd ../netcdf-c-4.4.1
-export NCDIR=/usr/local
-sudo CPPFLAGS=-I${H5DIR}/include LDFLAGS=-L${H5DIR}/lib ./configure --prefix=${NCDIR}
-sudo make check
-sudo make install  # or sudo make install
-cd
-sudo USE_SETUPCFG=0 pip install netcdf
-pip install xarray
+#sudo apt-get -y install m4
+#wget http://zlib.net/zlib-1.2.8.tar.gz
+#wget https://support.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.17.tar
+#wget https://github.com/Unidata/netcdf-c/archive/v4.4.1.tar.gz
+#tar -xzvf zlib-1.2.8.tar.gz
+#tar -xvf hdf5-1.8.17.tar
+#tar -xzvf v4.4.1.tar.gz
+#cd zlib-1.2.8
+#export ZDIR=/usr/local
+#./configure --prefix=${ZDIR}
+#sudo make check
+#sudo make install
+#cd ../hdf5-1.8.17
+#export H5DIR=/usr/local
+#./configure --with-zlib=${ZDIR} --prefix=${H5DIR}
+#sudo make check   # Fails here, but seems ok for netcdf
+#sudo make install
+#cd ../netcdf-c-4.4.1
+#export NCDIR=/usr/local
+#sudo CPPFLAGS=-I${H5DIR}/include LDFLAGS=-L${H5DIR}/lib ./configure --prefix=${NCDIR}
+#sudo make check
+#sudo make install  # or sudo make install
+#cd
+#sudo USE_SETUPCFG=0 pip install netcdf
+#pip install xarray

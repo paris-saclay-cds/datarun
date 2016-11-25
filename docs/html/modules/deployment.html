@@ -128,8 +128,10 @@ disk, create in the root directory a folder called <code class="docutils literal
 <li><p class="first">On your local computer, create a file called <code class="docutils literal"><span class="pre">env.sh</span></code> (do not
 change this name) with the content below.
 Do not forget to change the values and be careful <strong>not to commit this file</strong> :-)
-And <strong>do not add comments to the file</strong>.</p>
+And <strong>do not add comments to the file</strong>.
+Make sure that the directory <code class="docutils literal"><span class="pre">SCIENCEFS_DATARUN</span></code> has been created on the sciencefs disk beforehand.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>export SCIENCEFS_LOGIN=&#39;login_for_scienceFS_account&#39;
+export SCIENCEFS_DATARUN=&#39;path_of_sciencefs_disk&#39;
 export DR_DATABASE_NAME=&#39;database_name&#39;
 export DR_DATABASE_USER=&#39;database_user&#39;
 export DR_DATABASE_PASSWORD=&#39;database_password&#39;
@@ -174,9 +176,11 @@ needed to configure the master.</p>
 <li><p class="first">On your local computer in the folder <code class="docutils literal"><span class="pre">script_install</span></code>, create a
 file called <code class="docutils literal"><span class="pre">env_runner.sh</span></code> (be careful to use the name
 <code class="docutils literal"><span class="pre">env_runner.sh</span></code>) with the content below. Do not forget to change
-the values and be careful not to commit this file :-) And do not add
-comments to the file.</p>
+the values and <strong>be careful not to commit this file</strong> :-) And <strong>do not add
+comments to the file</strong>.
+Make sure that the directory <code class="docutils literal"><span class="pre">SCIENCEFS_DATARUN</span></code> has been created on the sciencefs disk beforehand.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">SCIENCEFS_LOGIN</span><span class="o">=</span><span class="s1">&#39;login_for_scienceFS_account&#39;</span>
+<span class="n">export</span> <span class="n">SCIENCEFS_DATARUN</span><span class="o">=</span><span class="s1">&#39;path_of_sciencefs_disk&#39;</span>
 <span class="n">export</span> <span class="n">DR_DATABASE_USER</span><span class="o">=</span><span class="s1">&#39;database_name&#39;</span>
 <span class="n">export</span> <span class="n">DR_DATABASE_PASSWORD</span><span class="o">=</span><span class="s1">&#39;database_password&#39;</span>
 <span class="n">export</span> <span class="n">DIR_DATA</span><span class="o">=</span><span class="s1">&#39;/mnt/datarun/data&#39;</span>
@@ -271,6 +275,10 @@ been correclty mounted</strong> (ssh to the instance and check if
 </ul>
 </div>
 </div>
+<div class="section" id="c-how-to-install-missing-packages-on-runners">
+<h2>C. How to install missing packages on runners<a class="headerlink" href="#c-how-to-install-missing-packages-on-runners" title="Permalink to this headline">¶</a></h2>
+<p>If the package can be installed with pip, run: <code class="docutils literal"><span class="pre">runner_install</span> <span class="pre">{list_runner.txt}&nbsp;{package</span> <span class="pre">name}</span></code> with <code class="docutils literal"><span class="pre">{list_runner.txt}</span></code> being the file mentionned (A and B sections) specifying runners. It is going to run on each runner the following <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">{package_name}</span></code></p>
+</div>
 </div>
 
 
@@ -306,6 +314,7 @@ been correclty mounted</strong> (ssh to the instance and check if
 <li><a class="reference internal" href="#b4-configure-runners">B4. Configure runners</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#c-how-to-install-missing-packages-on-runners">C. How to install missing packages on runners</a></li>
 </ul>
 </li>
 </ul>
