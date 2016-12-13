@@ -35,7 +35,13 @@ sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force
 # Install xgboost
 cd; git clone --recursive https://github.com/dmlc/xgboost
 cd xgboost; make -j4
-cd python-package; sudo python setup.py install
+cd python-package; 
+# xgboost install fails with error setup script specifies an absolute path
+# To fix this, the next 3 lines and lines labelled with TODO_xgboost are added (but this looks dirty)
+sed -i -e 's/include_package_data=True/include_package_data=False/g' setup.py 
+echo "export PYTHONPATH=$PYTHONPATH:/home/celery/xgboost/python-package" >> /root/.bashrc
+source /root/.bashrc
+sudo python setup.py install
 cd /home/
 
 
@@ -63,6 +69,7 @@ mv /root/datarun.py celery/.
 mv /root/supervisord_runner.conf celery/.
 mv /root/celeryd*_runner.conf celery/.
 mkdir celery/runapp
+cp -r /root/xgboost /home/celery/.   #TODO_xgboost
 mv /root/tasks.py celery/runapp
 mv /root/__init__.py celery/runapp
 mkdir celery/celery_info  
@@ -112,3 +119,4 @@ sudo make install  # or sudo make install
 cd
 sudo USE_SETUPCFG=0 pip install netcdf
 pip install xarray
+pip install --upgrade numpy
