@@ -42,4 +42,4 @@ pandas>=0.17.1
 xarray==0.8.2
 geopy
 keras==1.1.2
-tensorflow==0.12
+tensorflow
