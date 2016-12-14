@@ -168,3 +168,4 @@ sudo make check
 sudo make install  # or sudo make install
 cd
 sudo USE_SETUPCFG=0 pip install netcdf
+pip install --upgrade numpy

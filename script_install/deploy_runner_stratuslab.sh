@@ -39,7 +39,7 @@ cd python-package;
 # xgboost install fails with error setup script specifies an absolute path
 # To fix this, the next 3 lines and lines labelled with TODO_xgboost are added (but this looks dirty)
 sed -i -e 's/include_package_data=True/include_package_data=False/g' setup.py 
-echo "export PYTHONPATH=$PYTHONPATH:/home/celery/xgboost/python-package" >> /root/.bashrc
+echo "export PYTHONPATH=\$PYTHONPATH:/home/celery/xgboost/python-package" >> /root/.bashrc
 source /root/.bashrc
 sudo python setup.py install
 cd /home/
