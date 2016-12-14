@@ -84,14 +84,6 @@ HERE
 
 echo $USER
 
-# Run workers
-# bash runner_workers.sh start $NB_WORKER $WORKER_QUEUES $HARD_TIME_LIMIT $SOFT_TIME_LIMIT
-# Install supervisord
-easy_install supervisor
-# Start  celery workers and flower with supervisord
-supervisord -c /home/celery/supervisord_runner.conf
-
-
 cd
 # Install python-netcdf4 (requires zlib, hdf5, and netCDF-C)
 sudo apt-get -y install m4
@@ -120,3 +112,13 @@ cd
 sudo USE_SETUPCFG=0 pip install netcdf
 pip install xarray
 pip install --upgrade numpy
+
+cd
+# Run workers
+# bash runner_workers.sh start $NB_WORKER $WORKER_QUEUES $HARD_TIME_LIMIT $SOFT_TIME_LIMIT
+# Install supervisord
+easy_install supervisor
+# Start  celery workers and flower with supervisord
+supervisord -c /home/celery/supervisord_runner.conf
+
+
