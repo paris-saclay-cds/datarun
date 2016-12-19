@@ -1,4 +1,7 @@
-.. _deployment:
+.. _deployment:  
+Deployment
+==========
+
 
 -  `How to run it locally?`_
 -  `How to run it on stratuslab openstack?`_
@@ -82,6 +85,7 @@ which one is for the scheduler Note: to start one worker, run:
 ``celery -A datarun worker -l info``
 
 
+.. _deployment_stratus:  
 How to run it on stratuslab openstack?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -283,4 +287,4 @@ B4. Configure runners
 C. How to install missing packages on runners
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If the package can be installed with pip, run: ``runner_install {list_runner.txt} {package name}`` with ``{list_runner.txt}`` being the file mentionned (A and B sections) specifying runners. It is going to run on each runner the following ``pip install {package_name}``
+If the package can be installed with pip, run: ``runners_install {list_runner.txt} {package name}`` with ``{list_runner.txt}`` being the file mentionned (A and B sections) specifying runners. It is going to run on each runner the following ``pip install {package_name}``

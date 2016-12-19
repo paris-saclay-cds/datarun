@@ -31,7 +31,6 @@ sudo rabbitmqctl set_permissions -p $RMQ_VHOST $DR_DATABASE_USER ".*" ".*" ".*"
 sudo service rabbitmq-server restart
 
 # Start the worker and scheduler
-# bash script_install/master_workers.sh start $NB_LOCAL_WORKER
 
 # Start  celery workers and flower with supervisord
 supervisord -c /home/datarun/script_install/supervisord_master.conf

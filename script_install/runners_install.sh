@@ -1,5 +1,5 @@
 #! /bin/bash
-# :Usage: bash runner_install.sh {file_runner} {package_name}
+# :Usage: bash runners_install.sh {file_runner} {package_name}
 # To install {package_name} to a list of runners mentionneed in {file_runner} 
 # {file_runner} is a text file containing in each line 
 # the address of the runner and the number of workers to start on it

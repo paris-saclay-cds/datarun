@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>How to run it locally? &mdash; datarun 0.2 documentation</title>
+    <title>Deployment &mdash; datarun 0.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -38,14 +38,16 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <ul class="simple" id="deployment">
+  <div class="section" id="id1">
+<h1>Deployment<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
 <li><a class="reference internal" href="#how-to-run-it-locally">How to run it locally?</a></li>
 <li><a class="reference internal" href="#how-to-run-it-on-stratuslab-openstack">How to run it on stratuslab openstack?</a></li>
 </ul>
 <div class="section" id="how-to-run-it-locally">
-<h1>How to run it locally?<a class="headerlink" href="#how-to-run-it-locally" title="Permalink to this headline">¶</a></h1>
+<h2>How to run it locally?<a class="headerlink" href="#how-to-run-it-locally" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="install-the-application">
-<h2>1. Install the application<a class="headerlink" href="#install-the-application" title="Permalink to this headline">¶</a></h2>
+<h3>1. Install the application<a class="headerlink" href="#install-the-application" title="Permalink to this headline">¶</a></h3>
 <p>Clone the project:
 <code class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/camillemarini/datarun.git</span></code></p>
 <p>Install dependencies (might be useful to create a virtual environment before, eg
@@ -66,12 +68,12 @@ sudo sed -i &#8220;331a requirepass $DR_DATABASE_PASSWORD&#8221; /etc/redis/redi
 sudo service redis-server restart</div></blockquote>
 </div>
 <div class="section" id="set-up-the-database">
-<h2>2. Set up the database<a class="headerlink" href="#set-up-the-database" title="Permalink to this headline">¶</a></h2>
+<h3>2. Set up the database<a class="headerlink" href="#set-up-the-database" title="Permalink to this headline">¶</a></h3>
 <p>Datarun uses a Postgres database. Before starting, <a class="reference external" href="http://www.postgresql.org/download/">install postgres</a>
 if needed and create a database with <code class="docutils literal"><span class="pre">createdb</span> <span class="pre">database_name</span></code>.</p>
 </div>
 <div class="section" id="define-environment-variables">
-<h2>3. Define environment variables<a class="headerlink" href="#define-environment-variables" title="Permalink to this headline">¶</a></h2>
+<h3>3. Define environment variables<a class="headerlink" href="#define-environment-variables" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">DR_WORKING_ENV</span></code>: <code class="docutils literal"><span class="pre">PROD</span></code> for production environment or <code class="docutils literal"><span class="pre">DEV</span></code>
 for development env</li>
@@ -92,26 +94,26 @@ for every 2 min.</li>
 <code class="docutils literal"><span class="pre">$VIRTUAL_ENV/bin/postactivate</span></code></p>
 </div>
 <div class="section" id="apply-migrations">
-<h2>4. Apply migrations<a class="headerlink" href="#apply-migrations" title="Permalink to this headline">¶</a></h2>
+<h3>4. Apply migrations<a class="headerlink" href="#apply-migrations" title="Permalink to this headline">¶</a></h3>
 <p>Run: <code class="docutils literal"><span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">migrate</span></code></p>
 </div>
 <div class="section" id="create-a-superuser">
-<h2>5. Create a superuser<a class="headerlink" href="#create-a-superuser" title="Permalink to this headline">¶</a></h2>
+<h3>5. Create a superuser<a class="headerlink" href="#create-a-superuser" title="Permalink to this headline">¶</a></h3>
 <p>Run: <code class="docutils literal"><span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">createsuperuser</span></code></p>
 </div>
 <div class="section" id="run-the-server-localhost">
-<h2>6. Run the server (localhost)<a class="headerlink" href="#run-the-server-localhost" title="Permalink to this headline">¶</a></h2>
+<h3>6. Run the server (localhost)<a class="headerlink" href="#run-the-server-localhost" title="Permalink to this headline">¶</a></h3>
 <p>Run: <code class="docutils literal"><span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">runserver</span></code></p>
 </div>
 <div class="section" id="start-celery-worker-and-scheduler">
-<h2>7. Start celery worker and scheduler<a class="headerlink" href="#start-celery-worker-and-scheduler" title="Permalink to this headline">¶</a></h2>
+<h3>7. Start celery worker and scheduler<a class="headerlink" href="#start-celery-worker-and-scheduler" title="Permalink to this headline">¶</a></h3>
 <p>Run: <code class="docutils literal"><span class="pre">bash</span> <span class="pre">test_files/cmd_workers.sh</span> <span class="pre">start</span> <span class="pre">2</span> <span class="pre">1</span></code> for 3 workers, of
 which one is for the scheduler Note: to start one worker, run:
 <code class="docutils literal"><span class="pre">celery</span> <span class="pre">-A</span> <span class="pre">datarun</span> <span class="pre">worker</span> <span class="pre">-l</span> <span class="pre">info</span></code></p>
 </div>
 </div>
 <div class="section" id="how-to-run-it-on-stratuslab-openstack">
-<h1>How to run it on stratuslab openstack?<a class="headerlink" href="#how-to-run-it-on-stratuslab-openstack" title="Permalink to this headline">¶</a></h1>
+<h2>How to run it on stratuslab openstack?<a class="headerlink" href="#how-to-run-it-on-stratuslab-openstack" title="Permalink to this headline">¶</a></h2>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/datarun1.png"><img alt="oups!" src="../_images/datarun1.png" style="width: 600px;" /></a>
 </div>
@@ -123,16 +125,16 @@ which one is for the scheduler Note: to start one worker, run:
 <p>Note: in both cases, you need a scienceFS account. On your scienceFS
 disk, create in the root directory a folder called <code class="docutils literal"><span class="pre">datarun</span></code>.</p>
 <div class="section" id="a-using-an-ubuntu-14-04-image">
-<h2>A. Using an Ubuntu 14.04 image<a class="headerlink" href="#a-using-an-ubuntu-14-04-image" title="Permalink to this headline">¶</a></h2>
+<h3>A. Using an Ubuntu 14.04 image<a class="headerlink" href="#a-using-an-ubuntu-14-04-image" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="a1-start-one-instance-for-the-master-and-as-many-instances-as-you-want-for-the-runners">
-<h3>A1. Start one instance for the master and as many instances as you want for the runners.<a class="headerlink" href="#a1-start-one-instance-for-the-master-and-as-many-instances-as-you-want-for-the-runners" title="Permalink to this headline">¶</a></h3>
+<h4>A1. Start one instance for the master and as many instances as you want for the runners.<a class="headerlink" href="#a1-start-one-instance-for-the-master-and-as-many-instances-as-you-want-for-the-runners" title="Permalink to this headline">¶</a></h4>
 <p>Use Ubuntu v14.04 images. For the master, an VM os.2 is enough.</p>
 </div>
 <div class="section" id="a2-go-to-the-script-install-directory-and-stay-there-while-configuring-the-master-and-runners">
-<h3>A2. Go to the <code class="docutils literal"><span class="pre">script_install</span></code> directory and stay there while configuring the master and runners.<a class="headerlink" href="#a2-go-to-the-script-install-directory-and-stay-there-while-configuring-the-master-and-runners" title="Permalink to this headline">¶</a></h3>
+<h4>A2. Go to the <code class="docutils literal"><span class="pre">script_install</span></code> directory and stay there while configuring the master and runners.<a class="headerlink" href="#a2-go-to-the-script-install-directory-and-stay-there-while-configuring-the-master-and-runners" title="Permalink to this headline">¶</a></h4>
 </div>
 <div class="section" id="a3-configure-the-master">
-<h3>A3. Configure the master<a class="headerlink" href="#a3-configure-the-master" title="Permalink to this headline">¶</a></h3>
+<h4>A3. Configure the master<a class="headerlink" href="#a3-configure-the-master" title="Permalink to this headline">¶</a></h4>
 <ul>
 <li><p class="first">On your local computer, create a file called <code class="docutils literal"><span class="pre">env.sh</span></code> (do not
 change this name) with the content below.
@@ -180,7 +182,7 @@ needed to configure the master.</p>
 </ul>
 </div>
 <div class="section" id="a4-configure-runners">
-<h3>A4. Configure runners<a class="headerlink" href="#a4-configure-runners" title="Permalink to this headline">¶</a></h3>
+<h4>A4. Configure runners<a class="headerlink" href="#a4-configure-runners" title="Permalink to this headline">¶</a></h4>
 <ul>
 <li><p class="first">On your local computer in the folder <code class="docutils literal"><span class="pre">script_install</span></code>, create a
 file called <code class="docutils literal"><span class="pre">env_runner.sh</span></code> (be careful to use the name
@@ -233,17 +235,17 @@ script <code class="docutils literal"><span class="pre">deploy_runner_stratuslab
 </div>
 </div>
 <div class="section" id="b-using-images-datarun-master-and-datarun-runner-on-openstack">
-<h2>B. Using images <code class="docutils literal"><span class="pre">datarun_master</span></code> and <code class="docutils literal"><span class="pre">datarun_runner</span></code> on openstack<a class="headerlink" href="#b-using-images-datarun-master-and-datarun-runner-on-openstack" title="Permalink to this headline">¶</a></h2>
+<h3>B. Using images <code class="docutils literal"><span class="pre">datarun_master</span></code> and <code class="docutils literal"><span class="pre">datarun_runner</span></code> on openstack<a class="headerlink" href="#b-using-images-datarun-master-and-datarun-runner-on-openstack" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="b1-start-one-instance-for-the-master-and-as-many-instances-as-you-want-for-the-runners">
-<h3>B1. Start one instance for the master and as many instances as you want for the runners.<a class="headerlink" href="#b1-start-one-instance-for-the-master-and-as-many-instances-as-you-want-for-the-runners" title="Permalink to this headline">¶</a></h3>
+<h4>B1. Start one instance for the master and as many instances as you want for the runners.<a class="headerlink" href="#b1-start-one-instance-for-the-master-and-as-many-instances-as-you-want-for-the-runners" title="Permalink to this headline">¶</a></h4>
 <p>Use the image <code class="docutils literal"><span class="pre">datarun_master</span></code> for the master and <code class="docutils literal"><span class="pre">datarun_runner</span></code>
 for runners.</p>
 </div>
 <div class="section" id="b2-go-to-the-script-install-directory-and-stay-there-while-configuring-the-master-and-runners">
-<h3>B2. Go to the <code class="docutils literal"><span class="pre">script_install</span></code> directory and stay there while configuring the master and runners.<a class="headerlink" href="#b2-go-to-the-script-install-directory-and-stay-there-while-configuring-the-master-and-runners" title="Permalink to this headline">¶</a></h3>
+<h4>B2. Go to the <code class="docutils literal"><span class="pre">script_install</span></code> directory and stay there while configuring the master and runners.<a class="headerlink" href="#b2-go-to-the-script-install-directory-and-stay-there-while-configuring-the-master-and-runners" title="Permalink to this headline">¶</a></h4>
 </div>
 <div class="section" id="b3-configure-master">
-<h3>B3. Configure master<a class="headerlink" href="#b3-configure-master" title="Permalink to this headline">¶</a></h3>
+<h4>B3. Configure master<a class="headerlink" href="#b3-configure-master" title="Permalink to this headline">¶</a></h4>
 <ol class="arabic simple">
 <li>Ssh to the instance</li>
 <li>Go to <code class="docutils literal"><span class="pre">/home/datarun/script_install</span></code></li>
@@ -251,7 +253,7 @@ for runners.</p>
 </ol>
 </div>
 <div class="section" id="b4-configure-runners">
-<h3>B4. Configure runners<a class="headerlink" href="#b4-configure-runners" title="Permalink to this headline">¶</a></h3>
+<h4>B4. Configure runners<a class="headerlink" href="#b4-configure-runners" title="Permalink to this headline">¶</a></h4>
 <ul>
 <li><p class="first">On your local computer, create a file <code class="docutils literal"><span class="pre">list_runners.txt</span></code> containing
 the list of runners address address, the number of taskss you want be run
@@ -285,8 +287,9 @@ been correclty mounted</strong> (ssh to the instance and check if
 </div>
 </div>
 <div class="section" id="c-how-to-install-missing-packages-on-runners">
-<h2>C. How to install missing packages on runners<a class="headerlink" href="#c-how-to-install-missing-packages-on-runners" title="Permalink to this headline">¶</a></h2>
-<p>If the package can be installed with pip, run: <code class="docutils literal"><span class="pre">runner_install</span> <span class="pre">{list_runner.txt}&nbsp;{package</span> <span class="pre">name}</span></code> with <code class="docutils literal"><span class="pre">{list_runner.txt}</span></code> being the file mentionned (A and B sections) specifying runners. It is going to run on each runner the following <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">{package_name}</span></code></p>
+<h3>C. How to install missing packages on runners<a class="headerlink" href="#c-how-to-install-missing-packages-on-runners" title="Permalink to this headline">¶</a></h3>
+<p>If the package can be installed with pip, run: <code class="docutils literal"><span class="pre">runners_install</span> <span class="pre">{list_runner.txt}&nbsp;{package</span> <span class="pre">name}</span></code> with <code class="docutils literal"><span class="pre">{list_runner.txt}</span></code> being the file mentionned (A and B sections) specifying runners. It is going to run on each runner the following <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">{package_name}</span></code></p>
+</div>
 </div>
 </div>
 
@@ -298,7 +301,8 @@ been correclty mounted</strong> (ssh to the instance and check if
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">How to run it locally?</a><ul>
+<li><a class="reference internal" href="#">Deployment</a><ul>
+<li><a class="reference internal" href="#how-to-run-it-locally">How to run it locally?</a><ul>
 <li><a class="reference internal" href="#install-the-application">1. Install the application</a></li>
 <li><a class="reference internal" href="#set-up-the-database">2. Set up the database</a></li>
 <li><a class="reference internal" href="#define-environment-variables">3. Define environment variables</a></li>
@@ -324,6 +328,8 @@ been correclty mounted</strong> (ssh to the instance and check if
 </ul>
 </li>
 <li><a class="reference internal" href="#c-how-to-install-missing-packages-on-runners">C. How to install missing packages on runners</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

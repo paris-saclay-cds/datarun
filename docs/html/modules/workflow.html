@@ -100,11 +100,13 @@ Functions <code class="docutils literal"><span class="pre">train_submission(modu
 </ul>
 </div></blockquote>
 <ol class="arabic" start="2">
-<li><dl class="first docutils">
-<dt>To send data to datarun and to split data into train and test dataset, you can use the function <code class="docutils literal"><span class="pre">send_data_datarun</span></code> of <code class="docutils literal"><span class="pre">databoard/db_tools.py</span></code>, which uses the functions <code class="docutils literal"><span class="pre">post_data</span></code> and <code class="docutils literal"><span class="pre">post_split</span></code> (or <code class="docutils literal"><span class="pre">custom_post_split</span></code>) of the module test_files.post_api of datarun.</dt>
-<dd><p class="first last">This function can be called with fab: <code class="docutils literal"><span class="pre">fab</span> <span class="pre">send_data_datarun:&lt;problem_name&gt;,&lt;datarun_master_url&gt;,&lt;datarun_username&gt;,&lt;datarun_password&gt;</span></code></p>
-</dd>
-</dl>
+<li><p class="first">To send data to datarun and to split data into train and test dataset,
+you can use the function <code class="docutils literal"><span class="pre">send_data_datarun</span></code> of <code class="docutils literal"><span class="pre">databoard/db_tools.py</span></code>, which uses the functions <code class="docutils literal"><span class="pre">post_data</span></code> and <code class="docutils literal"><span class="pre">post_split</span></code> (or <code class="docutils literal"><span class="pre">custom_post_split</span></code>) of the module test_files.post_api of datarun.</p>
+<blockquote>
+<div><p>This function can be called with fab:</p>
+<p><code class="docutils literal"><span class="pre">fab</span> <span class="pre">send_data_datarun:&lt;problem_name&gt;,&lt;datarun_master_url&gt;,&lt;datarun_username&gt;,</span>
+<span class="pre">&lt;datarun_password&gt;</span></code></p>
+</div></blockquote>
 </li>
 </ol>
 </div>
@@ -123,7 +125,10 @@ Functions <code class="docutils literal"><span class="pre">train_submission(modu
 <p><strong>Note for databoard users:</strong>
 To send data to datarun and to split data into train and test dataset, you can use the function <code class="docutils literal"><span class="pre">send_data_datarun</span></code> of <code class="docutils literal"><span class="pre">databoard/db_tools.py</span></code>, which uses the functions <code class="docutils literal"><span class="pre">post_data</span></code> and <code class="docutils literal"><span class="pre">post_split</span></code> (or <code class="docutils literal"><span class="pre">custom_post_split</span></code>) of the module test_files.post_api of datarun (cf previous section).</p>
 <blockquote>
-<div>This function can be called with fab: <code class="docutils literal"><span class="pre">fab</span> <span class="pre">send_data_datarun:&lt;problem_name&gt;,&lt;datarun_master_url&gt;,&lt;datarun_username&gt;,&lt;datarun_password&gt;</span></code></div></blockquote>
+<div><p>This function can be called with fab:</p>
+<p><code class="docutils literal"><span class="pre">fab</span> <span class="pre">send_data_datarun:&lt;problem_name&gt;,&lt;datarun_master_url&gt;,&lt;datarun_username&gt;,</span>
+<span class="pre">&lt;datarun_password&gt;</span></code></p>
+</div></blockquote>
 </div>
 <div class="section" id="send-submission-on-cv-fold-to-be-trained-on-datarun">
 <h2>3- Send submission on cv fold to be trained on datarun<a class="headerlink" href="#send-submission-on-cv-fold-to-be-trained-on-datarun" title="Permalink to this headline">¶</a></h2>
@@ -133,33 +138,49 @@ To send data to datarun and to split data into train and test dataset, you can u
 <li>the <code class="docutils literal"><span class="pre">post_submission_fold</span></code> function in the module test_files.post_api (cf <a class="reference internal" href="views.html#requestsmodule"><span class="std std-ref">post_api module</span></a>)</li>
 </ul>
 <p>If the associted submission files have already been sent, you&#8217;ll need to send:</p>
-<ul class="simple">
-<li>the id of the associated submission</li>
-<li>the id of the submission on cv fold</li>
-<li>the train and test indices of the cv fold.
-* after compression (with zlib) and base64-encoding if you use a post request
-* the raw indices if you use the <code class="docutils literal"><span class="pre">post_submission_fold</span></code> function</li>
-<li>the priority level (<code class="docutils literal"><span class="pre">L</span></code> for low or <code class="docutils literal"><span class="pre">H</span></code> for high) of training this submission on cv fold.</li>
-<li>an indication that you want to force retraining the submission on cv fold even if it already exists (<code class="docutils literal"><span class="pre">force=&quot;submission_fold&quot;</span></code> instead of <code class="docutils literal"><span class="pre">force=None</span></code>).</li>
+<ul>
+<li><p class="first">the id of the associated submission</p>
+</li>
+<li><p class="first">the id of the submission on cv fold</p>
+</li>
+<li><dl class="first docutils">
+<dt>the train and test indices of the cv fold.</dt>
+<dd><ul class="first last simple">
+<li>after compression (with zlib) and base64-encoding if you use a post request</li>
+<li>the raw indices if you use the <code class="docutils literal"><span class="pre">post_submission_fold</span></code> function</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">the priority level (<code class="docutils literal"><span class="pre">L</span></code> for low or <code class="docutils literal"><span class="pre">H</span></code> for high) of training this submission on cv fold.</p>
+</li>
+<li><p class="first">an indication that you want to force retraining the submission on cv fold even if it already exists (<code class="docutils literal"><span class="pre">force=&quot;submission_fold&quot;</span></code> instead of <code class="docutils literal"><span class="pre">force=None</span></code>).</p>
+</li>
 </ul>
 <p>If the associated submission files have not been sent, you need to add:</p>
-<ul class="simple">
-<li>the id of the associated data. This id can be retrieved using:</li>
-</ul>
-<blockquote>
-<div><ul class="simple">
+<ul>
+<li><dl class="first docutils">
+<dt>the id of the associated data. This id can be retrieved using:</dt>
+<dd><ul class="first last simple">
 <li>a post request to <code class="docutils literal"><span class="pre">&lt;master-host&gt;/runapp/rawdata/</span></code> (cf <a class="reference internal" href="views.html#requestsdirect"><span class="std std-ref">direct requests</span></a>, class runapp.views.RawDataList)</li>
 <li>the <code class="docutils literal"><span class="pre">get_raw_data</span></code> function in the module test_files.post_api (cf <a class="reference internal" href="views.html#requestsmodule"><span class="std std-ref">post_api module</span></a>)</li>
 </ul>
-</div></blockquote>
-<ul class="simple">
-<li>the list of submission files</li>
-<li>an indication that you want to force resending the submission even if its id already exists (<code class="docutils literal"><span class="pre">force=&quot;submission&quot;</span></code> instead of <code class="docutils literal"><span class="pre">force=None</span></code>).</li>
+</dd>
+</dl>
+</li>
+<li><p class="first">the list of submission files</p>
+</li>
+<li><p class="first">an indication that you want to force resending the submission even if its id already exists (<code class="docutils literal"><span class="pre">force=&quot;submission&quot;</span></code> instead of <code class="docutils literal"><span class="pre">force=None</span></code>).</p>
+</li>
 </ul>
 <p><strong>Note for databoard users:</strong>
 To send a submission on cv fold, you can use the function <code class="docutils literal"><span class="pre">train_test_submissions_datarun</span></code> of <code class="docutils literal"><span class="pre">databoard/db_tools.py</span></code> (which uses functions from the module test_files.post_api of datarun).</p>
 <blockquote>
-<div>This function can be called with fab: <code class="docutils literal"><span class="pre">fab</span> <span class="pre">train_test_datarun:&lt;data_id_datarun&gt;,&lt;datarun_master_url&gt;,&lt;datarun_username&gt;,&lt;datarun_password&gt;,&lt;problem_name&gt;,&lt;team_name&gt;,&lt;submission_name&gt;(,force=True)</span></code></div></blockquote>
+<div><p>This function can be called with fab:</p>
+<p><code class="docutils literal"><span class="pre">fab</span> <span class="pre">train_test_datarun:&lt;data_id_datarun&gt;,</span>
+<span class="pre">&lt;datarun_master_url&gt;,&lt;datarun_username&gt;,</span>
+<span class="pre">&lt;datarun_password&gt;,&lt;problem_name&gt;,&lt;team_name&gt;,&lt;submission_name&gt;(,force=True)</span></code></p>
+</div></blockquote>
 <p>The &lt;data_id_datarun&gt; is printed when sending data to datarun, or it can be retrieved as mentionned above.</p>
 </div>
 <div class="section" id="get-back-your-predictions">
@@ -177,7 +198,29 @@ To send a submission on cv fold, you can use the function <code class="docutils 
 <p><strong>Note for databoard users:</strong>
 To get back predictions, you can use the function <code class="docutils literal"><span class="pre">get_trained_tested_submissions_datarun</span></code> of <code class="docutils literal"><span class="pre">databoard/db_tools.py</span></code> (which uses functions from the module test_files.post_api of datarun).</p>
 <blockquote>
-<div>This function can be called with fab: <code class="docutils literal"><span class="pre">fab</span> <span class="pre">get_trained_tested_datarun:&lt;datarun_master_url&gt;,&lt;datarun_username&gt;,&lt;datarun_password&gt;,&lt;problem_name&gt;,&lt;team_name&gt;,&lt;submission_name&gt;</span></code></div></blockquote>
+<div><p>This function can be called with fab:</p>
+<p><code class="docutils literal"><span class="pre">fab</span> <span class="pre">get_trained_tested_datarun:&lt;datarun_master_url&gt;,</span>
+<span class="pre">&lt;datarun_username&gt;,&lt;datarun_password&gt;,&lt;problem_name&gt;,</span>
+<span class="pre">&lt;team_name&gt;,&lt;submission_name&gt;</span></code></p>
+</div></blockquote>
+</div>
+<div class="section" id="install-new-packages-on-runners">
+<h2>5- Install new packages on runners<a class="headerlink" href="#install-new-packages-on-runners" title="Permalink to this headline">¶</a></h2>
+<p>To install a new package {package_name}&nbsp;on runners (listed in a text file {file_runner}), go to <code class="docutils literal"><span class="pre">script_install</span></code> directory and run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>bash runners_install.sh <span class="o">{</span>file_runner<span class="o">}</span> <span class="o">{</span>package_name<span class="o">}</span>
+</pre></div>
+</div>
+<p>An example of <code class="docutils literal"><span class="pre">{file_runner}</span></code> (which is the file used to deploy runners, see section <a class="reference internal" href="deployment.html#deployment-stratus"><span class="std std-ref">deployment</span></a>):</p>
+<blockquote>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="mf">134.158</span><span class="o">.</span><span class="mf">75.112</span> <span class="mi">2</span> <span class="n">L</span><span class="p">,</span><span class="n">celery</span> <span class="mi">360</span> <span class="mi">300</span>
+<span class="mf">134.158</span><span class="o">.</span><span class="mf">75.113</span> <span class="mi">3</span> <span class="n">H</span> <span class="mi">240</span> <span class="mi">200</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>After installing new packages, you must restart runners with:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>bash runners_restart.sh <span class="o">{</span>file_runner<span class="o">}</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -194,6 +237,7 @@ To get back predictions, you can use the function <code class="docutils literal"
 <li><a class="reference internal" href="#split-data-into-train-and-test-dataset">2- Split data into train and test dataset</a></li>
 <li><a class="reference internal" href="#send-submission-on-cv-fold-to-be-trained-on-datarun">3- Send submission on cv fold to be trained on datarun</a></li>
 <li><a class="reference internal" href="#get-back-your-predictions">4- Get back your predictions</a></li>
+<li><a class="reference internal" href="#install-new-packages-on-runners">5- Install new packages on runners</a></li>
 </ul>
 </li>
 </ul>

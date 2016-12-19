@@ -29,8 +29,7 @@ Datarun is made of a master and datarunners, as represented below:
     :align: center
     :alt: oups!
 
-
-Contents:
+Contents:  
 
 .. toctree::
    :maxdepth: 2

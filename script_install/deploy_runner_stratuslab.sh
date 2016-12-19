@@ -65,7 +65,6 @@ adduser --disabled-password --gecos "" celery
 #mkdir celery
 mv /root/env_runner*.sh celery/.bash_aliases
 mv /root/datarun.py celery/.
-#mv /root/runner_workers.sh celery/.
 mv /root/supervisord_runner.conf celery/.
 mv /root/celeryd*_runner.conf celery/.
 mkdir celery/runapp
@@ -115,7 +114,6 @@ pip install --upgrade numpy
 
 cd
 # Run workers
-# bash runner_workers.sh start $NB_WORKER $WORKER_QUEUES $HARD_TIME_LIMIT $SOFT_TIME_LIMIT
 # Install supervisord
 easy_install supervisor
 # Start  celery workers and flower with supervisord
