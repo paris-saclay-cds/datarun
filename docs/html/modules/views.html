@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Requests &mdash; datarun 0.2 documentation</title>
+    <title>Requests &mdash; datarun 0.4 documentation</title>
     
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2',
+        VERSION:     '0.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="datarun 0.2 documentation" href="../index.html" />
-    <link rel="next" title="How to run it locally?" href="deployment.html" />
+    <link rel="top" title="datarun 0.4 documentation" href="../index.html" />
+    <link rel="next" title="Deployment" href="deployment.html" />
     <link rel="prev" title="Models" href="models.html" />
    
   
@@ -41,8 +41,327 @@
   <div class="section" id="requests">
 <h1>Requests<a class="headerlink" href="#requests" title="Permalink to this headline">¶</a></h1>
 <p>You can either make direct requests to the datarun API, or use the post_api function.</p>
-<div class="section" id="direct-requests">
-<span id="requestsdirect"></span><h2>direct requests<a class="headerlink" href="#direct-requests" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-runapp.views">
+<span id="direct-requests"></span><span id="requestsdirect"></span><h2>direct requests<a class="headerlink" href="#module-runapp.views" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="runapp.views.CustomSplitTrainTest">
+<em class="property">class </em><code class="descclassname">runapp.views.</code><code class="descname">CustomSplitTrainTest</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.CustomSplitTrainTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split data set into train and test datasets for custom dataset
+(when a specific.py was submitted along with raw data</p>
+<dl class="method">
+<dt id="runapp.views.CustomSplitTrainTest.post">
+<code class="descname">post</code><span class="sig-paren">(</span><em>request</em>, <em>format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.CustomSplitTrainTest.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split raw data into train and test datasets for custom dataset</p>
+<ul>
+<li><p class="first">Example with curl (on localhost):</p>
+<blockquote>
+<div><p>curl -u username:password -H &#8220;Content-Type: application/json&#8221;            -X POST            -d &#8216;{&#8220;raw_data_id&#8221;: 1}&#8217;                http://127.0.0.1:8000/runapp/rawdata/customsplit/</p>
+<p>Don&#8217;t forget double quotes for the json, simple quotes do not work</p>
+</div></blockquote>
+</li>
+<li><p class="first">Example with the python package requests (on localhost):</p>
+<blockquote>
+<div><p>requests.post(&#8216;<a class="reference external" href="http://127.0.0.1:8000/runapp/raw_data/customsplit/">http://127.0.0.1:8000/runapp/raw_data/customsplit/</a>&#8216;,                          auth=(&#8216;username&#8217;, &#8216;password&#8217;),                          json={&#8216;raw_data_id&#8217;: 1})</p>
+</div></blockquote>
+</li>
+</ul>
+<p>&#8212;
+parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li>name: raw_data_id
+description: id of the raw dataset
+required: true
+type: integer
+paramType: form</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="runapp.views.GetTestPredictionList">
+<em class="property">class </em><code class="descclassname">runapp.views.</code><code class="descname">GetTestPredictionList</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.GetTestPredictionList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get predictions of submissions on cv fold given their ids</p>
+<dl class="method">
+<dt id="runapp.views.GetTestPredictionList.post">
+<code class="descname">post</code><span class="sig-paren">(</span><em>request</em>, <em>format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.GetTestPredictionList.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve predictions (on the test data set) of SubmissionFold instances        among a list of id that have been trained and tested</p>
+<ul>
+<li><p class="first">Example with curl (on localhost):</p>
+<blockquote>
+<div><p>curl -u username:password -H &#8220;Content-Type: application/json&#8221;            -X POST            -d &#8216;{&#8220;list_submission_fold&#8221;: [1, 2, 10]}&#8217;                http://127.0.0.1:8000/runapp/testpredictions/list/</p>
+<p>Don&#8217;t forget double quotes for the json, simple quotes do not work</p>
+</div></blockquote>
+</li>
+<li><p class="first">Example with the python package requests (on localhost):</p>
+<blockquote>
+<div><p>requests.post(&#8216;<a class="reference external" href="http://127.0.0.1:8000/runapp/testpredictions/list/">http://127.0.0.1:8000/runapp/testpredictions/list/</a>&#8216;,                          auth=(&#8216;username&#8217;, &#8216;password&#8217;),                          json={&#8216;list_submission_fold&#8217;: [1, 2, 10]})</p>
+</div></blockquote>
+</li>
+</ul>
+<p>&#8212;
+parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li>name: list_submission_fold
+description: list of submission on cv fold ids
+required: true
+type: list
+paramType: form</li>
+</ul>
+</div></blockquote>
+<p>response_serializer: TestPredSubmissionFoldSerializer</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="runapp.views.GetTestPredictionNew">
+<em class="property">class </em><code class="descclassname">runapp.views.</code><code class="descname">GetTestPredictionNew</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.GetTestPredictionNew" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get predictions of submissions on cv fold that have not been requested</p>
+<dl class="method">
+<dt id="runapp.views.GetTestPredictionNew.post">
+<code class="descname">post</code><span class="sig-paren">(</span><em>request</em>, <em>format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.GetTestPredictionNew.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve predictions (on the test data set) of  SubmissionFold        instances that have been trained and tested and not yet requested.        You can specify a given data challenge by posting the raw_data id.</p>
+<ul>
+<li><p class="first">Example with curl (on localhost):</p>
+<blockquote>
+<div><p>curl -u username:password -H &#8220;Content-Type: application/json&#8221;            -X POST            -d &#8216;{&#8220;raw_data_id&#8221;: 1}&#8217;                http://127.0.0.1:8000/runapp/testpredictions/new/</p>
+<p>Don&#8217;t forget double quotes for the json, simple quotes do not work</p>
+</div></blockquote>
+</li>
+<li><p class="first">Example with the python package requests (on localhost):</p>
+<blockquote>
+<div><p>requests.post(&#8216;<a class="reference external" href="http://127.0.0.1:8000/runapp/testpredictions/new/">http://127.0.0.1:8000/runapp/testpredictions/new/</a>&#8216;,                          auth=(&#8216;username&#8217;, &#8216;password&#8217;),                          json={&#8216;raw_data_id&#8217;: 1})</p>
+</div></blockquote>
+</li>
+</ul>
+<p>&#8212;
+parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li>name: raw_data_id
+description: id of the raw dataset from which to get predictions
+required: false
+type: integer
+paramType: form</li>
+</ul>
+</div></blockquote>
+<p>response_serializer: TestPredSubmissionFoldSerializer</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="runapp.views.RawDataList">
+<em class="property">class </em><code class="descclassname">runapp.views.</code><code class="descname">RawDataList</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.RawDataList" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all data set or submit a new one</p>
+<dl class="method">
+<dt id="runapp.views.RawDataList.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>request</em>, <em>format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.RawDataList.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all raw dataset</p>
+<ul class="simple">
+<li>Example with curl (on localhost):</li>
+</ul>
+<p>curl -u username:password GET http://127.0.0.1:8000/runapp/rawdata/</p>
+<ul class="simple">
+<li>Example with the python package requests (on localhost):</li>
+</ul>
+<p>requests.get(&#8216;<a class="reference external" href="http://127.0.0.1:8000/runapp/rawdata/">http://127.0.0.1:8000/runapp/rawdata/</a>&#8216;,            auth=(&#8216;username&#8217;, &#8216;password&#8217;))</p>
+<p>&#8212;
+response_serializer: RawDataSerializer</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="runapp.views.RawDataList.post">
+<code class="descname">post</code><span class="sig-paren">(</span><em>request</em>, <em>format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.RawDataList.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new dataset</p>
+<p>You have to post the name of the dataset, the target column,        the workflow elements, and the raw data file. If your data file does        not match the format expected by datarun (a csv with a first row            containing the feature and target column name, and then a row for            each sample), you can submit a python file containing three            functions: prepare_data(data_path), get_train_data(data_path),            and get_test_data(data_path)</p>
+<ul>
+<li><p class="first">Example with curl (on localhost):</p>
+<blockquote>
+<div><p>curl -u username:password   -H &#8220;Content-Type: application/json&#8221;            -X POST            -d &#8216;{&#8220;name&#8221;: &#8220;iris&#8221;, &#8220;target_column&#8221;: &#8220;species&#8221;,                 &#8220;workflow_elements&#8221;: &#8220;classifier&#8221;,                &#8220;files&#8221;: {&#8220;iris.csv&#8221;: &#8216;blablabla&#8217;, &#8216;specific.py&#8217;: &#8216;bli&#8217;}}&#8217;                http://127.0.0.1:8000/runapp/rawdata/</p>
+<p>Don&#8217;t forget double quotes for the json, simple quotes don&#8217;t work.</p>
+</div></blockquote>
+</li>
+<li><p class="first">Example with the python package requests (on localhost):</p>
+<blockquote>
+<div><p>requests.post(&#8216;<a class="reference external" href="http://127.0.0.1:8000/runapp/rawdata/">http://127.0.0.1:8000/runapp/rawdata/</a>&#8216;,                          auth=(&#8216;username&#8217;, &#8216;password&#8217;),                          json={&#8216;name&#8217;: &#8216;iris&#8217;, &#8216;target_column&#8217;: &#8216;species&#8217;,                                 &#8216;workflow_elements&#8217;: &#8216;classifier&#8217;,                        &#8216;files&#8217;: {&#8216;iris.csv&#8217;: &#8216;bla&#8217;, &#8216;specific.py&#8217;: &#8216;bli&#8217;}})</p>
+</div></blockquote>
+</li>
+</ul>
+<p>&#8212;
+request_serializer: RawDataSerializer
+response_serializer: RawDataSerializer</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="runapp.views.SplitTrainTest">
+<em class="property">class </em><code class="descclassname">runapp.views.</code><code class="descname">SplitTrainTest</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.SplitTrainTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split data set into train and test datasets for normal dataset</p>
+<dl class="method">
+<dt id="runapp.views.SplitTrainTest.post">
+<code class="descname">post</code><span class="sig-paren">(</span><em>request</em>, <em>format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.SplitTrainTest.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split raw data into train and test datasets for normal dataset</p>
+<ul>
+<li><p class="first">Example with curl (on localhost):</p>
+<blockquote>
+<div><p>curl -u username:password -H &#8220;Content-Type: application/json&#8221;            -X POST            -d &#8216;{&#8220;random_state&#8221;: 42, &#8220;held_out_test&#8221;: 0.7, &#8220;raw_data_id&#8221;: 1}&#8217;                http://127.0.0.1:8000/runapp/rawdata/split/</p>
+<p>Don&#8217;t forget double quotes for the json, simple quotes do not work</p>
+</div></blockquote>
+</li>
+<li><p class="first">Example with the python package requests (on localhost):</p>
+<blockquote>
+<div><p>requests.post(&#8216;<a class="reference external" href="http://127.0.0.1:8000/runapp/raw_data/split/">http://127.0.0.1:8000/runapp/raw_data/split/</a>&#8216;,                          auth=(&#8216;username&#8217;, &#8216;password&#8217;),                          json={&#8216;random_state&#8217;: 42, &#8216;held_out_test&#8217;: 0.7,                                &#8216;raw_data_id&#8217;: 1})</p>
+</div></blockquote>
+</li>
+</ul>
+<p>&#8212;
+parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li>name: random_state
+description: random state used to split data
+required: false
+type: integer
+paramType: form</li>
+<li>name: held_out_test
+description: percentage of the dataset kept as test dataset
+required: true
+type: float
+paramType: form</li>
+<li>name: raw_data_id
+description: id of the raw dataset
+required: true
+type: integer
+paramType: form</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="runapp.views.SubmissionFoldDetail">
+<em class="property">class </em><code class="descclassname">runapp.views.</code><code class="descname">SubmissionFoldDetail</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.SubmissionFoldDetail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a submission on CV fold given its id</p>
+<dl class="method">
+<dt id="runapp.views.SubmissionFoldDetail.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>request</em>, <em>pk</em>, <em>format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.SubmissionFoldDetail.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a SubmissionFold instance to check its state</p>
+<ul>
+<li><p class="first">Example with curl (on localhost):</p>
+<blockquote>
+<div><p>curl -u username:password GET            http://127.0.0.1:8000/runapp/submissionfold/10/</p>
+</div></blockquote>
+</li>
+<li><p class="first">Example with the python package requests (on localhost):</p>
+<blockquote>
+<div><p>requests.get(&#8216;<a class="reference external" href="http://127.0.0.1:8000/runapp/submissionfold/10/">http://127.0.0.1:8000/runapp/submissionfold/10/</a>&#8216;,            auth=(&#8216;username&#8217;, &#8216;password&#8217;))</p>
+</div></blockquote>
+</li>
+</ul>
+<p>&#8212;
+parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li>name : pk
+description: id of the submission on cv fold in the databoard db
+required: true
+type: interger
+paramType: path</li>
+</ul>
+</div></blockquote>
+<p>response_serializer: SubmissionFoldSerializer</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="runapp.views.SubmissionFoldLightList">
+<em class="property">class </em><code class="descclassname">runapp.views.</code><code class="descname">SubmissionFoldLightList</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.SubmissionFoldLightList" title="Permalink to this definition">¶</a></dt>
+<dd><p>To get main info about all submissions on CV fold</p>
+<dl class="method">
+<dt id="runapp.views.SubmissionFoldLightList.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>request</em>, <em>format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.SubmissionFoldLightList.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List main info (id, submission id, state, new) about all submissions        on CV fold</p>
+<ul>
+<li><p class="first">Example with curl (on localhost):</p>
+<blockquote>
+<div><p>curl -u username:password GET            http://127.0.0.1:8000/runapp/submissionfold-light/</p>
+</div></blockquote>
+</li>
+<li><p class="first">Example with the python package requests (on localhost):</p>
+<blockquote>
+<div><p>requests.get(&#8216;<a class="reference external" href="http://127.0.0.1:8000/runapp/submissionfold-light/">http://127.0.0.1:8000/runapp/submissionfold-light/</a>&#8216;,            auth=(&#8216;username&#8217;, &#8216;password&#8217;))</p>
+</div></blockquote>
+</li>
+</ul>
+<p>&#8212;
+response_serializer: SubmissionFoldLightSerializer</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="runapp.views.SubmissionFoldList">
+<em class="property">class </em><code class="descclassname">runapp.views.</code><code class="descname">SubmissionFoldList</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.SubmissionFoldList" title="Permalink to this definition">¶</a></dt>
+<dd><p>To get all submissions on CV fold</p>
+<dl class="method">
+<dt id="runapp.views.SubmissionFoldList.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>request</em>, <em>format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.SubmissionFoldList.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all submission on CV fold</p>
+<ul>
+<li><p class="first">Example with curl (on localhost):</p>
+<blockquote>
+<div><p>curl -u username:password GET            http://127.0.0.1:8000/runapp/submissionfold/</p>
+</div></blockquote>
+</li>
+<li><p class="first">Example with the python package requests (on localhost):</p>
+<blockquote>
+<div><p>requests.get(&#8216;<a class="reference external" href="http://127.0.0.1:8000/runapp/submissionfold/">http://127.0.0.1:8000/runapp/submissionfold/</a>&#8216;,            auth=(&#8216;username&#8217;, &#8216;password&#8217;))</p>
+</div></blockquote>
+</li>
+</ul>
+<p>&#8212;
+response_serializer: SubmissionFoldSerializer</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="runapp.views.SubmissionFoldList.post">
+<code class="descname">post</code><span class="sig-paren">(</span><em>request</em>, <em>format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.SubmissionFoldList.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a submission on CV fold (and if necessary the associated        submission)</p>
+<ul>
+<li><p class="first">Example with curl (on localhost):</p>
+<blockquote>
+<div><p>curl -u username:password   -H &#8220;Content-Type: application/json&#8221;            -X POST            -d &#8216;{&#8220;databoard_s_id&#8221;: 1, &#8220;files&#8221;: {&#8220;classifier.py&#8221;:                &#8220;import sklearn..&#8221;}, &#8220;train_is&#8221;: &#8220;hgjhg&#8221;, &#8220;raw_data&#8221;:1,                &#8220;databoard_sf_id&#8221;: 11, &#8220;test_is&#8221;: &#8220;kdjhLGf2&#8221;,                &#8220;priority&#8221;: &#8220;L&#8221;}&#8217;                http://127.0.0.1:8000/runapp/submissionfold/</p>
+<p>Don&#8217;t forget double quotes for the json, simple quotes do not work</p>
+</div></blockquote>
+</li>
+<li><p class="first">Example with the python package requests (on localhost):</p>
+<blockquote>
+<div><p>requests.post(&#8216;<a class="reference external" href="http://127.0.0.1:8000/runapp/submissionfold/">http://127.0.0.1:8000/runapp/submissionfold/</a>&#8216;,                          auth=(&#8216;username&#8217;, &#8216;password&#8217;),                          json={&#8216;databoard_sf_id&#8217;: 10, &#8216;databoard_s_id&#8217;: 24,                                &#8216;raw_data&#8217;: 8, &#8216;train_is&#8217;: &#8216;GDHRFdfgfd&#8217;,                                &#8216;test_is&#8217;: &#8216;kdjhLGf2&#8217;, &#8216;priority&#8217;: &#8216;L&#8217;                                &#8216;files&#8217;: {&#8216;classifier.py&#8217;: &#8216;import skle...&#8217;}})</p>
+</div></blockquote>
+</li>
+</ul>
+<p>Possible to force the submission and submission on CV fold (even if the        ids already exist) by adding to the data dictionary         &#8220;force&#8221;: &#8216;submission, submission_fold&#8217; to resubmit both, or         &#8220;force&#8221;: &#8216;submission_fold&#8217; to resubmit only the submission on CV fold</p>
+<p>&#8212;
+request_serializer: SubmissionFoldSerializer
+response_serializer: SubmissionFoldSerializer</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="runapp.views.save_files">
+<code class="descclassname">runapp.views.</code><code class="descname">save_files</code><span class="sig-paren">(</span><em>dir_data</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#runapp.views.save_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>save files from data[&#8216;files&#8217;] in directory dir_data</p>
+</dd></dl>
+
 </div>
 <div class="section" id="module-test_files.post_api">
 <span id="post-api-module"></span><span id="requestsmodule"></span><h2>post_api module<a class="headerlink" href="#module-test_files.post_api" title="Permalink to this headline">¶</a></h2>
@@ -270,7 +589,7 @@ prepare_data function sent by databoard</p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Requests</a><ul>
-<li><a class="reference internal" href="#direct-requests">direct requests</a></li>
+<li><a class="reference internal" href="#module-runapp.views">direct requests</a></li>
 <li><a class="reference internal" href="#module-test_files.post_api">post_api module</a></li>
 </ul>
 </li>
@@ -280,7 +599,7 @@ prepare_data function sent by databoard</p>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
       <li>Previous: <a href="models.html" title="previous chapter">Models</a></li>
-      <li>Next: <a href="deployment.html" title="next chapter">How to run it locally?</a></li>
+      <li>Next: <a href="deployment.html" title="next chapter">Deployment</a></li>
   </ul></li>
 </ul>
 </div>
