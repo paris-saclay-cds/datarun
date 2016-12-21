@@ -123,7 +123,7 @@ A3. Configure the master
      * ``SCIENCEFS_LOGIN`` is your scienceFS login.    
      * ``SCIENCEFS_DATARUN`` is the name of the directory on your scienceFS disk (write only the name of the directory located in your scienceFS home, no need for ``/``, e.g. ``datarun``), make sure that it has been created on the sciencefs disk beforehand.  
      * ``DR_DATABASE_NAME``, ``DR_DATABASE_USER``, ``DR_DATABASE_PASSWORD`` are the database settings, you can use what you want, e.g. ``datarun_db, toto, secret_password``  
-     * ``USER_LOGIN``, ``USER_PASSWORD``, and ``DR_EMAIL`` are username, password and email of a datarun superuser. You can use this user credentials to make requests to the datarun API. You can create other users once you've deployed the app. You can choose what you want for these settings.  
+     * ``USER_LOGIN``, ``USER_PASSWORD``, and ``DR_EMAIL`` are username, password and email of a datarun superuser. You can use this user credentials to make requests to the datarun API and to connect to flower. You can create other users once you've deployed the app. You can choose what you want for these settings.  
      * ``DIR_DATA`` and ``DIR_SUBMISSION`` are the path to folders where the data and submission are saved. It has to start with ``/mnt/datarun``, e.g. ``/mnt/datarun/data`` and ``/mnt/datarun/submission``.   
      * ``CELERY_SCHEDULER_PERIOD`` specifies the period in min ``*/<min>`` at which predictions computed by runners are put back in the database. You can use ``*/2``.  
      * ``RMQ_VHOST`` is the name of the Vhost for RabbitMQ. You can use what you want, e.g. ``datarun``.   
