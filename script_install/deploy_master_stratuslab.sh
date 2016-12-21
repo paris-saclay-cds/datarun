@@ -79,6 +79,7 @@ pip install -r requirements.txt
 python manage.py migrate
 python manage.py collectstatic
 python manage.py createuser $DR_DATABASE_USER $DR_EMAIL $DR_DATABASE_PASSWORD --superuser
+python manage.py createuser $USER_LOGIN $DR_EMAIL $USER_PSWD --superuser
 
 # Install redis
 sudo apt-get install -y redis-server

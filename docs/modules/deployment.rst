@@ -109,7 +109,7 @@ A. Using an Ubuntu 14.04 image
 A1. Start one instance for the master and as many instances as you want for the runners.
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-Use Ubuntu v14.04 images. For the master, an VM os.2 is enough.
+Use Ubuntu v14.04 images. For the master, use at least an os.2 flavor (4G RAM).
 
 A2. Go to the ``script_install`` directory and stay there while configuring the master and runners.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -117,12 +117,18 @@ A2. Go to the ``script_install`` directory and stay there while configuring the 
 A3. Configure the master
 ''''''''''''''''''''''''
 
--  On your local computer, create a file called ``env.sh`` (do not
-   change this name) with the content below. 
+-  On your local computer, create a file called ``env.sh`` (do not change this name) with the content below.   
    Do not forget to change the values and be careful **not to commit this file** :-) 
    And **do not add comments to the file**.  
-   Make sure that the directory ``SCIENCEFS_DATARUN`` has been created on the sciencefs disk beforehand.  
-
+     * ``SCIENCEFS_LOGIN`` is your scienceFS login.    
+     * ``SCIENCEFS_DATARUN`` is the name of the directory on your scienceFS disk (write only the name of the directory located in your scienceFS home, no need for ``/``, e.g. ``datarun``), make sure that it has been created on the sciencefs disk beforehand.  
+     * ``DR_DATABASE_NAME``, ``DR_DATABASE_USER``, ``DR_DATABASE_PASSWORD`` are the database settings, you can use what you want, e.g. ``datarun_db, toto, secret_password``  
+     * ``USER_LOGIN``, ``USER_PASSWORD``, and ``DR_EMAIL`` are username, password and email of a datarun superuser. You can use this user credentials to make requests to the datarun API. You can create other users once you've deployed the app. You can choose what you want for these settings.  
+     * ``DIR_DATA`` and ``DIR_SUBMISSION`` are the path to folders where the data and submission are saved. It has to start with ``/mnt/datarun``, e.g. ``/mnt/datarun/data`` and ``/mnt/datarun/submission``.   
+     * ``CELERY_SCHEDULER_PERIOD`` specifies the period in min ``*/<min>`` at which predictions computed by runners are put back in the database. You can use ``*/2``.  
+     * ``RMQ_VHOST`` is the name of the Vhost for RabbitMQ. You can use what you want, e.g. ``datarun``.   
+     * ``IP_MASTER`` is the IP of the master, you can let it as it is, it is a command that get the IP of the master.     
+   
    ::
 
        export SCIENCEFS_LOGIN='login_for_scienceFS_account'
@@ -130,12 +136,12 @@ A3. Configure the master
        export DR_DATABASE_NAME='database_name'
        export DR_DATABASE_USER='database_user'
        export DR_DATABASE_PASSWORD='database_password'
+       export USER_LOGIN='user_name'  
+       export USER_PSWD='user_password'
+       export DR_EMAIL='mail@emailworld.com'
        export DIR_DATA='/mnt/datarun/data'
        export DIR_SUBMISSION='/mnt/datarun/submission'
-       export USER_LOGIN='user_name'
-       export USER_PSWD='user_password'
        export CELERY_SCHEDULER_PERIOD='*/2'
-       export DR_EMAIL='mail@emailworld.com'
        export RMQ_VHOST='rabbitMQ_vhost_name'
        export IP_MASTER=$(/sbin/ifconfig eth0 | grep "inet addr" | awk -F: '{print $2}' | awk '{print $1}')
 
@@ -165,14 +171,17 @@ A3. Configure the master
        DEBUG = False
        ALLOWED_HOSTS = ['.<IP_MASTER>']
 
+
+- Restart Apache: ``sudo service apache2 restart``
+
+
+
 A4. Configure runners
 '''''''''''''''''''''
 
--  On your local computer in the folder ``script_install``, create a
-   file called ``env_runner.sh`` (be careful to use the name
-   ``env_runner.sh``) with the content below. Do not forget to change
-   the values and **be careful not to commit this file** :-) And **do not add
-   comments to the file**.  
+-  On your local computer in the folder ``script_install``, create a file called ``env_runner.sh`` (be careful to use the name ``env_runner.sh``).     
+   Do not forget to change the values and **be careful not to commit this file** :-)   
+   And **do not add comments to the file**.    
    Make sure that the directory ``SCIENCEFS_DATARUN`` has been created on the sciencefs disk beforehand.  
 
    ::
@@ -210,7 +219,11 @@ A4. Configure runners
        134.158.75.112 2 L,celery 360 300
        134.158.75.113 3 H 240 200
 
--  Run:
+
+   Note: If there is only one runner, go to the next line, otherwise, it wil believe there is no runner to install...
+
+
+-  From your local computer (you are still in ``script_install`` folder!), run:
 
    ::
 
