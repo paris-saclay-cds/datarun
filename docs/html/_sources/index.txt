@@ -40,7 +40,8 @@ Contents:
    modules/deployment.rst
    modules/tests.rst
    modules/migrations.rst
-
+   modules/troubleshooting.rst
+ 
 
 Indices and tables
 ==================

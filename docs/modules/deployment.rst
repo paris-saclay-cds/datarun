@@ -27,8 +27,7 @@ Install RabbitMQ (celery `broker`_):
 ``sudo apt-get install rabbitmq-server``
 
 Install Redis and set it up for our app (celery `result backend`_):  
-
-    ::
+::  
     sudo apt-get install -y redis-server
     pip install redis
     sudo sed -i "331a requirepass $DR_DATABASE_PASSWORD" /etc/redis/redis.conf
@@ -63,9 +62,8 @@ If your are using virtualenvwrapper, you can store these variables in
 ``$VIRTUAL_ENV/bin/postactivate``
 
 
-Example:  
-
-    ::
+Example: 
+::   
     export DR_DATABASE_NAME=datarun
     export DR_DATABASE_USER=db_user
     export DR_DATABASE_PASSWORD=db_password
@@ -90,8 +88,7 @@ Run: ``python manage.py createsuperuser``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Set up RabbitMQ:  
-
-    ::
+::
     sudo rabbitmqctl add_user $DR_DATABASE_USER $DR_DATABASE_PASSWORD
     sudo rabbitmqctl add_vhost $RMQ_VHOST
     sudo rabbitmqctl set_permissions -p $RMQ_VHOST $DR_DATABASE_USER ".*" ".*" ".*"

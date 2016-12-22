@@ -27,8 +27,7 @@ Install RabbitMQ (celery `broker`_):
 ``sudo apt-get install rabbitmq-server``
 
 Install Redis and set it up for our app (celery `result backend`_):  
-
-    ::
+::  
     sudo apt-get install -y redis-server
     pip install redis
     sudo sed -i "331a requirepass $DR_DATABASE_PASSWORD" /etc/redis/redis.conf
@@ -46,8 +45,8 @@ if needed and create a database with ``createdb database_name``.
 
 -  ``DR_WORKING_ENV``: ``PROD`` for production environment or ``DEV``
    for development env
--  ``DIR_DATA``: directory where to save data  
--  ``DIR_SUBMISSION``: directory where to save submissions  
+-  ``DIR_DATA``: directory where to save data (you must create the folder beforehand)    
+-  ``DIR_SUBMISSION``: directory where to save submissions (you must create the folder beforehand)    
 -  ``DR_DATABASE_NAME``: database name
 -  ``DR_DATABASE_USER``: database user name
 -  ``DR_DATABASE_PASSWORD``: database user password (do not use special
@@ -62,6 +61,19 @@ if needed and create a database with ``createdb database_name``.
 If your are using virtualenvwrapper, you can store these variables in
 ``$VIRTUAL_ENV/bin/postactivate``
 
+
+Example: 
+::   
+    export DR_DATABASE_NAME=datarun
+    export DR_DATABASE_USER=db_user
+    export DR_DATABASE_PASSWORD=db_password
+    export DR_WORKING_ENV=DEV
+    export DIR_DATA=data_folder
+    export DIR_SUBMISSION=submission_folder
+    export RMQ_VHOST=rabbithost
+    export IP_MASTER=localhost
+
+
 4. Apply migrations
 ^^^^^^^^^^^^^^^^^^^
 
@@ -72,17 +84,25 @@ Run: ``python manage.py migrate``
 
 Run: ``python manage.py createsuperuser``
 
-6. Run the server (localhost)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Run: ``python manage.py runserver``
-
 7. Start celery worker and scheduler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Set up RabbitMQ:  
+::
+    sudo rabbitmqctl add_user $DR_DATABASE_USER $DR_DATABASE_PASSWORD
+    sudo rabbitmqctl add_vhost $RMQ_VHOST
+    sudo rabbitmqctl set_permissions -p $RMQ_VHOST $DR_DATABASE_USER ".*" ".*" ".*"
+    sudo service rabbitmq-server restart
+
 
 Run: ``bash test_files/cmd_workers.sh start 2 1`` for 3 workers, of
 which one is for the scheduler Note: to start one worker, run:
 ``celery -A datarun worker -l info``
+
+6. Run the server (localhost)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Run: ``python manage.py runserver``
 
 
 .. _deployment_stratus:  
